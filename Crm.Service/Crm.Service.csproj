@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CustomerService\**" />
+    <Compile Remove="UserService\**" />
+    <EmbeddedResource Remove="CustomerService\**" />
+    <EmbeddedResource Remove="UserService\**" />
+    <None Remove="CustomerService\**" />
+    <None Remove="UserService\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Crm.Repository\Crm.Repository.csproj" />
+    <ProjectReference Include="..\Currency.Common\Currency.Common.csproj" />
+  </ItemGroup>
+
+</Project>

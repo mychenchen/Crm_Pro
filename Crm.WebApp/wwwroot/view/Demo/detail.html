@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>详情页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <style>
+        body {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form class="layui-form" action="" lay-filter="example">
+        <input type="hidden" name="Id" value="" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户昵称</label>
+            <div class="layui-input-block">
+                <input type="text" name="NickName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户账号</label>
+            <div class="layui-input-block">
+                <input type="text" name="LoginName" autocomplete="off" placeholder="请输入账号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="LoginPwd" placeholder="请输入密码" autocomplete="off" value="88888888"
+                    class="layui-input">
+            </div>
+        </div>
+
+    </form>
+
+    <script src="../../layui/layui.js"></script>
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/main.js"></script>
+
+    <script>
+        var form = null;
+        layui.use(['form', 'layedit', 'laydate'], function () {
+            form = layui.form;
+            var layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
+
+
+            var info = localStorage.detail;
+            if (!IsNullOrEmpty(info)) {
+                getDetail(JSON.parse(info));
+            }
+
+        });
+
+        //获取详情
+        function getDetail(info) {
+            //表单赋值 标签 name='NickName'
+            form.val('example', {
+                "Id": info.Id
+                , "NickName": info.NickName
+                , "LoginName": info.LoginName
+                , "LoginPwd": info.LoginPwd
+            });
+        }
+
+        //获取页面的值
+        function getNowDetailJson() {
+            return form.val('example');
+        }
+
+
+    </script>
+
+</body>
+
+</html>

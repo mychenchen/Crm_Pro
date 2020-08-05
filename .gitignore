@@ -3,3 +3,17 @@
 ################################################################################
 
 /Crm.Repository/bin
+/Crm.Repository/obj
+/Crm.Service/bin
+/Crm.Service/obj
+/Crm.WebApp/.vs/CRM.WebApp
+/Crm.WebApp/App_Data/SenparcTraceLog
+/Crm.WebApp/bin/Debug
+/Crm.WebApp/logfile
+/Crm.WebApp/obj
+/Currency.Common/bin
+/Currency.Common/obj
+/Currency.Quartz/bin/Debug/netcoreapp2.2
+/Currency.Quartz/obj
+/Currency.Rabbit/bin
+/Currency.Rabbit/obj

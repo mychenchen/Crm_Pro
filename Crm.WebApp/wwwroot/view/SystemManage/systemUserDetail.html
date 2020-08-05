@@ -1,0 +1,148 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>详情页</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../../layui/css/layui.css">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <style>
+        body {
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <form class="layui-form" action="" lay-filter="example">
+        <input type="hidden" name="Id" value="" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户昵称</label>
+            <div class="layui-input-block">
+                <input type="text" name="NickName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户账号</label>
+            <div class="layui-input-block">
+                <input type="text" name="LoginName" autocomplete="off" placeholder="请输入账号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户密码</label>
+            <div class="layui-input-block">
+                <input type="password" name="LoginPwd" placeholder="请输入密码" autocomplete="off" value="123123"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" style="display:none" id="div_nows">
+            <div class="layui-input-block">
+                <a class="layui-btn">保存修改</a>
+            </div>
+        </div>
+
+    </form>
+
+    <script src="../../layui/layui.js"></script>
+    <script src="../../js/jquery.min.js"></script>
+    <script src="../../js/main.js"></script>
+
+    <script>
+        var form = null;
+        layui.use(['form', 'layedit', 'laydate'], function () {
+            form = layui.form;
+            var layer = layui.layer
+                , layedit = layui.layedit
+                , laydate = layui.laydate;
+
+            var logUserInfo = JSON.parse(localStorage.LoginUser);
+            if (logUserInfo.LoginUser == "admin") {
+                $("input[name='NickName']").attr("disabled", true);
+                $("input[name='LoginName']").attr("disabled", true);
+            }
+            var uType = GetQueryString("u");
+            if (uType == "nows") {
+                $("#div_nows").show();
+                $.ajax({
+                    url: ApiService.SystemApi.APIService + '/Api/User/GetUserDetailByGid',
+                    data: { gid: logUserInfo.Gid },
+                    datType: "json",
+                    type: 'get',
+                    success: function (res) {
+                        if (res.code != 1) {
+                            layer.alert(res.message);
+                            return false;
+                        }
+                        getDetail(res.data);
+                    },
+                    error: function (res, sss, ffff) {
+                        layer.alert("网络连接超时,即将跳转至登陆界面!!!");
+                        localStorage.LoginUser = "";
+                        setTimeout(() => {
+                            location.href = "login.html";
+                        }, 2000);
+                    }
+                });
+            } else {
+                var info = localStorage.detail;
+                if (!IsNullOrEmpty(info)) {
+                    getDetail(JSON.parse(info));
+                }
+            }
+        });
+
+        //获取详情
+        function getDetail(info) {
+            //表单赋值 标签 name='NickName'
+            form.val('example', {
+                "Id": info.Id
+                , "NickName": info.NickName
+                , "LoginName": info.LoginName
+                , "LoginPwd": info.LoginPwd
+            });
+        }
+
+        //获取页面的值
+        function getNowDetailJson() {
+            return form.val('example');
+        }
+
+        //保存修改
+        function saveInfo() {
+            var model = getNowDetailJson();
+            if (IsNullOrEmpty(model.NickName)) {
+                layer.msg("请填写昵称");
+                return false;
+            }
+            if (IsNullOrEmpty(model.LoginName)) {
+                layer.msg("请填写用户名");
+                return false;
+            }
+            if (IsNullOrEmpty(model.LoginPwd)) {
+                layer.msg("请填写密码");
+                return false;
+            }
+            $.ajax({
+                url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
+                type: "post",
+                data: model,
+                success: function (res) {
+                    layer.msg(res.message);
+                    if (res.code != 1) {
+                        layer.msg(res.message);
+                        return false;
+                    }
+                    layer.msg("保存成功");
+                }
+            });
+        }
+
+    </script>
+
+</body>
+
+</html>

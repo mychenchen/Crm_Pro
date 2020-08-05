@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>登录系统</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/loginStyle.css">
+
+</head>
+
+<body>
+
+    <div class="login-main">
+        <header class="layui-elip">登录</header>
+        <form class="layui-form">
+            <div class="layui-input-inline">
+                <input type="text" name="account" required lay-verify="required" placeholder="用户名" autocomplete="off"
+                    class="layui-input">
+            </div>
+            <div class="layui-input-inline">
+                <input type="password" name="password" required lay-verify="required" placeholder="密码"
+                    autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-input-inline login-btn">
+                <button lay-submit lay-filter="login" class="layui-btn">登录</button>
+            </div>
+
+        </form>
+    </div>
+
+
+    <script src="layui/layui.all.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script type="text/javascript">
+        $(function () {
+
+            var logUser = localStorage.LoginUser;
+            if (!IsNullOrEmpty(logUser)) {
+
+                var indexMsg = layer.msg("自动登陆,请等待...", {
+                    icon: 16,
+                    time: false,
+                    shade: 0.5
+                });
+                var logUserInfo = JSON.parse(logUser);
+                $.ajax({
+                    url: ApiService.SystemApi.APIService + '/Api/LoginHome/AutomaticLogin',
+                    data: { token: logUserInfo.Token },
+                    datType: "json",
+                    type: 'get',
+                    success: function (res) {
+                        layer.close(indexMsg);
+                        if (res.code != 1) {
+                            layer.msg(res.message);
+                            localStorage.LoginUser = "";
+                            return false;
+                        }
+                        localStorage.LoginUser = JSON.stringify(res.data);
+                        location.href = "index.html";
+                    }
+                });
+            }
+        });
+        layui.use(['form', 'layer'], function () {
+
+            // 操作对象
+            var form = layui.form;
+            var layer = layui.layer;
+
+            form.on('submit(login)', function (data) {
+                $.ajax({
+                    url: ApiService.SystemApi.APIService + '/Api/LoginHome/Login',
+                    data: data.field,
+                    datType: "json",
+                    type: 'post',
+                    success: function (res) {
+                        if (res.code != 1) {
+                            layer.msg(res.message);
+                            return false;
+                        }
+                        localStorage.LoginUser = JSON.stringify(res.data);
+                        location.href = "index.html";
+                    },
+                    error: function (ex) {
+                        layer.alert("网络请求超时,请检查网络");
+                    }
+                });
+                return false;
+            })
+
+        });
+    </script>
+</body>
+
+</html>
