@@ -133,10 +133,11 @@
                         return false;
                     }
                     layer.confirm('真的删除行么', function (index) {
-                        
+
                         $.ajax({
                             url: ApiService.SystemApi.APIService + "/Api/User/DeleteModel",
                             type: "get",
+                            headers: { "ToKenStr": localStorage.Token },
                             data: { gid: data.Id },
                             success: function (res) {
                                 layer.msg(res.message);
@@ -182,6 +183,7 @@
                     $.ajax({
                         url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
                         type: "post",
+                        headers: { "ToKenStr": localStorage.Token },
                         data: model,
                         success: function (res) {
                             layer.msg(res.message);

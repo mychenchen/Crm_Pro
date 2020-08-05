@@ -17,6 +17,7 @@ namespace Crm.WebApp.Models.Configs
             CreateMap<HotSpotEntity, HotSpotMapper>();
             CreateMap<NoticeEntity, NoticeMapper>();
             CreateMap<TabMenuEntity, TabMenuMapper>();
+            CreateMap<OperationLogEntity, OperationLogMapper>();
 
         }
     }

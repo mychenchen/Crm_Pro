@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Senparc.CO2NET;
@@ -68,6 +69,7 @@ namespace Crm.WebApp
 
             services.AddAutoMapper();
 
+            services.AutoRegisterServicesFromAssembly("Crm.Service");
             //注入 碰到MemoryCacheManager 就实例给 IStaticCacheManager
             services.AddSingleton<IStaticCacheManager, MemoryCacheManager>();
 
@@ -77,7 +79,6 @@ namespace Crm.WebApp
             //接收mq的消息
             //services.AddSingleton<BatchHandle>();
 
-            services.AutoRegisterServicesFromAssembly("Crm.Service");
 
 
             ////注入 redis
@@ -158,7 +159,16 @@ namespace Crm.WebApp
 
             //开启后,可直接访问静态页面,静态文件
             app.UseStaticFiles();
-            
+
+            //自定义资源
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                //资源所在的绝对路径。
+                FileProvider = new PhysicalFileProvider(System.IO.Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
+                //表示访问路径,必须'/'开头
+                RequestPath = "/uploads"
+            });
+
             app.UseMvcWithDefaultRoute();
 
             app.UseSwagger();

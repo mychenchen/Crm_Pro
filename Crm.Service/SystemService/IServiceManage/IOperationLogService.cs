@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.TbEntity;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Crm.Service.SystemService
 {
@@ -30,5 +31,11 @@ namespace Crm.Service.SystemService
         /// </summary>
         /// <param name="model"></param>
         void SaveLog(OperationLogEntity model);
+
+        /// <summary>
+        /// 保存日志
+        /// </summary>
+        /// <param name="model"></param>
+        Task SaveLogAsync(OperationLogEntity model);
     }
 }

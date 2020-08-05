@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Crm.Repository.TbEntity;
+using Crm.Service.SystemService;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.Caching;
@@ -30,6 +32,8 @@ namespace Crm.WebApp.API
 
         protected readonly IStaticCacheManager _cache;
 
+        protected readonly IOperationLogService _opt;
+
         public ApiBaseController(
             //IOptions<DataSettingsModel> configDbStr,
             IOptions<CmsAppSettingModel> configStr,
@@ -41,6 +45,32 @@ namespace Crm.WebApp.API
             _configStr = configStr.Value;
             _mapper = mapper;
             _cache = cache;
+            _opt = DI.GetService<IOperationLogService>();
+        }
+
+        /// <summary>
+        /// 记录用户操作
+        /// </summary>
+        /// <param name="controllerStr">模块</param>
+        /// <param name="optEvent">操作事件</param>
+        /// <param name="txt">操作内容</param>
+        protected async void SaveUserOperation(string controllerStr, string optEvent, string txt)
+        {
+            var userLogin = _cache.Get<LoginUserInfo>("userLogin_" + Request.Headers["ToKenStr"]);
+            if (userLogin != null)
+            {
+                OperationLogEntity optModel = new OperationLogEntity
+                {
+                    CreateTime = DateTime.Now,
+                    OpentionControllerStr = controllerStr,
+                    IsDelete = 0,
+                    OperationEvent = optEvent,
+                    OperationTime = DateTime.Now,
+                    OperationUser = $"昵称:{userLogin.Name},账号:{userLogin.LoginUser}",
+                    OpentionContext = txt
+                };
+                await _opt.SaveLogAsync(optModel);
+            }
         }
 
         #region Success

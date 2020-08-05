@@ -1,26 +1,27 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using static Currency.Common.NetCoreDIModuleRegister;
 
-namespace Crm.Service.SystemService
+namespace Crm.Service.GatewayService
 {
     /// <summary>
-    /// 用户管理
+    /// 热点轮播
     /// UseDI特性用于注入必须加
     /// </summary>
-    [UseDI(ServiceLifetime.Scoped, typeof(IUserService))]
-    public class UserService : IUserService
+    [UseDI(ServiceLifetime.Scoped, typeof(IHotSpotService))]
+    public class HotSpotService : IHotSpotService
     {
         /// <summary>
         /// 数据库
         /// </summary>
         protected readonly MyDbContext _mydb;
 
-        public UserService(MyDbContext mydb)
+        public HotSpotService(MyDbContext mydb)
         {
             _mydb = mydb;
         }
@@ -29,25 +30,25 @@ namespace Crm.Service.SystemService
         /// 查询
         /// </summary>
         /// <param name="model"></param>
-        public List<User> GetList()
+        public List<HotSpotEntity> GetList()
         {
-            return _mydb.User.ToList();
+            return _mydb.HotSpot.ToList();
         }
 
         /// <summary>
         /// 分页查询
         /// </summary>
-        /// <param name="page"></param>
+        /// <param name="title"></param>
         /// <param name="page"></param>
         /// <param name="rows"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public List<User> GetPageList(string name, int page, int rows, ref int count)
+        public List<HotSpotEntity> GetPageList(string title, int page, int rows, ref int count)
         {
-            var list = _mydb.User.Where(a => a.IsDelete == 0);
-            if (!string.IsNullOrEmpty(name))
+            var list = _mydb.HotSpot.Where(a => a.IsDelete == 0);
+            if (!string.IsNullOrEmpty(title))
             {
-                list = list.Where(a => a.NickName.Contains(name));
+                list = list.Where(a => a.ImgTitle.Contains(title));
             }
             var data = list.OrderByDescending(a => a.CreateTime)
                 .Skip((page - 1) * rows).Take(rows).ToList();
@@ -59,30 +60,22 @@ namespace Crm.Service.SystemService
         /// 查询
         /// </summary>
         /// <param name="model"></param>
-        public User GetModel(Guid gid)
+        public HotSpotEntity GetModel(Guid gid)
         {
-            return _mydb.User.FirstOrDefault(a => a.Id == gid);
-        }
-
-        /// <summary>
-        /// 根据登陆名称查询
-        /// </summary>
-        /// <param name="name"></param>
-        public User UserLoginModel(string name)
-        {
-            return _mydb.User.FirstOrDefault(a => a.LoginName == name);
+            return _mydb.HotSpot.AsNoTracking().FirstOrDefault(a => a.Id == gid);
         }
 
         /// <summary>
         /// 添加
         /// </summary>
         /// <param name="model"></param>
-        public void AddUpdateModel(User model)
+        public void AddUpdateModel(HotSpotEntity model)
         {
             if (model.Id == Guid.Empty)
             {
                 model.Id = Guid.NewGuid();
-                _mydb.User.Add(model);
+                model.CreateTime = DateTime.Now;
+                _mydb.HotSpot.Add(model);
             }
             else
             {
@@ -101,31 +94,19 @@ namespace Crm.Service.SystemService
             var model = GetModel(gid);
             if (model == null)
                 return false;
+
             if (isDelete)
-                _mydb.User.Remove(model);
+            {
+                _mydb.HotSpot.Remove(model);
+            }
             else
             {
                 model.IsDelete = 1;
-                _mydb.User.Update(model);
+                _mydb.HotSpot.Update(model);
             }
             _mydb.SaveChanges();
             return true;
         }
-
-        #region 验证
-
-        /// <summary>
-        /// 验证登陆账号是否重复
-        /// </summary>
-        /// <param name="model"></param>
-        public bool VerifyLoginName(Guid gid, string name)
-        {
-            var model = _mydb.User.FirstOrDefault(a => a.IsDelete == 0 && a.LoginName == name && a.Id != gid);
-
-            return model == null ? false : true;
-        }
-
-        #endregion
 
     }
 }

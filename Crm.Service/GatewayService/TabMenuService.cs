@@ -6,21 +6,21 @@ using System.Collections.Generic;
 using System.Linq;
 using static Currency.Common.NetCoreDIModuleRegister;
 
-namespace Crm.Service.SystemService
+namespace Crm.Service.GatewayService
 {
     /// <summary>
-    /// 用户管理
+    /// tab菜单
     /// UseDI特性用于注入必须加
     /// </summary>
-    [UseDI(ServiceLifetime.Scoped, typeof(IUserService))]
-    public class UserService : IUserService
+    [UseDI(ServiceLifetime.Scoped, typeof(ITabMenuService))]
+    public class TabMenuService : ITabMenuService
     {
         /// <summary>
         /// 数据库
         /// </summary>
         protected readonly MyDbContext _mydb;
 
-        public UserService(MyDbContext mydb)
+        public TabMenuService(MyDbContext mydb)
         {
             _mydb = mydb;
         }
@@ -29,25 +29,25 @@ namespace Crm.Service.SystemService
         /// 查询
         /// </summary>
         /// <param name="model"></param>
-        public List<User> GetList()
+        public List<TabMenuEntity> GetList()
         {
-            return _mydb.User.ToList();
+            return _mydb.TabMenu.ToList();
         }
 
         /// <summary>
         /// 分页查询
         /// </summary>
-        /// <param name="page"></param>
+        /// <param name="name"></param>
         /// <param name="page"></param>
         /// <param name="rows"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public List<User> GetPageList(string name, int page, int rows, ref int count)
+        public List<TabMenuEntity> GetPageList(string name, int page, int rows, ref int count)
         {
-            var list = _mydb.User.Where(a => a.IsDelete == 0);
+            var list = _mydb.TabMenu.Where(a => a.IsDelete == 0);
             if (!string.IsNullOrEmpty(name))
             {
-                list = list.Where(a => a.NickName.Contains(name));
+                list = list.Where(a => a.Name.Contains(name));
             }
             var data = list.OrderByDescending(a => a.CreateTime)
                 .Skip((page - 1) * rows).Take(rows).ToList();
@@ -59,30 +59,21 @@ namespace Crm.Service.SystemService
         /// 查询
         /// </summary>
         /// <param name="model"></param>
-        public User GetModel(Guid gid)
+        public TabMenuEntity GetModel(Guid gid)
         {
-            return _mydb.User.FirstOrDefault(a => a.Id == gid);
-        }
-
-        /// <summary>
-        /// 根据登陆名称查询
-        /// </summary>
-        /// <param name="name"></param>
-        public User UserLoginModel(string name)
-        {
-            return _mydb.User.FirstOrDefault(a => a.LoginName == name);
+            return _mydb.TabMenu.FirstOrDefault(a => a.Id == gid);
         }
 
         /// <summary>
         /// 添加
         /// </summary>
         /// <param name="model"></param>
-        public void AddUpdateModel(User model)
+        public void AddUpdateModel(TabMenuEntity model)
         {
             if (model.Id == Guid.Empty)
             {
                 model.Id = Guid.NewGuid();
-                _mydb.User.Add(model);
+                _mydb.TabMenu.Add(model);
             }
             else
             {
@@ -102,30 +93,17 @@ namespace Crm.Service.SystemService
             if (model == null)
                 return false;
             if (isDelete)
-                _mydb.User.Remove(model);
+            {
+                _mydb.TabMenu.Remove(model);
+            }
             else
             {
                 model.IsDelete = 1;
-                _mydb.User.Update(model);
+                _mydb.TabMenu.Update(model);
             }
             _mydb.SaveChanges();
             return true;
         }
-
-        #region 验证
-
-        /// <summary>
-        /// 验证登陆账号是否重复
-        /// </summary>
-        /// <param name="model"></param>
-        public bool VerifyLoginName(Guid gid, string name)
-        {
-            var model = _mydb.User.FirstOrDefault(a => a.IsDelete == 0 && a.LoginName == name && a.Id != gid);
-
-            return model == null ? false : true;
-        }
-
-        #endregion
 
     }
 }

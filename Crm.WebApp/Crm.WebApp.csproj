@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Configs\HttpGlobalExceptionFilter.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\.vscode\settings.json" />
   </ItemGroup>
 

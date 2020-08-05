@@ -36,7 +36,7 @@
             <label class="layui-form-label">用户密码</label>
             <div class="layui-input-block">
                 <input type="password" name="LoginPwd" placeholder="请输入密码" autocomplete="off" value="123123"
-                       class="layui-input">
+                    class="layui-input">
             </div>
         </div>
         <div class="layui-form-item" style="display:none" id="div_nows">
@@ -59,11 +59,6 @@
                 , layedit = layui.layedit
                 , laydate = layui.laydate;
 
-            var logUserInfo = JSON.parse(localStorage.LoginUser);
-            if (logUserInfo.LoginUser == "admin") {
-                $("input[name='NickName']").attr("disabled", true);
-                $("input[name='LoginName']").attr("disabled", true);
-            }
             var uType = GetQueryString("u");
             if (uType == "nows") {
                 $("#div_nows").show();
@@ -104,6 +99,12 @@
                 , "LoginName": info.LoginName
                 , "LoginPwd": info.LoginPwd
             });
+
+            var logUserInfo = JSON.parse(localStorage.LoginUser);
+            if (info.LoginName == "admin") {
+                $("input[name='NickName']").attr("disabled", true);
+                $("input[name='LoginName']").attr("disabled", true);
+            }
         }
 
         //获取页面的值
@@ -129,6 +130,7 @@
             $.ajax({
                 url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
                 type: "post",
+                headers: { "ToKenStr": localStorage.Token },
                 data: model,
                 success: function (res) {
                     layer.msg(res.message);

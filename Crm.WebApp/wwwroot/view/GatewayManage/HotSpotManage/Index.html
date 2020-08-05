@@ -19,12 +19,21 @@
 <body>
 
     <div class="demoTable">
-        <label>查询：</label>
-        <div class="layui-inline">
-            <input class="layui-input" id="demoReload" autocomplete="off" placeholder="客户名称、手机号">
-        </div>
-        <button class="layui-btn" onclick="active.search()">搜索</button>
-        <button class="layui-btn" onclick="active.reload()">刷新</button>
+        <form class="layui-form">
+            <div class="layui-row">
+                <div class="layui-col-md3">
+                    <div class="grid-demo grid-demo-bg1">
+                        <label>标题：</label>
+                        <div class="layui-inline">
+                            <input class="layui-input" id="txt_Title" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+        </form>
+
+        <a class="layui-btn" onclick="active.search()">搜索</a>
+        <a class="layui-btn" onclick="active.reload()">刷新</a>
+    </div>
     </div>
 
     <table class="layui-hide" id="tableData" lay-filter="tableData"></table>
@@ -34,10 +43,14 @@
             <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
         </div>
     </script>
+    <script type="text/html" id="imgShow">
+        <div>
+            <img style="height:100px;width:100px;" src="{{ApiService.SystemApi.APIService + d.ImgPath}}">
+        </div>
+    </script>
 
     <script type="text/html" id="barDemo">
         <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-xs" lay-event="seedoctor">就诊记录</a>
         <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     </script>
 
@@ -48,19 +61,21 @@
     <script>
         var table = null;
         var layer = null;
+        var searchModel = {
+            //操作类型
+            title: ""
+        };
         var active = {
             //条件查询
             search: function () {
-                var demoReload = $('#demoReload').val();
+                searchModel.title = $('#txt_Title').val();
 
                 //执行重载
                 table.reload('tableReload', {
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
-                    , where: {
-                        name: demoReload
-                    }
+                    , where: searchModel
                 }, 'data');
             },
             //刷新页面
@@ -76,23 +91,18 @@
 
                 elem: '#tableData'
                 , id: "tableReload"
-                , url: ApiService.SystemApi.APIService + '/Api/Customer/GetData'
+                , url: ApiService.SystemApi.APIService + '/Api/HotSpot/GetData'
                 , page: true
                 , height: 'full-44'
                 , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
                 , defaultToolbar: ['filter']
-                , where: {
-                    name: ''
-                }
+                , where: searchModel
                 , cols: [[
                     // { type: 'checkbox' },
-                    { field: 'Name', title: '名称' }
-                    , { field: 'Telephone', title: '手机号' }
-                    , { field: 'IDCard', title: '身份证' }
-                    , { field: 'Occupation', title: '职业' }
-                    , { field: 'SexStr', title: '性别' }
-                    , { field: 'UpdateTimeStr', title: '最后一次更新' }
-                    , { field: 'Remark', title: '备注说明' }
+                    { field: 'ImgTitle', title: '标题' }
+                    , { field: 'ImgPath', title: '图片', templet: '#imgShow' }
+                    , { field: 'ContentUrl', title: '内容链接' }
+                    , { field: 'CreateTimeStr', title: '创建时间' }
                     , { field: '', title: '操作', toolbar: '#barDemo' }
                 ]]
                 , response: {
@@ -135,8 +145,9 @@
                     layer.confirm('真的删除行么', function (index) {
 
                         $.ajax({
-                            url: ApiService.SystemApi.APIService + "/Api/Customer/DeleteModel",
+                            url: ApiService.SystemApi.APIService + "/Api/HotSpot/DeleteModel",
                             type: "get",
+                            headers: { "ToKenStr": localStorage.Token },
                             data: { gid: data.Id },
                             success: function (res) {
                                 layer.msg(res.message);
@@ -150,15 +161,6 @@
                 } else if (obj.event === 'edit') {
                     localStorage.detail = JSON.stringify(data);
                     OpenDetail();
-                } else if (obj.event === 'seedoctor') {
-                    layer.open({
-                        type: 2,
-                        title: "就诊记录",
-                        scrollbar: false,
-                        area: ['100%', '100%'],
-                        content: 'SeeDoctorList.html',
-                        btnAlign: 'c'
-                    });
                 }
             });
         });
@@ -177,22 +179,19 @@
                     //获取详情页指定函数
                     var model = $(layero).find("iframe")[0].contentWindow.getNowDetailJson();
 
-                    if (IsNullOrEmpty(model.Name)) {
-                        layer.msg("请填写名称");
+                    if (IsNullOrEmpty(model.ImgTitle)) {
+                        layer.msg("请填写标题");
                         return false;
                     }
-                    if (IsNullOrEmpty(model.Telephone)) {
-                        layer.msg("请填写手机号");
-                        return false;
-                    }
-                    if (!VerifyMobile(model.Telephone)) {
-                        layer.msg("手机号格式错误");
-                        return false;
-                    }
+                    // if (IsNullOrEmpty(model.ImgPath)) {
+                    //     layer.msg("请填写上传图片");
+                    //     return false;
+                    // }
 
                     $.ajax({
-                        url: ApiService.SystemApi.APIService + "/Api/Customer/SaveModel",
+                        url: ApiService.SystemApi.APIService + "/Api/HotSpot/SaveModel",
                         type: "post",
+                        headers: { "ToKenStr": localStorage.Token },
                         data: model,
                         success: function (res) {
                             layer.msg(res.message);

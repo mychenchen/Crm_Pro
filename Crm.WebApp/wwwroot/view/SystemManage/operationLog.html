@@ -20,21 +20,34 @@
 <body>
 
     <div class="demoTable">
-        <label>操作类型：</label>
-        <div class="layui-input-block">
-            <select name="opt_Event" lay-filter="opt_Event">
-                <option value=""></option>
-                <option value="添加">添加</option>
-                <option value="修改">修改</option>
-                <option value="删除">删除</option>
-            </select>
-        </div>
-        <label>操作模块：</label>
-        <div class="layui-inline">
-            <input class="layui-input" id="txt_ControllerStr" autocomplete="off">
-        </div>
-        <button class="layui-btn" onclick="active.search()">搜索</button>
-        <button class="layui-btn" onclick="active.reload()">刷新</button>
+        <form class="layui-form">
+            <div class="layui-row">
+                <div class="layui-col-md3">
+                    <div class="grid-demo grid-demo-bg1">
+                        <label>操作类型：</label>
+                        <div class="layui-inline">
+                            <select name="opt_Event" lay-filter="opt_Event">
+                                <option value=""></option>
+                                <option value="添加">添加</option>
+                                <option value="修改">修改</option>
+                                <option value="删除">删除</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md3">
+                    <div class="grid-demo">
+                        <label>操作模块：</label>
+                        <div class="layui-inline">
+                            <input class="layui-input" id="txt_ControllerStr" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+        </form>
+        <a class="layui-btn" onclick="active.search()">搜索</a>
+        <a class="layui-btn" onclick="active.reload()">刷新</a>
+    </div>
+
     </div>
 
     <table class="layui-hide" id="tableData" lay-filter="tableData"></table>
@@ -50,14 +63,13 @@
             //操作类型
             optEvent: "",
             //模块名称
-            controllerStr:""
+            controllerStr: ""
         };
         var active = {
             //条件查询
             search: function () {
 
                 searchModel.controllerStr = $("#txt_ControllerStr").val();
-
                 //执行重载
                 table.reload('tableReload', {
                     page: {
@@ -72,14 +84,14 @@
             }
         };
 
-        layui.use(['table', 'layer','form'], function () {
+        layui.use(['table', 'layer', 'form'], function () {
             table = layui.table;
             layer = layui.layer;
 
             //下拉
             layui.form.on('select(opt_Event)', function (data) {
                 if (data.value != searchModel.optEvent) {
-                    searchForm.optEvent = data.value;
+                    searchModel.optEvent = data.value;
                     active.search();
                 }
             });
@@ -88,17 +100,16 @@
 
                 elem: '#tableData'
                 , id: "tableReload"
-                , url: ApiService.SystemApi.APIService + '/Api/SystemManage/GetLoginLogData'
+                , url: ApiService.SystemApi.APIService + '/Api/SystemManage/GetOptLogData'
                 , page: true
                 , height: 'full-44'
                 , defaultToolbar: ['filter']
-                , where: {
-                    name: ''
-                }
                 , cols: [[
-                    { field: 'UserName', title: '用户名' }
-                    , { field: 'Ip', title: 'Ip' }
-                    , { field: 'CreateTimeStr', title: '登陆时间' }
+                    { field: 'OperationUser', title: '操作人' }
+                    , { field: 'OpentionControllerStr', title: '模块' }
+                    , { field: 'OperationEvent', title: '事件' }
+                    , { field: 'OpentionContext', title: '内容' }
+                    , { field: 'OperationTime', title: '时间' }
                 ]]
                 , response: {
                     statusCode: 1 //重新规定成功的状态码为 1 ，table 组件默认为 0

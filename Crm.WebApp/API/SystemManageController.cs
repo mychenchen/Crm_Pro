@@ -22,7 +22,6 @@ namespace Crm.WebApp.API
     public class SystemManageController : ApiBaseController
     {
         protected readonly IUserLoginLogService _userLog;
-        protected readonly IOperationLogService _optLog;
         public SystemManageController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
@@ -33,7 +32,6 @@ namespace Crm.WebApp.API
         {
 
             _userLog = userLog;
-            _optLog = optLog;
         }
 
         #region 系统用户查询
@@ -81,8 +79,8 @@ namespace Crm.WebApp.API
             try
             {
                 var count = 0;
-                var data = _optLog.GetPageList(optEvent, controllerStr, page, limit, ref count);
-                var list = _mapper.Map<List<UserLoginLogMapper>>(data);
+                var data = _opt.GetPageList(optEvent, controllerStr, page, limit, ref count);
+                var list = _mapper.Map<List<OperationLogMapper>>(data);
 
                 return SuccessPage(page, limit, count, list);
             }

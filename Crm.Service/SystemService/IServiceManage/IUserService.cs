@@ -48,8 +48,9 @@ namespace Crm.Service.SystemService
         /// <summary>
         /// 删除
         /// </summary>
-        /// <param name="model"></param>
-        bool Delete(Guid gid);
+        /// <param name="gid"></param>
+        /// <param name="isDelete">true 真删除 false 假删除</param>
+        bool Delete(Guid gid, bool isDelete = false);
 
         #region 验证
 

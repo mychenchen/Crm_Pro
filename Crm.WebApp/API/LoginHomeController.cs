@@ -99,7 +99,7 @@ namespace Crm.WebApp.API
                 var info = _cache.Get<LoginUserInfo>("userLogin_" + token);
                 if (info == null || info.LoginTime == null)
                 {
-                    LogHelper.Error("自动登陆过期,请重新登陆!!!");
+                    return Error("自动登陆过期,请重新登陆!!!");
                 }
                 if (Utils.TimeHoursContrast(info.LoginTime, DateTime.Now) > 3)
                 {

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using static Currency.Common.NetCoreDIModuleRegister;
 
 namespace Crm.Service.SystemService
@@ -44,14 +45,14 @@ namespace Crm.Service.SystemService
         /// <param name="rows"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public List<OperationLogEntity> GetPageList(string optEvent,string controllerStr, int page, int rows, ref int count)
+        public List<OperationLogEntity> GetPageList(string optEvent, string controllerStr, int page, int rows, ref int count)
         {
             var list = _mydb.OperationLog.Where(a => a.IsDelete == 0);
             if (!string.IsNullOrEmpty(optEvent))
             {
                 list = list.Where(a => a.OperationEvent == optEvent);
             }
-            if (!string.IsNullOrEmpty(optEvent))
+            if (!string.IsNullOrEmpty(controllerStr))
             {
                 list = list.Where(a => a.OpentionControllerStr.Contains(controllerStr));
             }
@@ -69,6 +70,16 @@ namespace Crm.Service.SystemService
         {
             _mydb.OperationLog.Add(model);
             _mydb.SaveChanges();
+        }
+
+        /// <summary>
+        /// 保存日志
+        /// </summary>
+        /// <param name="model"></param>
+        public async Task SaveLogAsync(OperationLogEntity model)
+        {
+            await _mydb.OperationLog.AddAsync(model);
+            await _mydb.SaveChangesAsync();
         }
     }
 }

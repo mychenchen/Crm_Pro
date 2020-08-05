@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Crm.WebApp.Models;
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
+using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.Caching;
 using Currency.Common.LogManange;
@@ -88,6 +88,8 @@ namespace Crm.WebApp.API
         [HttpPost]
         public ResultObject SaveModel(UserMapper model)
         {
+            string optEvent = "添加";
+            string errStr = "成功";
             try
             {
                 var entity = new User();
@@ -106,6 +108,7 @@ namespace Crm.WebApp.API
                         return Error("信息不存在,修改失败");
                     }
                     entity.UpdateTime = DateTime.Now;
+                    optEvent = "修改";
                 }
                 entity.LoginName = model.LoginName;
                 entity.NickName = model.NickName;
@@ -121,8 +124,13 @@ namespace Crm.WebApp.API
             }
             catch (Exception ex)
             {
+                errStr = "失败,请查看日志";
                 LogHelper.Error(ex.ToString());
                 return Error(ex.Message);
+            }
+            finally
+            {
+                SaveUserOperation("UserController", optEvent, $"系统用户({model.LoginName},{model.NickName},结果:{errStr})");
             }
         }
 
@@ -134,6 +142,7 @@ namespace Crm.WebApp.API
         [HttpGet]
         public ResultObject DeleteModel(string gid)
         {
+            string errStr = "成功";
             try
             {
                 _user.Delete(Guid.Parse(gid));
@@ -141,8 +150,13 @@ namespace Crm.WebApp.API
             }
             catch (Exception ex)
             {
+                errStr = "失败,请查看日志";
                 LogHelper.Error(ex.ToString());
                 return Error(ex.Message);
+            }
+            finally
+            {
+                SaveUserOperation("UserController", "删除", $"系统用户({gid},结果:{errStr})");
             }
         }
 

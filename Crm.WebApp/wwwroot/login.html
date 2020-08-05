@@ -37,28 +37,28 @@
     <script type="text/javascript">
         $(function () {
 
-            var logUser = localStorage.LoginUser;
-            if (!IsNullOrEmpty(logUser)) {
+            if (!IsNullOrEmpty(localStorage.Token)) {
 
                 var indexMsg = layer.msg("自动登陆,请等待...", {
                     icon: 16,
                     time: false,
                     shade: 0.5
                 });
-                var logUserInfo = JSON.parse(logUser);
                 $.ajax({
                     url: ApiService.SystemApi.APIService + '/Api/LoginHome/AutomaticLogin',
-                    data: { token: logUserInfo.Token },
+                    data: { token: localStorage.Token },
                     datType: "json",
                     type: 'get',
                     success: function (res) {
                         layer.close(indexMsg);
                         if (res.code != 1) {
                             layer.msg(res.message);
+                            localStorage.Token = "";
                             localStorage.LoginUser = "";
                             return false;
                         }
                         localStorage.LoginUser = JSON.stringify(res.data);
+                        localStorage.Token = res.data.Token;
                         location.href = "index.html";
                     }
                 });
@@ -82,6 +82,7 @@
                             return false;
                         }
                         localStorage.LoginUser = JSON.stringify(res.data);
+                        localStorage.Token = res.data.Token;
                         location.href = "index.html";
                     },
                     error: function (ex) {
