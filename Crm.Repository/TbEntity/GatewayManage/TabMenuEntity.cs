@@ -23,6 +23,11 @@ namespace Crm.Repository.TbEntity
         [StringLength(50)]
         public string Name { get; set;}
 
+        /// <summary>
+        /// 排序
+        /// </summary>
+        [Required]
+        public int SortNum { get; set; }
 
     }
 }

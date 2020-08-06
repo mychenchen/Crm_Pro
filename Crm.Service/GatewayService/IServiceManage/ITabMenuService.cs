@@ -16,6 +16,12 @@ namespace Crm.Service.GatewayService
         List<TabMenuEntity> GetList();
 
         /// <summary>
+        /// 查询子级菜单
+        /// </summary>
+        /// <param name="pid"></param>
+        List<TabMenuEntity> GetListByPid(Guid pid);
+
+        /// <summary>
         /// 分页查询
         /// </summary>
         /// <param name="name"></param>

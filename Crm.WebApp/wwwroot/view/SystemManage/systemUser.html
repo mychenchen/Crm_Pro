@@ -180,10 +180,8 @@
                         layer.msg("请填写密码");
                         return false;
                     }
-                    $.ajax({
+                    ajaxPost({
                         url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
-                        type: "post",
-                        headers: { "ToKenStr": localStorage.Token },
                         data: model,
                         success: function (res) {
                             layer.msg(res.message);

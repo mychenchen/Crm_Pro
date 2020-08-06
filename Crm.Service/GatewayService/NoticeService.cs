@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -61,7 +62,7 @@ namespace Crm.Service.GatewayService
         /// <param name="model"></param>
         public NoticeEntity GetModel(Guid gid)
         {
-            return _mydb.Notice.FirstOrDefault(a => a.Id == gid);
+            return _mydb.Notice.AsNoTracking().FirstOrDefault(a => a.Id == gid);
         }
 
         /// <summary>

@@ -17,5 +17,9 @@ namespace Crm.Repository.MapperEntity
         /// </summary>
         public string Name { get; set; }
 
+        /// <summary>
+        /// 排序
+        /// </summary>
+        public int SortNum { get; set; }
     }
 }

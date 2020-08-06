@@ -8,6 +8,7 @@
         /// <summary>
         /// 图片标题
         /// </summary>
+        
         public string ImgTitle { get; set; }
 
         /// <summary>

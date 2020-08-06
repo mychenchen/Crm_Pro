@@ -62,24 +62,15 @@
             var uType = GetQueryString("u");
             if (uType == "nows") {
                 $("#div_nows").show();
-                $.ajax({
+                ajaxGet({
                     url: ApiService.SystemApi.APIService + '/Api/User/GetUserDetailByGid',
                     data: { gid: logUserInfo.Gid },
-                    datType: "json",
-                    type: 'get',
                     success: function (res) {
                         if (res.code != 1) {
                             layer.alert(res.message);
                             return false;
                         }
                         getDetail(res.data);
-                    },
-                    error: function (res, sss, ffff) {
-                        layer.alert("网络连接超时,即将跳转至登陆界面!!!");
-                        localStorage.LoginUser = "";
-                        setTimeout(() => {
-                            location.href = "login.html";
-                        }, 2000);
                     }
                 });
             } else {
@@ -127,10 +118,8 @@
                 layer.msg("请填写密码");
                 return false;
             }
-            $.ajax({
+            ajaxPost({
                 url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
-                type: "post",
-                headers: { "ToKenStr": localStorage.Token },
                 data: model,
                 success: function (res) {
                     layer.msg(res.message);

@@ -2,7 +2,6 @@
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Crm.Service.GatewayService;
-using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
 using Currency.Common.Caching;
 using Currency.Common.LogManange;
@@ -15,21 +14,21 @@ using System.Collections.Generic;
 namespace Crm.WebApp.API
 {
     /// <summary>
-    /// 热点轮播
+    /// tab菜单
     /// </summary>
     [EnableCors("allow_all")]
     [Route("api/[controller]/[action]")]
-    public class HotSpotController : ApiBaseController
+    public class TabMenuController : ApiBaseController
     {
-        protected readonly IHotSpotService _hotSpot;
-        public HotSpotController(
+        protected readonly ITabMenuService _tabMenu;
+        public TabMenuController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
             IStaticCacheManager cache,
-            IHotSpotService hotSpot
+            ITabMenuService tabMenu
             ) : base(configStr, mapper, cache)
         {
-            _hotSpot = hotSpot;
+            _tabMenu = tabMenu;
         }
 
         #region 后台服务接口
@@ -47,10 +46,32 @@ namespace Crm.WebApp.API
             try
             {
                 var count = 0;
-                var data = _hotSpot.GetPageList(title, page, limit, ref count);
-                var list = _mapper.Map<List<HotSpotMapper>>(data);
+                var data = _tabMenu.GetPageList(title, page, limit, ref count);
+                var list = _mapper.Map<List<TabMenuMapper>>(data);
 
                 return SuccessPage(page, limit, count, list);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.ToString());
+                return Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        /// <param name="pid">父级ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject GetDataByPid(Guid pid)
+        {
+            try
+            {
+                var data = _tabMenu.GetListByPid(pid);
+                var list = _mapper.Map<List<TabMenuMapper>>(data);
+
+                return Success(list);
             }
             catch (Exception ex)
             {
@@ -64,13 +85,13 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="gid">名称</param>
         /// <returns></returns>
-        [HttpGet, NoSign]
+        [HttpGet]
         public ResultObject GetDetailByGid(Guid gid)
         {
             try
             {
-                var data = _hotSpot.GetModel(gid);
-                var info = _mapper.Map<HotSpotMapper>(data);
+                var data = _tabMenu.GetModel(gid);
+                var info = _mapper.Map<TabMenuMapper>(data);
 
                 return Success(info);
             }
@@ -87,26 +108,22 @@ namespace Crm.WebApp.API
         /// <param name="model">热点轮播</param>
         /// <returns></returns>
         [HttpPost]
-        public ResultObject SaveModel(HotSpotMapper model)
+        public ResultObject SaveModel(TabMenuMapper model)
         {
             var optEvent = "添加";
             var errStr = "成功";
             try
             {
-                var saveEntity = _mapper.Map<HotSpotEntity>(model);
-                var entity = _hotSpot.GetModel(saveEntity.Id);
+                var saveEntity = _mapper.Map<TabMenuEntity>(model);
+                var entity = _tabMenu.GetModel(saveEntity.Id);
                 if (entity != null)
                 {
                     saveEntity.CreateTime = entity.CreateTime;
                     saveEntity.IsDelete = entity.IsDelete;
-                    if (string.IsNullOrEmpty(saveEntity.ImgPath))
-                    {
-                        saveEntity.ImgPath = entity.ImgPath;
-                    }
                     optEvent = "修改";
                 }
 
-                _hotSpot.AddUpdateModel(saveEntity);
+                _tabMenu.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
@@ -117,7 +134,7 @@ namespace Crm.WebApp.API
             }
             finally
             {
-                SaveUserOperation("HotSpotController", optEvent, $"热点轮播图({model.ImgTitle},结果:{errStr})");
+                SaveUserOperation("TabMenuController", optEvent, $"tab菜单({model.Name},结果:{errStr})");
             }
         }
 
@@ -132,7 +149,7 @@ namespace Crm.WebApp.API
             var errStr = "成功";
             try
             {
-                _hotSpot.Delete(Guid.Parse(gid));
+                _tabMenu.Delete(Guid.Parse(gid));
                 return Success();
             }
             catch (Exception ex)
@@ -143,7 +160,32 @@ namespace Crm.WebApp.API
             }
             finally
             {
-                SaveUserOperation("HotSpotController", "删除", $"热点轮播图{gid},结果:{errStr}");
+                SaveUserOperation("TabMenuController", "删除", $"tab菜单{gid},结果:{errStr}");
+            }
+        }
+
+        #endregion
+
+        #region 前台调用接口
+
+        /// <summary>
+        /// 查询所有tab菜单
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject GetAllData()
+        {
+            try
+            {
+                var data = _tabMenu.GetList();
+                var list = _mapper.Map<List<TabMenuMapper>>(data);
+
+                return Success(list);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.ToString());
+                return Error(ex.Message);
             }
         }
 

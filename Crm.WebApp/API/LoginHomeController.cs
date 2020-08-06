@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
+using Crm.WebApp.AuthorizeHelper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -51,6 +52,7 @@ namespace Crm.WebApp.API
         /// <param name="login"></param>
         /// <returns></returns>
         [HttpPost]
+        [NoSign]
         public ResultObject Login(LoginUserPwd login)
         {
             try
@@ -92,6 +94,7 @@ namespace Crm.WebApp.API
         /// <param name="token">用户token</param>
         /// <returns></returns>
         [HttpGet]
+        [NoSign]
         public ResultObject AutomaticLogin(string token)
         {
             try

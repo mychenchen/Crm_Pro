@@ -62,6 +62,7 @@
             var uploadInst = upload.render({
                 elem: '#up_img'
                 , url: ''
+                , headers: { "ToKenStr": localStorage.Token }
                 , choose: function (obj) {
                     //自定义文件名称
                     // var fileName = encodeURI("告警等级_" + $("#LevelName").val());

@@ -33,6 +33,61 @@ var JsonConfin = function () {
     })
 }
 
+function ajaxGet(dom) {
+    console.log(dom.async == undefined ? true : dom.async);
+    $.ajax({
+        type: 'get',
+        url: dom.url,
+        data: dom.data,
+        dataType: "json",
+        headers: { "ToKenStr": localStorage.Token },
+        async: dom.async == undefined ? true : dom.async,
+        success: function (res) {
+            dom.success(res);
+        },
+        error: function (res, sss, ffff) {
+            if (dom.error == undefined) {
+                dom.error(res);
+            } else {
+                if (res.code == 401) {
+                    layer.alert("登陆已过期,即将跳转至登陆界面!!!");
+                    localStorage.LoginUser = "";
+                    setTimeout(() => {
+                        location.href = "login.html";
+                    }, 2000);
+                }
+            }
+        }
+    });
+}
+
+function ajaxPost(dom) {
+    $.ajax({
+        type: 'post',
+        url: dom.url,
+        data: dom.data,
+        headers: { "ToKenStr": localStorage.Token },
+        async: dom.async == undefined ? true : dom.async,
+        dataType: "json",
+        success: function (res) {
+            dom.success(res);
+        },
+        error: function (res, sss, ffff) {
+            if (dom.error == undefined) {
+                dom.error(res);
+            } else {
+                if (res.code == 401) {
+                    layer.alert("登陆已过期,即将跳转至登陆界面!!!");
+                    localStorage.LoginUser = "";
+                    setTimeout(() => {
+                        location.href = "login.html";
+                    }, 2000);
+                }
+            }
+        }
+    });
+}
+
 //获取URL参方法
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

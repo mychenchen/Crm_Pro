@@ -6,14 +6,14 @@ var menuJson = [
         link: "",
         children: [
             {
+                name: "菜单管理",
+                icon: "",
+                link: "/view/GatewayManage/TabMenuManage/Index.html"
+            },
+            {
                 name: "热点轮播",
                 icon: "",
                 link: "/view/GatewayManage/HotSpotManage/Index.html"
-            },
-            {
-                name: "菜单管理",
-                icon: "",
-                link: "/view/GatewayManage/MenuManage/Index.html"
             },
             {
                 name: "新闻管理",

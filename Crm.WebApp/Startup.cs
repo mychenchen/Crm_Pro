@@ -2,6 +2,7 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Crm.Repository.DB;
+using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.Caching;
@@ -10,6 +11,7 @@ using Currency.Mq.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -103,6 +105,12 @@ namespace Crm.WebApp
             });
 
             services.AddSignalR();
+
+            //È«¾ÖÀ¹½Ø
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(AuthorizeLogin));
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddMvc();
 

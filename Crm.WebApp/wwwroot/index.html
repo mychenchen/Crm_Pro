@@ -33,7 +33,9 @@
                         <label id="lbl_SystemAdminName">贤心</label>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:OpenAppointHtml('/view/SystemManage/systemUserDetail.html?u=nows')">基本资料</a></dd>
+                        <dd><a
+                                href="javascript:OpenAppointHtml('/view/SystemManage/systemUserDetail.html?u=nows')">基本资料</a>
+                        </dd>
                         <dd><a href="">安全设置</a></dd>
                     </dl>
                 </li>
@@ -113,14 +115,12 @@
             var element = layui.element;
             var layer = layui.layer;
 
-            if (!IsNullOrEmpty(localStorage.LoginUser)) {
-                //自动登陆,验证token
-                var logUserInfo = JSON.parse(localStorage.LoginUser);
-                $.ajax({
+            if (!IsNullOrEmpty(localStorage.Token)) {
+                ajaxGet({
                     url: ApiService.SystemApi.APIService + '/Api/LoginHome/AutomaticLogin',
-                    data: { token: logUserInfo.Token },
-                    datType: "json",
-                    type: 'get',
+                    data: {
+                        token: localStorage.Token
+                    },
                     success: function (res) {
                         //验证失败,重新登陆
                         if (res.code != 1) {
@@ -130,15 +130,6 @@
                                 location.href = "login.html";
                             }, 2000);
                         }
-
-                        $("#lbl_SystemAdminName").html(res.data.Name);
-                    },
-                    error: function (res, sss, ffff) {
-                        layer.alert("网络连接超时,即将跳转至登陆界面!!!");
-                        localStorage.LoginUser = "";
-                        setTimeout(() => {
-                            location.href = "login.html";
-                        }, 2000);
                     }
                 });
             } else {
@@ -157,26 +148,13 @@
         });
 
         function logOut() {
-
-            //自动登陆,验证token
-            var logUserInfo = JSON.parse(localStorage.LoginUser);
-
-            $.ajax({
+            ajaxGet({
                 url: ApiService.SystemApi.APIService + '/Api/LoginHome/LogOut',
-                data: { token: logUserInfo.Token },
-                datType: "json",
-                type: 'get',
+                data: { token: localStorage.Token },
                 success: function (res) {
                     //验证失败,重新登陆
                     localStorage.LoginUser = "";
                     location.href = "login.html";
-                },
-                error: function (res, sss, ffff) {
-                    layer.alert("网络连接超时,即将跳转至登陆界面!!!");
-                    localStorage.LoginUser = "";
-                    setTimeout(() => {
-                        location.href = "login.html";
-                    }, 2000);
                 }
             });
         }

@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -28,12 +29,19 @@ namespace Crm.Service.GatewayService
         /// <summary>
         /// 查询
         /// </summary>
-        /// <param name="model"></param>
         public List<TabMenuEntity> GetList()
         {
-            return _mydb.TabMenu.ToList();
+            return _mydb.TabMenu.OrderBy(a => a.SortNum).ThenBy(a => a.ParentGid).ToList();
         }
 
+        /// <summary>
+        /// 查询子级菜单
+        /// </summary>
+        /// <param name="pid"></param>
+        public List<TabMenuEntity> GetListByPid(Guid pid)
+        {
+            return _mydb.TabMenu.Where(a => a.ParentGid == pid).OrderBy(a => a.SortNum).ToList();
+        }
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -44,12 +52,12 @@ namespace Crm.Service.GatewayService
         /// <returns></returns>
         public List<TabMenuEntity> GetPageList(string name, int page, int rows, ref int count)
         {
-            var list = _mydb.TabMenu.Where(a => a.IsDelete == 0);
+            var list = _mydb.TabMenu.Where(a => a.IsDelete == 0 && a.ParentGid == Guid.Empty);
             if (!string.IsNullOrEmpty(name))
             {
                 list = list.Where(a => a.Name.Contains(name));
             }
-            var data = list.OrderByDescending(a => a.CreateTime)
+            var data = list.OrderBy(a => a.SortNum)
                 .Skip((page - 1) * rows).Take(rows).ToList();
             count = list.Count();
             return data;
@@ -61,7 +69,7 @@ namespace Crm.Service.GatewayService
         /// <param name="model"></param>
         public TabMenuEntity GetModel(Guid gid)
         {
-            return _mydb.TabMenu.FirstOrDefault(a => a.Id == gid);
+            return _mydb.TabMenu.AsNoTracking().FirstOrDefault(a => a.Id == gid);
         }
 
         /// <summary>
@@ -73,6 +81,7 @@ namespace Crm.Service.GatewayService
             if (model.Id == Guid.Empty)
             {
                 model.Id = Guid.NewGuid();
+                model.CreateTime = DateTime.Now;
                 _mydb.TabMenu.Add(model);
             }
             else
