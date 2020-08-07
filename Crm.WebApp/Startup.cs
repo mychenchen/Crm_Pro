@@ -52,7 +52,7 @@ namespace Crm.WebApp
             //services.Configure<DataSettingsModel>(Configuration.GetSection("DataSettings")).AddMvc();
             services.Configure<CmsAppSettingModel>(Configuration.GetSection("CmsAppSetting")).AddMvc();
             services.Configure<RabbitBaseInfo>(Configuration.GetSection("RabbitSetting")).AddMvc();
-
+            
             //services.AddQuartz(typeof(QuartzJob));
 
             var connection = Configuration.GetConnectionString("SqlServer");
