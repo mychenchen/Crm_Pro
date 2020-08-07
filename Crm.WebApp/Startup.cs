@@ -60,6 +60,7 @@ namespace Crm.WebApp
             services.AddDbContext<MyDbContext>(options =>
                 options.UseSqlServer(connection, b => b.MigrationsAssembly("Crm.Repository")));
 
+            services.AddScoped<DBSeed>();
 
             //设置json数据返回
             services.AddMvc().AddJsonOptions(options =>
@@ -201,6 +202,10 @@ namespace Crm.WebApp
             register.UseSenparcWeixin(senparcWeixinSetting.Value, senparcSetting.Value);
 
             LogHelper.Configure(); //使用前先配置
+
+            // 添加默认数据
+            var myContext = DI.GetService<MyDbContext>();
+            DefaultDataSeed.SeedAsync(myContext).Wait();
 
             //QuartzService.StartJobs<QuartzJob>();  //多任务
 
