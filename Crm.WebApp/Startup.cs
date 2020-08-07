@@ -52,7 +52,7 @@ namespace Crm.WebApp
             //services.Configure<DataSettingsModel>(Configuration.GetSection("DataSettings")).AddMvc();
             services.Configure<CmsAppSettingModel>(Configuration.GetSection("CmsAppSetting")).AddMvc();
             services.Configure<RabbitBaseInfo>(Configuration.GetSection("RabbitSetting")).AddMvc();
-            
+
             //services.AddQuartz(typeof(QuartzJob));
 
             var connection = Configuration.GetConnectionString("SqlServer");
@@ -60,7 +60,7 @@ namespace Crm.WebApp
             services.AddDbContext<MyDbContext>(options =>
                 options.UseSqlServer(connection, b => b.MigrationsAssembly("Crm.Repository")));
 
-            services.AddScoped<DBSeed>();
+            services.AddScoped<DefaultDataSeed>();
 
             //设置json数据返回
             services.AddMvc().AddJsonOptions(options =>
