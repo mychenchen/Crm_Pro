@@ -11,6 +11,18 @@ namespace Crm.Repository.TbEntity
     public class HotNewsEntity : BaseEntity
     {
         /// <summary>
+        /// 父级菜单
+        /// </summary>
+        [Required]
+        public Guid ParentGid { get; set; }
+
+        /// <summary>
+        /// 子级菜单
+        /// </summary>
+        [Required]
+        public Guid ChildrenGid { get; set; }
+
+        /// <summary>
         /// 标题
         /// </summary>
         [Required]

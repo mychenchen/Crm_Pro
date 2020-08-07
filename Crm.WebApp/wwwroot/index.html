@@ -125,7 +125,7 @@
                         //验证失败,重新登陆
                         if (res.code != 1) {
                             layer.alert("登陆已过期,即将跳转至登陆界面!!!");
-                            localStorage.LoginUser = "";
+                            localStorage.Token = "";
                             setTimeout(() => {
                                 location.href = "login.html";
                             }, 2000);
@@ -153,7 +153,7 @@
                 data: { token: localStorage.Token },
                 success: function (res) {
                     //验证失败,重新登陆
-                    localStorage.LoginUser = "";
+                    localStorage.Token = "";
                     location.href = "login.html";
                 }
             });

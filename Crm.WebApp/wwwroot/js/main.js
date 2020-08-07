@@ -33,8 +33,27 @@ var JsonConfin = function () {
     })
 }
 
+//获取tab标签
+function getTabMenu(selId, pid, defultId) {
+    this.ajaxGet({
+        url: ApiService.SystemApi.APIService + "/Api/Common/GetAllTabMenu",
+        data: { pid: pid },
+        async: false,
+        success: function (res) {
+            var str = '<option value="">请选择</option>';
+            $.each(res.data, function (i, val) {
+                if (defultId == val.Id)
+                    str += '<option value="' + val.Id + '" selected>' + val.Name + '</option>';
+                else
+                    str += '<option value="' + val.Id + '">' + val.Name + '</option>';
+
+            })
+            $("#" + selId).html(str);
+        }
+    });
+}
+
 function ajaxGet(dom) {
-    console.log(dom.async == undefined ? true : dom.async);
     $.ajax({
         type: 'get',
         url: dom.url,
@@ -43,19 +62,19 @@ function ajaxGet(dom) {
         headers: { "ToKenStr": localStorage.Token },
         async: dom.async == undefined ? true : dom.async,
         success: function (res) {
+            if (res.code == 401) {
+                localStorage.LoginUser = "";
+                localStorage.Token = "";
+                setTimeout(() => {
+                    location.href = "/login.html";
+                }, 2000);
+                return false;
+            }
             dom.success(res);
         },
         error: function (res, sss, ffff) {
-            if (dom.error == undefined) {
+            if (dom.error != undefined) {
                 dom.error(res);
-            } else {
-                if (res.code == 401) {
-                    layer.alert("登陆已过期,即将跳转至登陆界面!!!");
-                    localStorage.LoginUser = "";
-                    setTimeout(() => {
-                        location.href = "login.html";
-                    }, 2000);
-                }
             }
         }
     });
@@ -70,19 +89,19 @@ function ajaxPost(dom) {
         async: dom.async == undefined ? true : dom.async,
         dataType: "json",
         success: function (res) {
+            if (res.code == 401) {
+                localStorage.LoginUser = "";
+                localStorage.Token = "";
+                setTimeout(() => {
+                    location.href = "/login.html";
+                }, 2000);
+                return false;
+            }
             dom.success(res);
         },
         error: function (res, sss, ffff) {
-            if (dom.error == undefined) {
+            if (dom.error != undefined) {
                 dom.error(res);
-            } else {
-                if (res.code == 401) {
-                    layer.alert("登陆已过期,即将跳转至登陆界面!!!");
-                    localStorage.LoginUser = "";
-                    setTimeout(() => {
-                        location.href = "login.html";
-                    }, 2000);
-                }
             }
         }
     });

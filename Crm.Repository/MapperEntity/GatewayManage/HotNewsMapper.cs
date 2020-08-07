@@ -8,6 +8,16 @@ namespace Crm.Repository.MapperEntity
     public class HotNewsMapper : BaseEntityMapper
     {
         /// <summary>
+        /// 父级菜单
+        /// </summary>
+        public Guid ParentGid { get; set; }
+
+        /// <summary>
+        /// 子级菜单
+        /// </summary>
+        public Guid ChildrenGid { get; set; }
+
+        /// <summary>
         /// 标题
         /// </summary>
         public string Title { get; set; }

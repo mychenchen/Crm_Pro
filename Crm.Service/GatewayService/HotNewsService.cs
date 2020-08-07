@@ -74,6 +74,7 @@ namespace Crm.Service.GatewayService
             if (model.Id == Guid.Empty)
             {
                 model.Id = Guid.NewGuid();
+                model.CreateTime = DateTime.Now;
                 _mydb.HotNews.Add(model);
             }
             else

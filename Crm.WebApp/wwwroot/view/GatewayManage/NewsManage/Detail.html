@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="../../../layui/css/layui.css">
-    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+
     <style>
         body {
             padding: 10px;
@@ -20,65 +20,127 @@
 
     <form class="layui-form" action="" lay-filter="example">
         <input type="hidden" name="Id" value="" />
+        <input type="hidden" name="ParentGid" value="" />
+        <input type="hidden" name="ChildrenGid" value="" />
         <div class="layui-form-item">
-            <label class="layui-form-label">客户名称<label style="color: red;">*</label></label>
-            <div class="layui-input-block">
-                <input type="text" name="Name" autocomplete="off" placeholder="请输入名称" class="layui-input">
+            <label class="layui-form-label">所属菜单<label style="color: red;">*</label></label>
+            <div class="layui-input-inline">
+                <select id="sel_tabMenu" name='ParentGid' lay-filter="sel_tabMenu">
+                    <option value="">请选择</option>
+                </select>
             </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">手机号<label style="color: red;">*</label></label>
-            <div class="layui-input-block">
-                <input type="text" name="Telephone" autocomplete="off" placeholder="请输入手机号" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">身份证</label>
-            <div class="layui-input-block">
-                <input type="text" name="IDCard" placeholder="请输入身份证" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">职业</label>
-            <div class="layui-input-block">
-                <input type="text" name="Occupation" placeholder="请输入职业" autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">性别</label>
-            <div class="layui-input-block">
-                <select name="Sex">
-                    <option value="1">男</option>
-                    <option value="2">女</option>
+            <div class="layui-input-inline">
+                <select id="sel_tabMenuChildren" name="ChildrenGid">
+                    <option value="">请选择</option>
                 </select>
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">备注说明</label>
+            <label class="layui-form-label">标题<label style="color: red;">*</label></label>
             <div class="layui-input-block">
-                <textarea name="Remark" cols="52" rows="10"></textarea>
+                <input type="text" name="Title" autocomplete="off" placeholder="请输入标题" class="layui-input">
             </div>
         </div>
-
+        <div class="layui-form-item">
+            <label class="layui-form-label">副标题</label>
+            <div class="layui-input-block">
+                <input type="text" name="Subtitle" autocomplete="off" placeholder="请输入副标题" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">消息来源</label>
+            <div class="layui-input-block">
+                <input type="text" name="InformationSource" placeholder="消息来源(原创则不填写)" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">封面图<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <img src='../../../images/upload.png' class="layui-upload-img" id="up_img"
+                    style="width: 114px;height: 140px;">
+                <input type="hidden" name="CoverUrl" value="" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">新闻内容<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <script id="editor" type="text/plain" style="width:1024px;height:500px;"></script>
+            </div>
+        </div>
+        </div>
     </form>
 
     <script src="../../../layui/layui.js"></script>
     <script src="../../../js/jquery.min.js"></script>
     <script src="../../../js/main.js"></script>
 
+    <script type="text/javascript" charset="utf-8" src="../../../js/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="../../../js/ueditor/ueditor.all.min.js"> </script>
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="../../../js/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+
     <script>
+        //实例化编辑器
+        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+        var ue = UE.getEditor('editor', {
+            toolbars: [
+                ['fullscreen', 'source', 'undo', 'redo', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'fontfamily',
+                    'fontsize', 'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify', 'rowspacingtop', 'rowspacingbottom', 'removeformat', 'formatmatch',
+                    'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc'
+                ]
+            ]
+        });
+
         var form = null;
-        layui.use(['form', 'layedit', 'laydate'], function () {
+        layui.use(['form', 'layedit', 'laydate', 'upload'], function () {
             form = layui.form;
             var layer = layui.layer
                 , layedit = layui.layedit
                 , laydate = layui.laydate;
 
+            var upload = layui.upload;
+            //普通图片上传
+            var uploadInst = upload.render({
+                elem: '#up_img'
+                , url: ''
+                , headers: { "ToKenStr": localStorage.Token }
+                , choose: function (obj) {
+                    //自定义文件名称
+                    var oldPath = $("input[name='CoverUrl']").val();
+                    var ToKenStr = localStorage.Token;
+                    this.url = ApiService.SystemApi.APIService + '/Api/Common/UploadFile?oldPath=' + oldPath;
+                }
+                , done: function (res) {
+                    //如果上传失败
+                    if (res.code != 1) {
+                        return layer.msg('上传失败');
+                    }
+                    $('#up_img').attr('src', ApiService.SystemApi.APIService + res.data);
+                    $("input[name='CoverUrl']").val(res.data);
+                }
+                , error: function () {
+                }
+            });
 
             var info = localStorage.detail;
             if (!IsNullOrEmpty(info)) {
+                //修改,查看
                 getDetail(JSON.parse(info));
+            } else {
+                //新增
+                getTabMenu("sel_tabMenu", "", "");
             }
+
+            form.render('select');
+
+            form.on('select(sel_tabMenu)', function (data) {
+                getTabMenu("sel_tabMenuChildren", data.value, "");
+                form.render('select');
+            });
+
 
         });
 
@@ -87,18 +149,25 @@
             //表单赋值 标签 name='NickName'
             form.val('example', {
                 "Id": info.Id
-                , "Name": info.Name
-                , "Telephone": info.Telephone
-                , "IDCard": info.IDCard
-                , "Occupation": info.Occupation
-                , "Sex": info.Sex
-                , "Remark": info.Remark
+                , "ParentGid": info.ParentGid
+                , "ChildrenGid": info.ChildrenGid
+                , "Title": info.Title
+                , "Subtitle": info.Subtitle
+                , "InformationSource": info.InformationSource
+                , "NewsContent": info.NewsContent
+                , "CoverUrl": info.CoverUrl
             });
+            getTabMenu("sel_tabMenu", "", info.ParentGid);
+            getTabMenu("sel_tabMenuChildren", info.ParentGid, info.ChildrenGid);
+            $('#up_img').attr('src', ApiService.SystemApi.APIService + info.CoverUrl);
+            UE.getEditor('editor').setContent(info.NewsContent);
         }
 
         //获取页面的值
         function getNowDetailJson() {
-            return form.val('example');
+            var detail = form.val('example');
+            detail.NewsContent = UE.getEditor('editor').getContent();
+            return detail;
         }
 
 

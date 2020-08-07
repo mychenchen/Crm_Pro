@@ -24,6 +24,8 @@ namespace Crm.Repository.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<Guid>("ChildrenGid");
+
                     b.Property<string>("CoverUrl");
 
                     b.Property<DateTime>("CreateTime");
@@ -35,6 +37,8 @@ namespace Crm.Repository.Migrations
 
                     b.Property<string>("NewsContent")
                         .IsRequired();
+
+                    b.Property<Guid>("ParentGid");
 
                     b.Property<DateTime?>("ShowTime");
 

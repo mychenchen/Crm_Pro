@@ -40,7 +40,7 @@ namespace Crm.Service.GatewayService
         /// <param name="pid"></param>
         public List<TabMenuEntity> GetListByPid(Guid pid)
         {
-            return _mydb.TabMenu.Where(a => a.ParentGid == pid).OrderBy(a => a.SortNum).ToList();
+            return _mydb.TabMenu.Where(a => a.IsDelete == 0 && a.ParentGid == pid).OrderBy(a => a.SortNum).ToList();
         }
         /// <summary>
         /// 分页查询

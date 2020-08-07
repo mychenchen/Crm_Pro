@@ -2,6 +2,7 @@
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Crm.Service.GatewayService;
+using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
 using Currency.Common.Caching;
 using Currency.Common.LogManange;
@@ -172,7 +173,7 @@ namespace Crm.WebApp.API
         /// 查询所有tab菜单
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet, NoSign]
         public ResultObject GetAllData()
         {
             try

@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Crm.Repository.MapperEntity;
+using Crm.Service.GatewayService;
+using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
 using Currency.Common.Caching;
 using Microsoft.AspNetCore.Cors;
@@ -7,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -22,15 +26,43 @@ namespace Crm.WebApp.API
     public class CommonController : ApiBaseController
     {
         private readonly IHostingEnvironment _hostingEnvironment;
+        private readonly ITabMenuService _tabMenu;
         public CommonController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
             IStaticCacheManager cache,
-            IHostingEnvironment hostingEnvironment
+            IHostingEnvironment hostingEnvironment,
+            ITabMenuService tabMenu
             ) : base(configStr, mapper, cache)
         {
             _hostingEnvironment = hostingEnvironment;
+            _tabMenu = tabMenu;
         }
+
+        #region 下拉菜单
+
+        /// <summary>
+        /// 查询tab菜单
+        /// </summary>
+        /// <param name="pid">父级ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject GetAllTabMenu(Guid pid)
+        {
+            try
+            {
+                var data = _tabMenu.GetListByPid(pid);
+                var list = _mapper.Map<List<TabMenuMapper>>(data);
+
+                return Success(list);
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        #endregion
 
         #region 上传图片
 
@@ -80,6 +112,25 @@ namespace Crm.WebApp.API
             catch (Exception ex)
             {
                 System.IO.File.Delete(wuliPath + url);
+                return Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 富文本框上传图片
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="noCache"></param>
+        /// <returns></returns>
+        [HttpGet, NoSign]
+        public ResultObject UEditorUploadFile(string action, string callback)
+        {
+            try
+            {
+                return Success();
+            }
+            catch (Exception ex)
+            {
                 return Error(ex.Message);
             }
         }

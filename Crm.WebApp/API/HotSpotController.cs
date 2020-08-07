@@ -64,7 +64,7 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="gid">名称</param>
         /// <returns></returns>
-        [HttpGet, NoSign]
+        [HttpGet]
         public ResultObject GetDetailByGid(Guid gid)
         {
             try
@@ -148,5 +148,35 @@ namespace Crm.WebApp.API
         }
 
         #endregion
+
+        #region 前端接口
+
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        /// <param name="page">页码</param>
+        /// <param name="limit">每页条数</param>
+        /// <returns></returns>
+        [HttpGet]
+        [NoSign]
+        public ResultObject GetAllData(int page, int limit)
+        {
+            try
+            {
+                var count = 0;
+                var data = _hotSpot.GetPageList("", page, limit, ref count);
+                var list = _mapper.Map<List<HotSpotMapper>>(data);
+
+                return SuccessPage(page, limit, count, list);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.ToString());
+                return Error(ex.Message);
+            }
+        }
+
+        #endregion
+
     }
 }
