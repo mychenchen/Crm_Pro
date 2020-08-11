@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Live2DW</title>
+    <style>
+        #live2dcanvas {
+            border: 0 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <label>当前模型:</label><label id="lbl_index"></label><br />
+    <label>手动输入:<input type="text" id="txt_shuru" /></label>
+    <button onclick="qiehuan()">切换模型</button>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/L2Dwidget.min.js"></script>
+    <!--<script src="js/L2Dwidget.0.min.js"></script>-->
+    <script type="text/javascript">
+        var urlapi = "https://unpkg.com/";
+        var list = [
+            "live2d-widget-model-shizuku/assets/shizuku.model.json",
+            "live2d-widget-model-z16/assets/z16.model.json",
+            "live2d-widget-model-chitose@1.0.5/assets/chitose.model.json",
+            // "live2d-widget-model-epsilon2_1@1.0.5/assets/Epsilon2.1.model.json",
+            //"live2d-widget-model-gf@1.0.5/assets/Gantzert_Felixander.model.json",
+            "live2d-widget-model-haru@1.0.5/01/assets/haru01.model.json",
+            "live2d-widget-model-haru@1.0.5/02/assets/haru02.model.json",
+            "live2d-widget-model-haruto@1.0.5/assets/haruto.model.json",
+            "live2d-widget-model-koharu@1.0.5/assets/koharu.model.json",
+            "live2d-widget-model-hibiki@1.0.5/assets/hibiki.model.json",
+            "live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json",
+            "live2d-widget-model-tororo/assets/tororo.model.json",//粉猫
+            "live2d-widget-model-izumi@1.0.5/assets/izumi.model.json",
+            // "live2d-widget-model-miku/assets/miku.model.json",
+            // "live2d-widget-model-ni-j/assets/ni-j.model.json", //13
+            // "live2d-widget-model-nico/assets/nico.model.json",
+            // "live2d-widget-model-nietzsche/assets/nietzche.model.json",
+            // "live2d-widget-model-nipsilon/assets/nipsilon.model.json",
+            // "live2d-widget-model-nito/assets/nito.model.json",
+            // "live2d-widget-model-tsumiki/assets/tsumiki.model.json",
+            // "live2d-widget-model-unitychan/assets/unitychan.model.json",
+            "live2d-widget-model-wanko/assets/wanko.model.json"
+        ];
+
+        window.onload = function () {
+            showKanBan(list[0]);
+            document.getElementById("lbl_index").innerHTML = "1/" + list.length;
+        }
+        var i = 1;
+        function qiehuan() {
+            if (list.length < i) {
+                i = 0;
+            }
+            var num = document.getElementById("txt_shuru").value;
+            if (num != "") {
+                i = parseInt(num) - 1;
+            }
+            showKanBan(list[i]);
+            document.getElementById("lbl_index").innerHTML = (i + 1) + "/" + list.length;
+            i++;
+        }
+
+        function showKanBan(url) {
+            L2Dwidget
+                // .o.n('*', (name) => {
+                //     console.log('%c EVENT ' + '%c -> ' + name, 'background: #222; color: yellow', 'background: #fff; color: #000')
+                // })
+                .init({
+                    "model": {
+                        //jsonpath控制显示那个小萝莉模型，下面这个就是我觉得最可爱的小萝莉模型
+                        //jsonPath: "https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json",
+                        jsonPath: urlapi + url,
+                        "scale": 1
+                    },
+                    "display": {
+                        "position": "center", //看板娘的表现位置
+                        "width": 200,//小萝莉的宽度
+                        "height": 300, //小萝莉的高度
+                        "hOffset": 0,//水平
+                        "vOffset": -20 //垂直
+                    },
+                    "mobile": {
+                        "show": true,
+                        "scale": 0.5
+                    },
+                    "react": {
+                        "opacityDefault": 0.7,//不透明度，可调
+                        "opacityOnHover": 0.2
+                    },
+                    "dialog": {
+                        enable: true,
+                        script: {
+                            //每20s，显示一言（调用一言Api返回的句子）
+                            'every idle 20s': '你好呀',
+                            //触摸到class='star'对象
+                            'hover .star': '星星在天上而你在我心里 (*/ω＼*)',
+                            //触摸到身体
+                            'tap body': '害羞⁄(⁄ ⁄•⁄ω⁄•⁄ ⁄)⁄',
+                            //触摸到头部
+                            'tap face': '~~'
+                        }
+                    }
+                });
+
+        }
+
+                                                //L2Dwidget
+                                                //    .on('*', (name) => {
+                                                //        console.log('%c EVENT ' + '%c -> ' + name, 'background: #222; color: yellow', 'background: #fff; color: #000')
+                                                //    })
+                                                //    .init({
+                                                //        dialog: {
+                                                //            // 开启对话框
+                                                //            enable: true,
+                                                //            script: {
+                                                //                // 每空闲 10 秒钟，显示一条一言
+                                                //                'every idle 10s': '$hitokoto$',
+                                                //                // 当触摸到星星图案
+                                                //                'hover .star': '星星在天上而你在我心里 (*/ω＼*)',
+                                                //                // 当触摸到角色身体
+                                                //                'tap body': '哎呀！别碰我！',
+                                                //                // 当触摸到角色头部
+                                                //                'tap face': '人家已经不是小孩子了！'
+                                                //            }
+                                                //        }
+                                                //    });
+
+
+    </script>
+</body>
+
+</html>

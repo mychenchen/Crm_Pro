@@ -33,8 +33,8 @@
                         <label id="lbl_SystemAdminName">贤心</label>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a
-                                href="javascript:OpenAppointHtml('/view/SystemManage/systemUserDetail.html?u=nows')">基本资料</a>
+                        <dd>
+                            <a href="javascript:OpenAppointHtml('/view/SystemManage/systemUserDetail.html?u=nows')">基本资料</a>
                         </dd>
                         <dd><a href="">安全设置</a></dd>
                     </dl>
@@ -86,6 +86,8 @@
     <script src="layui/layui.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/L2Dwidget.min.js"></script>
+    <script src="js/L2Dwidget.0.min.js"></script>
     <script>
 
         $(function () {
@@ -177,6 +179,29 @@
             return flag;
         }
 
+        L2Dwidget.init({
+            "model": {
+                //jsonpath控制显示那个小萝莉模型，下面这个就是我觉得最可爱的小萝莉模型
+                //jsonPath: "https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json",
+                jsonPath: "https://unpkg.com/live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json",
+                "scale": 1
+            },
+            "display": {
+                "position": "right", //看板娘的表现位置,默认左边
+                "width": 150,//小萝莉的宽度
+                "height": 150, //小萝莉的高度
+                "hOffset": 0,//水平
+                "vOffset": -20 //垂直
+            },
+            "mobile": {
+                "show": true,
+                "scale": 0.5
+            },
+            "react": {
+                "opacityDefault": 0.7,//不透明度，可调
+                "opacityOnHover": 0.2
+            }
+        });
     </script>
 </body>
 
