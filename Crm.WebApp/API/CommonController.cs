@@ -72,7 +72,7 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost,NoSign]
         public async Task<ResultObject> UploadFile(IFormFile file)
         {
             if (file == null)

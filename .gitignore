@@ -17,3 +17,5 @@
 /Currency.Quartz/obj
 /Currency.Rabbit/bin
 /Currency.Rabbit/obj
+/Crm.WebApp/bin/Release/netcoreapp2.2/publish/runtimes/win/lib
+/Crm.WebApp/bin/Release/netcoreapp2.2
