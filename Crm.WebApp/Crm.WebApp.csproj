@@ -102,4 +102,10 @@
 		<ProjectReference Include="..\Currency.Rabbit\Currency.Mq.csproj" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <Folder Include="uploads\" />
+	  <Folder Include="wwwroot\js\wangEditor\" />
+	</ItemGroup>
+
 </Project>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -51,23 +51,22 @@
             <label class="layui-form-label">消息来源</label>
             <div class="layui-input-block">
                 <input type="text" name="InformationSource" placeholder="消息来源(原创则不填写)" autocomplete="off"
-                    class="layui-input">
+                       class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">封面图<label style="color: red;">*</label></label>
             <div class="layui-input-block">
                 <img src='../../../images/upload.png' class="layui-upload-img" id="up_img"
-                    style="width: 114px;height: 140px;">
+                     style="width: 114px;height: 140px;">
                 <input type="hidden" name="CoverUrl" value="" />
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">新闻内容<label style="color: red;">*</label></label>
             <div class="layui-input-block">
-                <script id="editor" type="text/plain" style="width:1024px;height:500px;"></script>
+                <div id="editor"></div>
             </div>
-        </div>
         </div>
     </form>
 
@@ -75,24 +74,9 @@
     <script src="../../../js/jquery.min.js"></script>
     <script src="../../../js/main.js"></script>
 
-    <script type="text/javascript" charset="utf-8" src="../../../js/ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="../../../js/ueditor/ueditor.all.min.js"> </script>
-    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
-    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
-    <script type="text/javascript" charset="utf-8" src="../../../js/ueditor/lang/zh-cn/zh-cn.js"></script>
-    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <script src="../../../js/wangEditor/wangEditor.min.js"></script>
 
     <script>
-        //实例化编辑器
-        //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
-        var ue = UE.getEditor('editor', {
-            toolbars: [
-                ['fullscreen', 'source', 'undo', 'redo', 'bold', 'italic', 'underline', 'fontborder', 'strikethrough', 'superscript', 'subscript', 'fontfamily',
-                    'fontsize', 'justifyleft', 'justifyright', 'justifycenter', 'justifyjustify', 'rowspacingtop', 'rowspacingbottom', 'removeformat', 'formatmatch',
-                    'autotypeset', 'blockquote', 'pasteplain', '|', 'forecolor', 'backcolor', 'insertorderedlist', 'insertunorderedlist', 'selectall', 'cleardoc'
-                ]
-            ]
-        });
 
         var form = null;
         layui.use(['form', 'layedit', 'laydate', 'upload'], function () {
@@ -100,6 +84,8 @@
             var layer = layui.layer
                 , layedit = layui.layedit
                 , laydate = layui.laydate;
+
+            showUEditor();
 
             var upload = layui.upload;
             //普通图片上传
@@ -160,14 +146,90 @@
             getTabMenu("sel_tabMenu", "", info.ParentGid);
             getTabMenu("sel_tabMenuChildren", info.ParentGid, info.ChildrenGid);
             $('#up_img').attr('src', ApiService.SystemApi.APIService + info.CoverUrl);
-            UE.getEditor('editor').setContent(info.NewsContent);
+            editor.txt.html(info.NewsContent)
+            //UE.getEditor('editor').setContent(info.NewsContent);
         }
 
         //获取页面的值
         function getNowDetailJson() {
             var detail = form.val('example');
-            detail.NewsContent = UE.getEditor('editor').getContent();
+            detail.NewsContent = editor.txt.html();
             return detail;
+        }
+
+        var editor = new window.wangEditor('#editor');
+        // 自定义菜单配置
+        editor.customConfig.menus = [
+            'head',  // 标题
+            'bold',  // 粗体
+            'fontSize',  // 字号
+            'fontName',  // 字体
+            'italic',  // 斜体
+            'underline',  // 下划线
+            'strikeThrough',  // 删除线
+            'foreColor',  // 文字颜色
+            'backColor',  // 背景颜色
+            'link',  // 插入链接
+            'list',  // 列表
+            'justify',  // 对齐方式
+            'quote',  // 引用 
+            //'emoticon',  // 表情
+            'image',  // 插入图片
+            'table',  // 表格
+            //'video',  // 插入视频
+            //'code',  // 插入代码
+            'undo',  // 撤销
+            'redo'  // 重复
+        ]
+        function showUEditor() {
+
+            // 上传图片到服务器
+            //editor.customConfig.uploadImgServer = ApiService.SystemApi.APIService + '/Api/Common/UploadFile';
+            // 隐藏“网络图片”tab
+            editor.customConfig.showLinkImg = false;
+            // 将图片大小限制为 3M
+            editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+            // 限制一次最多上传 5 张图片
+            editor.customConfig.uploadImgMaxLength = 5;
+            editor.customConfig.uploadImgParams = {
+                // 如果版本 <=v3.1.0 ，属性值会自动进行 encode ，此处无需 encode
+                // 如果版本 >=v3.1.1 ，属性值不会自动 encode ，如有需要自己手动 encode
+                token: localStorage.Token
+            };
+
+            editor.customConfig.customUploadImg = function (files, insert) {
+                // files 是 input 中选中的文件列表
+                // insert 是获取图片 url 后，插入到编辑器的方法
+                var uploadData = new FormData();
+                for (var i = 0; i < files.length; i++) {
+                    uploadData.append(files[i].name, files[i]);
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: ApiService.SystemApi.APIService + '/Api/Common/WangEditorUpload',
+                    //beforeSend: function (xhr) {
+                    //    xhr.setRequestHeader("XSRF-TOKEN",
+                    //        $('input:hidden[name="__RequestVerificationToken"]').val());
+                    //},
+                    data: uploadData,
+                    processData: false,
+                    contentType: false,
+                    async: false,
+                    success: function (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            // 上传代码返回结果之后，将图片插入到编辑器中
+                            insert(ApiService.SystemApi.APIService + response[i]);
+                        }
+                    },
+                    failure: function (response) {
+                        alert(response);
+                    }
+                });
+            }
+
+            editor.create();
+
         }
 
 

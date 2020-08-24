@@ -4,11 +4,13 @@ using Crm.Service.GatewayService;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
 using Currency.Common.Caching;
+using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -72,7 +74,7 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        [HttpPost,NoSign]
+        [HttpPost, NoSign]
         public async Task<ResultObject> UploadFile(IFormFile file)
         {
             if (file == null)
@@ -105,33 +107,74 @@ namespace Crm.WebApp.API
                 }
                 if (!string.IsNullOrEmpty(oldPath))
                 {
-                    System.IO.File.Delete(wuliPath + oldPath);
+                    DeleteImage(wuliPath + oldPath);
                 }
                 return Success(url);
             }
             catch (Exception ex)
             {
-                System.IO.File.Delete(wuliPath + url);
+                DeleteImage(wuliPath + url);
                 return Error(ex.Message);
             }
         }
 
         /// <summary>
-        /// 富文本框上传图片
+        /// 富文本编辑框,图片上传
         /// </summary>
-        /// <param name="action"></param>
-        /// <param name="noCache"></param>
         /// <returns></returns>
-        [HttpGet, NoSign]
-        public ResultObject UEditorUploadFile(string action, string callback)
+        [HttpPost, NoSign]
+        public async Task<IActionResult> WangEditorUpload()
         {
             try
             {
-                return Success();
+                List<string> list = new List<string>();
+                var files = Request.Form.Files;
+                var wuliPath = Directory.GetCurrentDirectory();
+                string uploadPath = "uploads" + "/" + DateTime.Now.ToString("yyyyMMdd");
+                if (!Directory.Exists(uploadPath))
+                {
+                    Directory.CreateDirectory(uploadPath);
+                }
+                foreach (var formFile in files)
+                {
+                    if (formFile.Length > 0)
+                    {
+                        string fileExt = Path.GetExtension(formFile.FileName).Trim('.'); //文件扩展名，不含“.”
+                        string newFileName = Guid.NewGuid().ToString().Replace("-", "") + "." + fileExt; //随机生成新的文件名
+
+                        var filePath = Path.Combine(uploadPath, newFileName);
+
+                        using (var stream = new FileStream(filePath, FileMode.CreateNew))
+                        {
+                            await formFile.CopyToAsync(stream);
+                            var url = $@"/{uploadPath}/{newFileName}";
+                            list.Add(url);
+                        }
+                    }
+                }
+                return new JsonResult(list);
             }
             catch (Exception ex)
             {
-                return Error(ex.Message);
+                LogHelper.Error(ex.ToString());
+                return new JsonResult(ex.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// 删除图片
+        /// </summary>
+        /// <param name="url"></param>
+        private void DeleteImage(string url)
+        {
+            try
+            {
+                System.IO.File.Delete(url);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.Message);
             }
         }
 
