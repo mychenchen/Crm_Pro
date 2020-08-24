@@ -104,7 +104,6 @@
 
 
 	<ItemGroup>
-	  <Folder Include="uploads\" />
 	  <Folder Include="wwwroot\js\wangEditor\" />
 	</ItemGroup>
 
