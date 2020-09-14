@@ -14,6 +14,7 @@ using MongoDB.Bson.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -176,6 +177,122 @@ namespace Crm.WebApp.API
             {
                 LogHelper.Error(ex.Message);
             }
+        }
+
+        #endregion
+
+        #region 上传文件
+
+        /// <summary>
+        /// 上传 文件,并返回相对url(不包含 host port wwwroot)
+        /// 上传旧图地址,则会删除旧图
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost, NoSign]
+        public async Task<ResultObject> UploadFileWj(upModel model)
+        {
+            if (model.file == null)
+            {
+                return Error("请先选择文件");
+            }
+            var wuliPath = Directory.GetCurrentDirectory();
+            //文件夹名称 model.fileName
+            //页码 model.page
+            //总页码 model.totalPage
+            //格式 model.fileExt 
+            string uploadPath = "uploads" + "/" + model.fileName;
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+            string newFileName = model.fileName + "#" + model.page; //随机生成新的文件名
+
+            var filePath = Path.Combine(uploadPath, newFileName);
+            var url = $@"/{uploadPath}/{newFileName}";
+            try
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.file.CopyToAsync(stream);
+                }
+                if (model.page != model.totalPage)
+                    return Success(1, "继续上传", url);
+                else
+                    return Success(2, "上传完成", url);
+            }
+            catch (Exception ex)
+            {
+                DeleteImage(wuliPath + url);
+                return Error(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 文件合并
+        /// </summary>
+        /// <param name="filePath">文件夹路径</param>
+        /// <param name="fullName">存放路径</param>
+        [HttpGet, NoSign]
+        public string FileMerge(string filePath, string fullName)
+        {
+            var wuliPath = Directory.GetCurrentDirectory();
+            if (!Directory.Exists(wuliPath + filePath))
+            {
+                throw new Exception("文件不存在");
+            }
+
+            var files = Directory.GetFiles(wuliPath + filePath);
+
+            if (!(files.Length > 0))
+            {
+                throw new Exception("文件列表为空");
+            }
+            List<fileList> list_s = new List<fileList>();
+            foreach (var item in files)
+            {
+                var sp_ = item.Split('#');
+                list_s.Add(new fileList
+                {
+                    nameNum = int.Parse(sp_[1]),
+                    path = item
+                });
+            }
+            list_s = list_s.OrderBy(a => a.nameNum).ToList();
+
+            byte[] buffer = new byte[1024 * 100];
+            using (FileStream outStream = new FileStream(wuliPath + fullName, FileMode.Create))
+            {
+                int readedLen = 0;
+                FileStream srcStream = null;
+
+                list_s.ForEach(a =>
+                {
+                    srcStream = new FileStream(a.path, FileMode.Open);
+                    while ((readedLen = srcStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        outStream.Write(buffer, 0, readedLen);
+                    }
+                    srcStream.Close();
+                });
+            }
+            return fullName;
+        }
+
+        public class fileList
+        {
+            public int nameNum { get; set; }
+
+            public string path { get; set; }
+        }
+
+        public class upModel
+        {
+
+            public IFormFile file { get; set; }
+            public string fileName { get; set; }
+            public string page { get; set; }
+            public string totalPage { get; set; }
+            public string fileExt { get; set; }
         }
 
         #endregion

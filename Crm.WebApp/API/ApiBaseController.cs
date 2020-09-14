@@ -144,6 +144,25 @@ namespace Crm.WebApp.API
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="msg"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        protected ResultObject Success(int code, string msg, object obj)
+        {
+            ResultObject res = new ResultObject()
+            {
+                code = code,
+                message = msg,
+                resultTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"),
+                data = obj
+            };
+            return res;
+        }
+
+        /// <summary>
         /// 分页列表返回
         /// </summary>
         /// <param name="page"></param>
