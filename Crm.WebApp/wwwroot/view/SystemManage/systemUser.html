@@ -77,6 +77,7 @@
                 elem: '#tableData'
                 , id: "tableReload"
                 , url: ApiService.SystemApi.APIService + '/Api/User/GetData'
+                , headers: { "ToKenStr": localStorage.Token }
                 , page: true
                 , height: 'full-44'
                 , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
@@ -182,6 +183,7 @@
                     }
                     ajaxPost({
                         url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
+                        headers: { "ToKenStr": localStorage.Token },
                         data: model,
                         success: function (res) {
                             layer.msg(res.message);

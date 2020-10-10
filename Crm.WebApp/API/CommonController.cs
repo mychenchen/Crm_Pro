@@ -285,13 +285,34 @@ namespace Crm.WebApp.API
             public string path { get; set; }
         }
 
+        /// <summary>
+        /// 文件分片上传
+        /// </summary>
         public class upModel
         {
-
+            /// <summary>
+            /// 文件流
+            /// </summary>
             public IFormFile file { get; set; }
+
+            /// <summary>
+            /// 文件名称
+            /// </summary>
             public string fileName { get; set; }
+
+            /// <summary>
+            /// 当前分片数
+            /// </summary>
             public string page { get; set; }
+
+            /// <summary>
+            /// 总分片数
+            /// </summary>
             public string totalPage { get; set; }
+
+            /// <summary>
+            /// 文件后缀名
+            /// </summary>
             public string fileExt { get; set; }
         }
 

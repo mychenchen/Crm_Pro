@@ -4,12 +4,18 @@
 		<TargetFramework>netcoreapp2.2</TargetFramework>
 		<AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
 		<PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+		<UserSecretsId>17cee948-3ff8-4db2-a41f-018d69435563</UserSecretsId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<DocumentationFile>bin\Debug\Crm.WebApp.xml</DocumentationFile>
 		<OutputPath>bin\Debug\</OutputPath>
 		<NoWarn>1701;1702;1591</NoWarn>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <OutputPath>bin\Release\netcoreapp2.2\publish\</OutputPath>
+	  <DocumentationFile>bin\Release\netcoreapp2.2\publish\Crm.WebApp.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>

@@ -20,3 +20,4 @@
 /Crm.WebApp/bin/Release/netcoreapp2.2/publish/runtimes/win/lib
 /Crm.WebApp/bin/Release/netcoreapp2.2
 uploads
+/Currency.Quartz/bin

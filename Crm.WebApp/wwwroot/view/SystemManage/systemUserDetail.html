@@ -64,6 +64,7 @@
                 $("#div_nows").show();
                 ajaxGet({
                     url: ApiService.SystemApi.APIService + '/Api/User/GetUserDetailByGid',
+                    headers: { "ToKenStr": localStorage.Token }
                     data: { gid: logUserInfo.Gid },
                     success: function (res) {
                         if (res.code != 1) {
@@ -120,6 +121,7 @@
             }
             ajaxPost({
                 url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
+                headers: { "ToKenStr": localStorage.Token }
                 data: model,
                 success: function (res) {
                     layer.msg(res.message);

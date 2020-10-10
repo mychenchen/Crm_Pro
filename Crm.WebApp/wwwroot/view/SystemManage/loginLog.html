@@ -66,6 +66,7 @@
                 elem: '#tableData'
                 , id: "tableReload"
                 , url: ApiService.SystemApi.APIService + '/Api/SystemManage/GetLoginLogData'
+                , headers: { "ToKenStr": localStorage.Token }
                 , page: true
                 , height: 'full-44'
                 , defaultToolbar: ['filter']
