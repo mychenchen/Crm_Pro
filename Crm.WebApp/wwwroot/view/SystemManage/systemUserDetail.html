@@ -9,7 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="../../layui/css/layui.css">
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
-    <style>
+    <style type="text/css">
         body {
             padding: 10px;
         }
@@ -51,7 +51,7 @@
     <script src="../../js/jquery.min.js"></script>
     <script src="../../js/main.js"></script>
 
-    <script>
+    <script type="text/javascript">
         var form = null;
         layui.use(['form', 'layedit', 'laydate'], function () {
             form = layui.form;
@@ -62,9 +62,10 @@
             var uType = GetQueryString("u");
             if (uType == "nows") {
                 $("#div_nows").show();
+                var logUserInfo = JSON.parse(localStorage.LoginUser);
                 ajaxGet({
                     url: ApiService.SystemApi.APIService + '/Api/User/GetUserDetailByGid',
-                    headers: { "ToKenStr": localStorage.Token }
+                    headers: { "ToKenStr": localStorage.Token },
                     data: { gid: logUserInfo.Gid },
                     success: function (res) {
                         if (res.code != 1) {
@@ -121,7 +122,7 @@
             }
             ajaxPost({
                 url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
-                headers: { "ToKenStr": localStorage.Token }
+                headers: { "ToKenStr": localStorage.Token },
                 data: model,
                 success: function (res) {
                     layer.msg(res.message);

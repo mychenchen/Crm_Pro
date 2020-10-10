@@ -20,7 +20,7 @@ namespace Crm.Repository.TbEntity
         /// <summary>
         /// 公告类型
         /// </summary>
-        public Guid NoticeType { get; set; } = Guid.Empty;
+        public Guid NoticeType { get; set; }
 
         /// <summary>
         /// 内容
@@ -33,5 +33,9 @@ namespace Crm.Repository.TbEntity
         /// </summary>
         public string FileDownload { get; set; }
 
+        /// <summary>
+        /// 文件名称
+        /// </summary>
+        public string FileName { get; set; }
     }
 }

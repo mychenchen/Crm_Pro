@@ -781,7 +781,7 @@ if (typeof(SyntaxHighlighter) == 'undefined') var SyntaxHighlighter = function()
             /** <%= %> tags. */
             aspScriptTags				: { left: /(&lt;|<)%=?/g, right: /%(&gt;|>)/g },
 
-            /** <script> tags. */
+            /** <script type="text/javascript"> tags. */
             scriptScriptTags			: { left: /(&lt;|<)\s*script.*?(&gt;|>)/gi, right: /(&lt;|<)\/\s*script\s*(&gt;|>)/gi }
         },
 

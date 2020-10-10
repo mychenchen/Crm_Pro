@@ -148,10 +148,10 @@ function OpenDetail() {
                 layer.msg("请上传图片");
                 return false;
             }
-            // if (IsNullOrEmpty(model.NewsContent)) {
-            //     layer.msg("请编辑内容");
-            //     return false;
-            // }
+            if (IsNullOrEmpty(model.NewsContent)) {
+                layer.msg("请编辑内容");
+                return false;
+            }
 
             $.ajax({
                 url: ApiService.SystemApi.APIService + "/Api/HotNews/SaveModel",

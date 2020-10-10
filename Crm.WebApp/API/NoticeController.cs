@@ -19,17 +19,17 @@ namespace Crm.WebApp.API
     /// </summary>
     [EnableCors("allow_all")]
     [Route("api/[controller]/[action]")]
-    public class HotNewsController : ApiBaseController
+    public class NoticeController : ApiBaseController
     {
-        protected readonly IHotNewsService _hotNews;
-        public HotNewsController(
+        protected readonly INoticeService _notice;
+        public NoticeController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
             IStaticCacheManager cache,
-            IHotNewsService hotNews
+            INoticeService notice
             ) : base(configStr, mapper, cache)
         {
-            _hotNews = hotNews;
+            _notice = notice;
         }
 
         #region 后台服务接口
@@ -47,8 +47,8 @@ namespace Crm.WebApp.API
             try
             {
                 var count = 0;
-                var data = _hotNews.GetPageList(title, page, limit, ref count);
-                var list = _mapper.Map<List<HotNewsMapper>>(data);
+                var data = _notice.GetPageList(title, page, limit, ref count);
+                var list = _mapper.Map<List<NoticeMapper>>(data);
 
                 return SuccessPage(page, limit, count, list);
             }
@@ -69,8 +69,8 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _hotNews.GetModel(gid);
-                var info = _mapper.Map<HotNewsMapper>(data);
+                var data = _notice.GetModel(gid);
+                var info = _mapper.Map<NoticeMapper>(data);
 
                 return Success(info);
             }
@@ -87,14 +87,15 @@ namespace Crm.WebApp.API
         /// <param name="model">热点轮播</param>
         /// <returns></returns>
         [HttpPost]
-        public ResultObject SaveModel(HotNewsMapper model)
+        public ResultObject SaveModel(NoticeMapper model)
         {
             var optEvent = "添加";
             var errStr = "成功";
             try
             {
-                var saveEntity = _mapper.Map<HotNewsEntity>(model);
-                var entity = _hotNews.GetModel(saveEntity.Id);
+                model.CreateTime = DateTime.Now;
+                var saveEntity = _mapper.Map<NoticeEntity>(model);
+                var entity = _notice.GetModel(saveEntity.Id);
                 if (entity != null)
                 {
                     saveEntity.CreateTime = entity.CreateTime;
@@ -102,7 +103,7 @@ namespace Crm.WebApp.API
                     optEvent = "修改";
                 }
 
-                _hotNews.AddUpdateModel(saveEntity);
+                _notice.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
@@ -113,7 +114,7 @@ namespace Crm.WebApp.API
             }
             finally
             {
-                SaveUserOperation("HotNewsController", optEvent, $"添加新闻,结果:{errStr})");
+                SaveUserOperation("NoticeController", optEvent, $"添加公告,结果:{errStr})");
             }
         }
 
@@ -128,7 +129,7 @@ namespace Crm.WebApp.API
             var errStr = "成功";
             try
             {
-                _hotNews.Delete(Guid.Parse(gid));
+                _notice.Delete(Guid.Parse(gid));
                 return Success();
             }
             catch (Exception ex)
@@ -139,35 +140,11 @@ namespace Crm.WebApp.API
             }
             finally
             {
-                SaveUserOperation("HotNewsController", "删除", $"删除新闻,结果:{errStr}");
+                SaveUserOperation("NoticeController", "删除", $"删除公告,结果:{errStr}");
             }
         }
 
         #endregion
 
-        #region 前台调用接口
-
-        /// <summary>
-        /// 查询所有tab菜单
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet, NoSign]
-        public ResultObject GetAllData()
-        {
-            try
-            {
-                var data = _hotNews.GetList();
-                var list = _mapper.Map<List<HotNewsMapper>>(data);
-
-                return Success(list);
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error(ex.ToString());
-                return Error(ex.Message);
-            }
-        }
-
-        #endregion
     }
 }

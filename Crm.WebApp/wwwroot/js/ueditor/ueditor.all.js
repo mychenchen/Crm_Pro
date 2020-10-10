@@ -2251,7 +2251,7 @@ var domUtils = dom.domUtils = {
      * <div id="test">
      *     <div id="child">你好</div>
      * </div>
-     * <script>
+     * <script type="text/javascript">
      *     UE.dom.domUtils.remove( document.body, false );
      *     //output: false
      *     console.log( document.getElementById( "child" ) !== null );
@@ -2270,7 +2270,7 @@ var domUtils = dom.domUtils = {
      * <div id="test">
      *     <div id="child">你好</div>
      * </div>
-     * <script>
+     * <script type="text/javascript">
      *     UE.dom.domUtils.remove( document.body, true );
      *     //output: true
      *     console.log( document.getElementById( "child" ) !== null );
@@ -2305,7 +2305,7 @@ var domUtils = dom.domUtils = {
      *      </div>
      *      <i>xxx</i>
      * </body>
-     * <script>
+     * <script type="text/javascript">
      *
      *     //output: i节点
      *     console.log( UE.dom.domUtils.getNextDomNode( document.getElementById( "test" ) ) );
@@ -2321,7 +2321,7 @@ var domUtils = dom.domUtils = {
      *      </div>
      *      <b>xxx</b>
      * </body>
-     * <script>
+     * <script type="text/javascript">
      *
      *     //由于id为test的i节点之后没有兄弟节点， 则查找其父节点（div）后面的兄弟节点
      *     //output: b节点
@@ -2356,7 +2356,7 @@ var domUtils = dom.domUtils = {
      * @example
      * ```html
      * <span id="_baidu_bookmark_1"></span>
-     * <script>
+     * <script type="text/javascript">
      *      var bookmarkNode = document.getElementById("_baidu_bookmark_1");
      *      //output: true
      *      console.log( UE.dom.domUtils.isBookmarkNode( bookmarkNode ) );
@@ -2435,7 +2435,7 @@ var domUtils = dom.domUtils = {
      *     <em>xxx</em>
      *     <span></span>
      * </body>
-     * <script>
+     * <script type="text/javascript">
      *
      *      UE.dom.domUtils.clearEmptySibling( document.getElementById( "test" ) );
      *
@@ -2489,7 +2489,7 @@ var domUtils = dom.domUtils = {
      * @example
      * ```html
      * <div id="test">abcdef</div>
-     * <script>
+     * <script type="text/javascript">
      *      var newNode = UE.dom.domUtils.split( document.getElementById( "test" ).firstChild, 3 );
      *      //output: def
      *      console.log( newNode.nodeValue );
@@ -2522,7 +2522,7 @@ var domUtils = dom.domUtils = {
      * <div id="test">
      *
      * </div>
-     * <script>
+     * <script type="text/javascript">
      *      //output: true
      *      console.log( UE.dom.domUtils.isWhitespace( document.getElementById("test").firstChild ) );
      * </script>
@@ -2676,7 +2676,7 @@ var domUtils = dom.domUtils = {
      * <span style="font-size:13px">ssss</span>
      * <span style="font-size:14px">bbbbb</span>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var nodes = document.getElementsByTagName( "span" );
      *
@@ -2751,7 +2751,7 @@ var domUtils = dom.domUtils = {
      * <span style="font-size:13px">ssss</span>
      * <span style="font-size:14px">bbbbb</span>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var nodes = document.getElementsByTagName( "span" );
      *
@@ -2810,7 +2810,7 @@ var domUtils = dom.domUtils = {
      * <span id="test2"></span>
      * <div id="test3" style="display: inline"></div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     //output: true
      *     console.log( UE.dom.domUtils.isBlockElm( document.getElementById("test1") ) );
@@ -3055,7 +3055,7 @@ var domUtils = dom.domUtils = {
      *     </div>
      * </div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var child = document.getElementById( "child" );
      *
@@ -3106,7 +3106,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <b>xxxx</b><b id="test">ooo</b><b>xxxx</b>
      *
-     * <script>
+     * <script type="text/javascript">
      *     var demoNode = document.getElementById("test");
      *     UE.dom.domUtils.mergeSibling( demoNode );
      *     //output: xxxxoooxxxx
@@ -3124,7 +3124,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <b>xxxx</b><b id="test">ooo</b><b>xxxx</b>
      *
-     * <script>
+     * <script type="text/javascript">
      *     var demoNode = document.getElementById("test");
      *     UE.dom.domUtils.mergeSibling( demoNode, true );
      *     //output: oooxxxx
@@ -3144,7 +3144,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <b>xxxx</b><b id="test">ooo</b><b>xxxx</b>
      *
-     * <script>
+     * <script type="text/javascript">
      *     var demoNode = document.getElementById("test");
      *     UE.dom.domUtils.mergeSibling( demoNode, false, true );
      *     //output: xxxxooo
@@ -3219,7 +3219,7 @@ var domUtils = dom.domUtils = {
      *      <span style="font-size:14px;" id="test" name="followMe">xxxxx</span>
      * </div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     UE.dom.domUtils.removeAttributes( document.getElementById( "test" ), "id name" );
      *
@@ -3241,7 +3241,7 @@ var domUtils = dom.domUtils = {
      *      <span style="font-size:14px;" id="test" name="followMe">xxxxx</span>
      * </div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     UE.dom.domUtils.removeAttributes( document.getElementById( "test" ), ["id", "name"] );
      *
@@ -3301,7 +3301,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <span id="test"></span>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var testNode = UE.dom.domUtils.setAttributes( document.getElementById( "test" ), {
      *         id: 'demo'
@@ -3355,7 +3355,7 @@ var domUtils = dom.domUtils = {
      *
      * <span id="test"></span>
      *
-     * <script>
+     * <script type="text/javascript">
      *     //output: 15px
      *     console.log( UE.dom.domUtils.getComputedStyle( document.getElementById( "test" ), 'font-size' ) );
      * </script>
@@ -3403,7 +3403,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <span id="test" class="test1 test2 test3">xxx</span>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var testNode = document.getElementById( "test" );
      *     UE.dom.domUtils.removeClasses( testNode, "test1 test2" );
@@ -3424,7 +3424,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <span id="test" class="test1 test2 test3">xxx</span>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var testNode = document.getElementById( "test" );
      *     UE.dom.domUtils.removeClasses( testNode, ["test1", "test2"] );
@@ -3458,7 +3458,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <span id="test" class="cls1 cls2"></span>
      *
-     * <script>
+     * <script type="text/javascript">
      *     var testNode = document.getElementById("test");
      *
      *     UE.dom.domUtils.addClass( testNode, "cls2 cls3 cls4" );
@@ -3466,7 +3466,7 @@ var domUtils = dom.domUtils = {
      *     //output: cl1 cls2 cls3 cls4
      *     console.log( testNode.className );
      *
-     * <script>
+     * <script type="text/javascript">
      * ```
      */
 
@@ -3480,7 +3480,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <span id="test" class="cls1 cls2"></span>
      *
-     * <script>
+     * <script type="text/javascript">
      *     var testNode = document.getElementById("test");
      *
      *     UE.dom.domUtils.addClass( testNode, ["cls2", "cls3", "cls4"] );
@@ -3488,7 +3488,7 @@ var domUtils = dom.domUtils = {
      *     //output: cl1 cls2 cls3 cls4
      *     console.log( testNode.className );
      *
-     * <script>
+     * <script type="text/javascript">
      * ```
      */
     addClass:function (elm, classNames) {
@@ -3511,7 +3511,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <span id="test1" class="cls1 cls2"></span>
      *
-     * <script>
+     * <script type="text/javascript">
      *     var test1 = document.getElementById("test1");
      *
      *     //output: false
@@ -3533,7 +3533,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <span id="test1" class="cls1 cls2"></span>
      *
-     * <script>
+     * <script type="text/javascript">
      *     var test1 = document.getElementById("test1");
      *
      *     //output: false
@@ -3578,7 +3578,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <span id="test" style="color: red; background: blue;"></span>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var testNode = document.getElementById("test");
      *
@@ -3621,7 +3621,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <div id="test" style="color: red;"></div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *      var testNode = document.getElementById( "test" );
      *
@@ -3648,7 +3648,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <div id="test"></div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *      var testNode = document.getElementById( "test" );
      *
@@ -3677,7 +3677,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <div id="test"></div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *      var testNode = document.getElementById( "test" );
      *
@@ -3722,7 +3722,7 @@ var domUtils = dom.domUtils = {
      *      <span></span>
      * </div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     //output: 3
      *     console.log( UE.dom.domUtils.getChildCount( document.getElementById("test") ) );
@@ -3743,7 +3743,7 @@ var domUtils = dom.domUtils = {
      *      <span></span>
      * </div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     //output: 1
      *     console.log( UE.dom.domUtils.getChildCount( document.getElementById("test"), function ( node ) {
@@ -3920,7 +3920,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <div id="test"></div>
      *
-     * <script>
+     * <script type="text/javascript">
      *     //output: true
      *     console.log( UE.dom.domUtils.isEmptyBlock( document.getElementById("test") ) );
      * </script>
@@ -3961,7 +3961,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <div id="test" style="top: 100px; left: 50px; position: absolute;"></div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var testNode = document.getElementById("test");
      *
@@ -4000,7 +4000,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <div id="test"></div>
      *
-     * <script>
+     * <script type="text/javascript">
      *     var testNode = document.getElementById("test");
      *
      *     //output: 0
@@ -4034,7 +4034,7 @@ var domUtils = dom.domUtils = {
      *     <div></div>
      * </div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var test1 = document.getElementById("test1"),
      *         test2 = document.getElementById("test2");
@@ -4066,7 +4066,7 @@ var domUtils = dom.domUtils = {
      *     <div></div>
      * </div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     var test1 = document.getElementById("test1"),
      *         test2 = document.getElementById("test2");
@@ -4102,7 +4102,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <div id="test"><span>xxxx</span></div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     //output: false
      *     console.log( UE.dom.domUtils.hasNoAttributes( document.getElementById("test") ) );
@@ -4139,7 +4139,7 @@ var domUtils = dom.domUtils = {
      * ```html
      * <div id="test"></div>
      *
-     * <script>
+     * <script type="text/javascript">
      *
      *     //output: true
      *     console.log( UE.dom.domUtils.isTagNode( document.getElementById("test"), "div" ) );
@@ -4529,7 +4529,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *      <!-- 中括号表示选区 -->
          *      <b>x<i>x[x</i>xx]x</b>
          *
-         *      <script>
+         *      <script type="text/javascript">
          *          //range是已选中的选区
          *          var fragment = range.cloneContents(),
          *              node = document.createElement("div");
@@ -4558,7 +4558,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *      <!-- 中括号表示选区 -->
          *      <b>x<i>x[x</i>xx]x</b>
          *
-         *      <script>
+         *      <script type="text/javascript">
          *          //range是已选中的选区
          *          range.deleteContents();
          *
@@ -4609,7 +4609,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *      <!-- 中括号表示选区 -->
          *      <b>x<i>x[x</i>xx]x</b>
          *
-         *      <script>
+         *      <script type="text/javascript">
          *          //range是已选中的选区
          *          var fragment = range.extractContents(),
          *              node = document.createElement( "div" );
@@ -4658,7 +4658,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区 -->
          * <b>xxx<i>x<span>xx</span>xx<em>xx</em>xxx</i>[xxx]</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行操作
          *     range.setStart( document.getElementsByTagName("i")[0], 1 );
@@ -4673,7 +4673,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区 -->
          * <b>xxx<img>[xx]x</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行操作
          *     range.setStart( document.getElementsByTagName("img")[0], 3 );
@@ -4711,7 +4711,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区示例 -->
          * <b>xx<i>xxx</i><span>xx[x</span>xxx]</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行操作
          *     range.setStartAfter( document.getElementsByTagName("i")[0] );
@@ -4750,7 +4750,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区示例 -->
          * <b>[xx<i>xxx</i><span>xx]x</span>xxx</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行操作
          *     range.setStartAfter( document.getElementsByTagName("span")[0] );
@@ -4790,7 +4790,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区示例 -->
          * <b>xx<i>xxx</i><span>[xx]x</span>xxx</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行操作
          *     range.setStartAtFirst( document.getElementsByTagName("i")[0] );
@@ -4856,7 +4856,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区示例 -->
          * <b>xx<i>xxx</i><span>[xx]x</span>xxx</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行操作
          *     range.selectNode( document.getElementsByTagName("i")[0] );
@@ -4883,7 +4883,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区示例 -->
          * <b>xx<i>xxx</i><span>[xx]x</span>xxx</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行操作
          *     range.selectNode( document.getElementsByTagName("b")[0] );
@@ -4919,7 +4919,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区示例 -->
          * <b>xx<i>xxx</i><span>[xx]x</span>xxx</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行操作
          *     range.collapse();
@@ -4944,7 +4944,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区示例 -->
          * <b>xx<i>xxx</i><span>[xx]x</span>xxx</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行操作
          *     range.collapse( true );
@@ -4983,7 +4983,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * <!-- 选区示例 -->
          * <b>x[xx</b><i>]xxx</i>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //执行收缩
          *     range.shrinkBoundary();
@@ -5041,7 +5041,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * ```html
          * //选区示例
          * <span>xxx<b>x[x<em>xx]x</em>xxx</b>xx</span>
-         * <script>
+         * <script type="text/javascript">
          *
          *     var node = range.getCommonAncestor();
          *
@@ -5068,7 +5068,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *     <!-- 选区示例 -->
          *     <b>xxx<i>xxxx<span>xx[x</span>xx]x</i>xxxxxxx</b>
          *
-         *     <script>
+         *     <script type="text/javascript">
          *
          *         var node = range.getCommonAncestor( false );
          *
@@ -5100,7 +5100,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *     <!-- 选区示例 -->
          *     <b>xxx<i>xxxx<span>x[x]x</span>xxx</i>xxxxxxx</b>
          *
-         *     <script>
+         *     <script type="text/javascript">
          *
          *         var node = range.getCommonAncestor( true, false );
          *
@@ -5139,7 +5139,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * //选区示例
          * <b>xxx<i>[xxxxx]</i>xxx</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *     //未调整前， 选区的开始容器和结束都是文本节点
          *     //执行调整
          *     range.trimBoundary();
@@ -5162,7 +5162,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          * //选区示例
          * <b>xxx<i>[xxxxx]</i>xxx</b>
          *
-         * <script>
+         * <script type="text/javascript">
          *     //未调整前， 选区的开始容器和结束都是文本节点
          *     //执行调整
          *     range.trimBoundary( true );
@@ -5876,7 +5876,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *         </em>
          *     </p>
          *
-         *     <script>
+         *     <script type="text/javascript">
          *         //output: {startAddress:[0,1,0,0],endAddress:[0,1,0,4]}
          *         console.log( range.createAddress() );
          *     </script>
@@ -5960,7 +5960,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *         </em>
          *     </p>
          *
-         *     <script>
+         *     <script type="text/javascript">
          *         var range = editor.selection.getRange();
          *         range.moveToAddress({startAddress:[0,1,0,0],endAddress:[0,1,0,4]});
          *         range.select();
@@ -6037,7 +6037,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *     <!-- 选区结束 -->
          * </body>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //output: <span></span><a></a>
          *     console.log( range.cloneContents() );
@@ -6081,7 +6081,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
          *     <!-- 选区结束 -->
          * </body>
          *
-         * <script>
+         * <script type="text/javascript">
          *
          *     //output: <span></span><a></a>
          *     console.log( range.cloneContents() );
@@ -12550,7 +12550,7 @@ UE.commands['preview'] = {
         var w = window.open('', '_blank', ''),
             d = w.document;
         d.open();
-        d.write('<!DOCTYPE html><html><head><meta charset="utf-8"/><script src="'+this.options.UEDITOR_HOME_URL+'ueditor.parse.js"></script><script>' +
+        d.write('<!DOCTYPE html><html><head><meta charset="utf-8"/><script src="'+this.options.UEDITOR_HOME_URL+'ueditor.parse.js"></script><script type="text/javascript">' +
             "setTimeout(function(){uParse('div',{rootPath: '"+ this.options.UEDITOR_HOME_URL +"'})},300)" +
             '</script></head><body><div>'+this.getContent(null,null,true)+'</div></body></html>');
         d.close();

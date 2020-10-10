@@ -31,7 +31,8 @@ layui.use(['table', 'layer'], function () {
 
         elem: '#tableData'
         , id: "tableReload"
-        , url: ApiService.SystemApi.APIService + '/Api/HotSpot/GetData'
+        , url: ApiService.SystemApi.APIService + '/Api/Notice/GetData'
+        , headers: { "ToKenStr": localStorage.Token }
         , page: true
         , height: 'full-44'
         , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
@@ -39,16 +40,30 @@ layui.use(['table', 'layer'], function () {
         , where: searchModel
         , cols: [[
             // { type: 'checkbox' },
-            { field: 'ImgTitle', title: '标题' }
-            , { field: 'ImgPath', title: '图片', templet: '#imgShow' }
-            , { field: 'ContentUrl', title: '内容链接' }
+            { field: 'Title', title: '标题' }
+            , { field: 'FileName', title: '文件名' }
             , { field: 'CreateTimeStr', title: '创建时间' }
             , { field: '', title: '操作', toolbar: '#barDemo' }
         ]]
+        , done: function (res, curr, count) { //表格数据加载完后的事件
+            //调用示例
+            layer.photos({//点击图片弹出
+                photos: '.layer-photos-demo'
+                , anim: 1 //0-6的选择，指定弹出图片动画类型，默认随机（请注意，3.0之前的版本用shift参数）
+            });
+        }
         , response: {
             statusCode: 1 //重新规定成功的状态码为 1 ，table 组件默认为 0
         }
         , parseData: function (res) {
+            if (res.code == 401) {
+                layer.alert("登陆已过期,即将跳转至登陆界面!!!");
+                localStorage.Token = "";
+                setTimeout(() => {
+                    location.href = "/login.html";
+                }, 2000);
+                return false;
+            }
             var count = 0;
             var tableList = [];
             //将原始数据解析成 table 组件所规定的数据
@@ -85,7 +100,7 @@ layui.use(['table', 'layer'], function () {
             layer.confirm('真的删除行么', function (index) {
 
                 $.ajax({
-                    url: ApiService.SystemApi.APIService + "/Api/HotSpot/DeleteModel",
+                    url: ApiService.SystemApi.APIService + "/Api/Notice/DeleteModel",
                     type: "get",
                     headers: { "ToKenStr": localStorage.Token },
                     data: { gid: data.Id },
@@ -101,6 +116,8 @@ layui.use(['table', 'layer'], function () {
         } else if (obj.event === 'edit') {
             localStorage.detail = JSON.stringify(data);
             OpenDetail();
+        } else if (obj.event === 'down') {
+            location.href = ApiService.SystemApi.APIService + data.FileDownload;
         }
     });
 });
@@ -111,7 +128,7 @@ function OpenDetail() {
         type: 2,
         title: "详情",
         scrollbar: false,
-        area: ['550px', '700px'],
+        area: ['1000px', '700px'],
         content: 'Detail.html',
         btn: ['提交', '取消'],
         btnAlign: 'c',
@@ -119,17 +136,21 @@ function OpenDetail() {
             //获取详情页指定函数
             var model = $(layero).find("iframe")[0].contentWindow.getNowDetailJson();
 
-            if (IsNullOrEmpty(model.ImgTitle)) {
+            if (IsNullOrEmpty(model.NoticeType)) {
+                layer.msg("请选择菜单");
+                return false;
+            }
+            if (IsNullOrEmpty(model.Title)) {
                 layer.msg("请填写标题");
                 return false;
             }
-            // if (IsNullOrEmpty(model.ImgPath)) {
-            //     layer.msg("请填写上传图片");
-            //     return false;
-            // }
+            if (IsNullOrEmpty(model.NewsContent)) {
+                layer.msg("请编辑内容");
+                return false;
+            }
 
             $.ajax({
-                url: ApiService.SystemApi.APIService + "/Api/HotSpot/SaveModel",
+                url: ApiService.SystemApi.APIService + "/Api/Notice/SaveModel",
                 type: "post",
                 headers: { "ToKenStr": localStorage.Token },
                 data: model,

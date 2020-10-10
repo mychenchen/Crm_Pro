@@ -113,4 +113,20 @@
 	  <Folder Include="wwwroot\js\wangEditor\" />
 	</ItemGroup>
 
+
+	<ItemGroup>
+	  <Content Update="wwwroot\view\GatewayManage\NoticeManage\Detail.html">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\view\GatewayManage\NoticeManage\Index.html">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	  <Content Update="wwwroot\view\GatewayManage\NoticeManage\js\index.js">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
 </Project>

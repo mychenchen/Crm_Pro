@@ -11,7 +11,7 @@
 <body class="layui-layout-body">
     <div class="layui-layout layui-layout-admin">
         <div class="layui-header">
-            <div class="layui-logo systemLogoName">云健康</div>
+            <div class="layui-logo systemLogoName" id="div_LogTitle">云健康</div>
             <!-- 头部区域（可配合layui已有的水平导航） -->
             <!-- <ul class="layui-nav layui-layout-left">
                 <li class="layui-nav-item"><a href="">控制台</a></li>
@@ -30,11 +30,12 @@
                 <li class="layui-nav-item">
                     <a href="javascript:;">
                         <img src="/images/name.png" class="layui-nav-img">
-                        <label id="lbl_SystemAdminName">贤心</label>
+                        <label id="lbl_SystemAdminName">大头不怕下雨</label>
                     </a>
                     <dl class="layui-nav-child">
                         <dd>
-                            <a href="javascript:OpenAppointHtml('/view/SystemManage/systemUserDetail.html?u=nows')">基本资料</a>
+                            <a
+                                href="javascript:OpenAppointHtml('/view/SystemManage/systemUserDetail.html?u=nows')">基本资料</a>
                         </dd>
                         <dd><a href="">安全设置</a></dd>
                     </dl>
@@ -88,12 +89,9 @@
     <script src="js/main.js"></script>
     <script src="js/L2Dwidget.min.js"></script>
     <script src="js/L2Dwidget.0.min.js"></script>
-    <script>
+    <script type="text/javascript">
 
         $(function () {
-
-            document.title = ApiService.HtmlInfo.topTitle;
-            $("#div_botTitle").html(ApiService.HtmlInfo.bottomTitle);
 
             var str = "";
             $.each(menuJson, function (i, val) {
@@ -110,12 +108,18 @@
                 str += '</li>';
             });
             $(".layui-nav-tree").html(str);
-
         });
 
         layui.use(['element', 'layer'], function () {
             var element = layui.element;
             var layer = layui.layer;
+
+            document.title = ApiService.HtmlInfo.topTitle;
+            $("#div_LogTitle").html(ApiService.HtmlInfo.LogTitle);
+            $("#div_botTitle").html(ApiService.HtmlInfo.bottomTitle);
+            var logUserInfo = JSON.parse(localStorage.LoginUser);
+            $("#lbl_SystemAdminName").html(logUserInfo.Name);
+
 
             if (!IsNullOrEmpty(localStorage.Token)) {
                 ajaxGet({
@@ -150,14 +154,17 @@
         });
 
         function logOut() {
-            ajaxGet({
-                url: ApiService.SystemApi.APIService + '/Api/LoginHome/LogOut',
-                data: { token: localStorage.Token },
-                success: function (res) {
-                    //验证失败,重新登陆
-                    localStorage.Token = "";
-                    location.href = "login.html";
-                }
+            layer.confirm('是否确定退出账号', function (index) {
+
+                ajaxGet({
+                    url: ApiService.SystemApi.APIService + '/Api/LoginHome/LogOut',
+                    data: { token: localStorage.Token },
+                    success: function (res) {
+                        //验证失败,重新登陆
+                        localStorage.Token = "";
+                        location.href = "login.html";
+                    }
+                });
             });
         }
 

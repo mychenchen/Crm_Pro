@@ -22,5 +22,14 @@ namespace Crm.Repository.MapperEntity
         /// </summary>
         public string NewsContent { get; set; }
 
+        /// <summary>
+        /// 附件
+        /// </summary>
+        public string FileDownload { get; set; }
+
+        /// <summary>
+        /// 文件名称
+        /// </summary>
+        public string FileName { get; set; }
     }
 }

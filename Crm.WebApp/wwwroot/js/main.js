@@ -8,8 +8,9 @@ var ApiService = {
         "APIService": "" //API输出地址
     },
     HtmlInfo: {
-        topTitle: "云健康-为您的健康保驾护航",
-        bottomTitle: "© 云健康平台 - 专注健康,为您服务"
+        LogTitle: "模板名称-自定义",
+        topTitle: "模板title-自定义",
+        bottomTitle: "© 模板底部-自定义描述"
     }
 };
 

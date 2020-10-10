@@ -9661,7 +9661,7 @@ jQuery.ajaxTransport( "script", function( s ) {
 		var script, callback;
 		return {
 			send: function( _, complete ) {
-				script = jQuery( "<script>" ).prop( {
+				script = jQuery( "<script type='text/javascript'>" ).prop( {
 					charset: s.scriptCharset,
 					src: s.url
 				} ).on(
