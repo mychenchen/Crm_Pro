@@ -21,3 +21,5 @@
 /Crm.WebApp/bin/Release/netcoreapp2.2
 uploads
 /Currency.Quartz/bin
+/Currency.aliyun/bin
+/Currency.aliyun/obj
