@@ -17,11 +17,11 @@
         <form class="layui-form">
             <div class="layui-input-inline">
                 <input type="text" name="account" required lay-verify="required" placeholder="用户名" autocomplete="off"
-                    class="layui-input">
+                       class="layui-input">
             </div>
             <div class="layui-input-inline">
                 <input type="password" name="password" required lay-verify="required" placeholder="密码"
-                    autocomplete="off" class="layui-input">
+                       autocomplete="off" class="layui-input">
             </div>
             <div class="layui-input-inline login-btn">
                 <button lay-submit lay-filter="login" class="layui-btn">登录</button>
@@ -71,19 +71,27 @@
             var layer = layui.layer;
 
             form.on('submit(login)', function (data) {
+                var indexMsg = layer.msg("正在登陆,请等待...", {
+                    icon: 16,
+                    time: false,
+                    shade: 0.5
+                });
                 $.ajax({
                     url: ApiService.SystemApi.APIService + '/Api/LoginHome/Login',
                     data: data.field,
                     datType: "json",
                     type: 'post',
                     success: function (res) {
+                        layer.close(indexMsg);
                         if (res.code != 1) {
                             layer.msg(res.message);
                             return false;
                         }
                         localStorage.LoginUser = JSON.stringify(res.data);
                         localStorage.Token = res.data.Token;
-                        location.href = "index.html";
+                        setTimeout(() => {
+                            location.href = "index.html";
+                        }, 1500);
                     },
                     error: function (ex) {
                         layer.alert("网络请求超时,请检查网络");

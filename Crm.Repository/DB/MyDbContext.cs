@@ -47,6 +47,16 @@ namespace Crm.Repository.DB
         /// </summary>
         public DbSet<OperationLogEntity> OperationLog { get; set; }
 
+        /// <summary>
+        /// 产品信息
+        /// </summary>
+        public DbSet<ProductEntity> Product { get; set; }
+
+        /// <summary>
+        /// 产品视频详情
+        /// </summary>
+        public DbSet<ProductVideoEntity> ProductVideo { get; set; }
+
         #endregion
     }
 }

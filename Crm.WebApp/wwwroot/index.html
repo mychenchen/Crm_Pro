@@ -2,18 +2,18 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>CMS</title>
-    <link rel="stylesheet" href="layui/css/layui.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>CMS</title>
+  <link rel="stylesheet" href="layui/css/layui.css">
 </head>
 
 <body class="layui-layout-body">
-    <div class="layui-layout layui-layout-admin">
-        <div class="layui-header">
-            <div class="layui-logo systemLogoName" id="div_LogTitle">云健康</div>
-            <!-- 头部区域（可配合layui已有的水平导航） -->
-            <!-- <ul class="layui-nav layui-layout-left">
+  <div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+      <div class="layui-logo systemLogoName" id="div_LogTitle">云健康</div>
+      <!-- 头部区域（可配合layui已有的水平导航） -->
+      <!-- <ul class="layui-nav layui-layout-left">
                 <li class="layui-nav-item"><a href="">控制台</a></li>
                 <li class="layui-nav-item"><a href="">商品管理</a></li>
                 <li class="layui-nav-item"><a href="">用户</a></li>
@@ -26,29 +26,28 @@
                     </dl>
                 </li>
             </ul> -->
-            <ul class="layui-nav layui-layout-right">
-                <li class="layui-nav-item">
-                    <a href="javascript:;">
-                        <img src="/images/name.png" class="layui-nav-img">
-                        <label id="lbl_SystemAdminName">大头不怕下雨</label>
-                    </a>
-                    <dl class="layui-nav-child">
-                        <dd>
-                            <a
-                                href="javascript:OpenAppointHtml('/view/SystemManage/systemUserDetail.html?u=nows')">基本资料</a>
-                        </dd>
-                        <dd><a href="">安全设置</a></dd>
-                    </dl>
-                </li>
-                <li class="layui-nav-item"><a href="javascript:logOut()">退出</a></li>
-            </ul>
-        </div>
+      <ul class="layui-nav layui-layout-right">
+        <li class="layui-nav-item">
+          <a href="javascript:;">
+            <img src="/images/name.png" class="layui-nav-img">
+            <label id="lbl_SystemAdminName">大头不怕下雨</label>
+          </a>
+          <dl class="layui-nav-child">
+            <dd>
+              <a href="javascript:OpenAppointHtml('/view/SystemManage/systemUserDetail.html?u=nows')">基本资料</a>
+            </dd>
+            <dd><a href="">安全设置</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"><a href="javascript:logOut()">退出</a></li>
+      </ul>
+    </div>
 
-        <div class="layui-side layui-bg-black">
-            <div class="layui-side-scroll">
-                <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
-                <ul class="layui-nav layui-nav-tree">
-                    <!-- <li class="layui-nav-item layui-nav-itemed">
+    <div class="layui-side layui-bg-black">
+      <div class="layui-side-scroll">
+        <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+        <ul class="layui-nav layui-nav-tree">
+          <!-- <li class="layui-nav-item layui-nav-itemed">
                         <a class="" href="javascript:;">用户管理</a>
                         <dl class="layui-nav-child">
                             <dd><a href="javascript:;" data-src="/view/UserManage/Index.html" target="_top">用户列表</a>
@@ -68,148 +67,150 @@
                     </li>
                     <li class="layui-nav-item"><a href="">云市场</a></li>
                     <li class="layui-nav-item"><a href="">发布商品</a></li> -->
-                </ul>
-            </div>
-        </div>
-
-        <div class="layui-body" style="overflow: hidden;">
-            <!-- 内容主体区域 -->
-            <iframe frameborder="0" scrolling="no" style="width:100%;height:97%;" id="showIframe">
-            </iframe>
-        </div>
-
-        <div id="div_botTitle" class="layui-footer" style="height: 40px !important;">
-
-        </div>
+        </ul>
+      </div>
     </div>
 
-    <script src="js/menu.js"></script>
-    <script src="layui/layui.js"></script>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/main.js"></script>
-    <script src="js/L2Dwidget.min.js"></script>
-    <script src="js/L2Dwidget.0.min.js"></script>
-    <script type="text/javascript">
+    <div class="layui-body" style="overflow: hidden;">
+      <!-- 内容主体区域 -->
+      <iframe frameborder="0" scrolling="no" style="width:100%;height:97%;" id="showIframe">
+      </iframe>
+    </div>
 
-        $(function () {
+    <div id="div_botTitle" class="layui-footer" style="height: 40px !important;">
 
-            var str = "";
-            $.each(menuJson, function (i, val) {
-                if (isShowMenu(val.name)) {
-                    str += '<li class="layui-nav-item">';
-                    str += '    <a class="" href="javascript:;">' + val.name + '</a>';
-                    str += '    <dl class="layui-nav-child">';
+    </div>
+  </div>
 
-                    $.each(val.children, function (i, item) {
-                        str += '<dd><a href="javascript:;" data-src="' + item.link + '" target="_top">' + item.name + '</a></dd>';
-                    });
-                }
-                str += '    </dl>';
-                str += '</li>';
-            });
-            $(".layui-nav-tree").html(str);
-        });
+  <script src="js/menu.js"></script>
+  <script src="layui/layui.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/L2Dwidget.min.js"></script>
+  <script src="js/L2Dwidget.0.min.js"></script>
+  <script type="text/javascript">
+    $(function () {
 
-        layui.use(['element', 'layer'], function () {
-            var element = layui.element;
-            var layer = layui.layer;
+      var str = "";
+      $.each(menuJson, function (i, val) {
+        if (isShowMenu(val.name)) {
+          str += '<li class="layui-nav-item">';
+          str += '    <a class="" href="javascript:;">' + val.name + '</a>';
+          str += '    <dl class="layui-nav-child">';
 
-            document.title = ApiService.HtmlInfo.topTitle;
-            $("#div_LogTitle").html(ApiService.HtmlInfo.LogTitle);
-            $("#div_botTitle").html(ApiService.HtmlInfo.bottomTitle);
-            var logUserInfo = JSON.parse(localStorage.LoginUser);
-            $("#lbl_SystemAdminName").html(logUserInfo.Name);
-
-
-            if (!IsNullOrEmpty(localStorage.Token)) {
-                ajaxGet({
-                    url: ApiService.SystemApi.APIService + '/Api/LoginHome/AutomaticLogin',
-                    data: {
-                        token: localStorage.Token
-                    },
-                    success: function (res) {
-                        //验证失败,重新登陆
-                        if (res.code != 1) {
-                            layer.alert("登陆已过期,即将跳转至登陆界面!!!");
-                            localStorage.Token = "";
-                            setTimeout(() => {
-                                location.href = "login.html";
-                            }, 2000);
-                        }
-                    }
-                });
-            } else {
-                //token缓存失效,重新登陆
-                layer.alert("登陆已过期,即将跳转至登陆界面!!!");
-                setTimeout(() => {
-                    location.href = "login.html";
-                }, 2000);
-            }
-
-            $("dd > a").on("click", function () {
-                var address = $(this).attr("data-src");
-                $("#showIframe").attr("src", address);
-            });
-
-        });
-
-        function logOut() {
-            layer.confirm('是否确定退出账号', function (index) {
-
-                ajaxGet({
-                    url: ApiService.SystemApi.APIService + '/Api/LoginHome/LogOut',
-                    data: { token: localStorage.Token },
-                    success: function (res) {
-                        //验证失败,重新登陆
-                        localStorage.Token = "";
-                        location.href = "login.html";
-                    }
-                });
-            });
+          $.each(val.children, function (i, item) {
+            str += '<dd><a href="javascript:;" data-src="' + item.link + '" target="_top">' + item.name +
+              '</a></dd>';
+          });
         }
+        str += '    </dl>';
+        str += '</li>';
+      });
+      $(".layui-nav-tree").html(str);
+    });
 
-        //基本资料
-        function OpenAppointHtml(url) {
-            $("#showIframe").attr("src", url);
-        }
+    layui.use(['element', 'layer'], function () {
+      var element = layui.element;
+      var layer = layui.layer;
 
-        function isShowMenu(menuName) {
-            var logUserInfo = JSON.parse(localStorage.LoginUser);
-            var flag = true;
-            switch (menuName) {
-                case "系统管理":
-                    if (logUserInfo.LoginUser != "admin")
-                        flag = false;
-                    break;
-                default:
+      document.title = ApiService.HtmlInfo.topTitle;
+      $("#div_LogTitle").html(ApiService.HtmlInfo.LogTitle);
+      $("#div_botTitle").html(ApiService.HtmlInfo.bottomTitle);
+      var logUserInfo = JSON.parse(localStorage.LoginUser);
+      $("#lbl_SystemAdminName").html(logUserInfo.Name);
+
+
+      if (!IsNullOrEmpty(localStorage.Token)) {
+        ajaxGet({
+          url: ApiService.SystemApi.APIService + '/Api/LoginHome/AutomaticLogin',
+          data: {
+            token: localStorage.Token
+          },
+          success: function (res) {
+            //验证失败,重新登陆
+            if (res.code != 1) {
+              layer.alert("登陆已过期,即将跳转至登陆界面!!!");
+              localStorage.Token = "";
+              setTimeout(() => {
+                location.href = "login.html";
+              }, 2000);
             }
-            return flag;
-        }
-
-        L2Dwidget.init({
-            "model": {
-                //jsonpath控制显示那个小萝莉模型，下面这个就是我觉得最可爱的小萝莉模型
-                //jsonPath: "https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json",
-                jsonPath: "https://unpkg.com/live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json",
-                "scale": 1
-            },
-            "display": {
-                "position": "right", //看板娘的表现位置,默认左边
-                "width": 150,//小萝莉的宽度
-                "height": 150, //小萝莉的高度
-                "hOffset": 0,//水平
-                "vOffset": -20 //垂直
-            },
-            "mobile": {
-                "show": true,
-                "scale": 0.5
-            },
-            "react": {
-                "opacityDefault": 0.7,//不透明度，可调
-                "opacityOnHover": 0.2
-            }
+          }
         });
-    </script>
+      } else {
+        //token缓存失效,重新登陆
+        layer.alert("登陆已过期,即将跳转至登陆界面!!!");
+        setTimeout(() => {
+          location.href = "login.html";
+        }, 2000);
+      }
+
+      $("dd > a").on("click", function () {
+        var address = $(this).attr("data-src");
+        $("#showIframe").attr("src", address);
+      });
+
+    });
+
+    function logOut() {
+      layer.confirm('是否确定退出账号', function (index) {
+
+        ajaxGet({
+          url: ApiService.SystemApi.APIService + '/Api/LoginHome/LogOut',
+          data: {
+            token: localStorage.Token
+          },
+          success: function (res) {
+            //验证失败,重新登陆
+            localStorage.Token = "";
+            location.href = "login.html";
+          }
+        });
+      });
+    }
+
+    //基本资料
+    function OpenAppointHtml(url) {
+      $("#showIframe").attr("src", url);
+    }
+
+    function isShowMenu(menuName) {
+      var logUserInfo = JSON.parse(localStorage.LoginUser);
+      var flag = true;
+      switch (menuName) {
+        case "系统管理":
+          if (logUserInfo.LoginUser != "admin")
+            flag = false;
+          break;
+        default:
+      }
+      return flag;
+    }
+
+    L2Dwidget.init({
+      "model": {
+        //jsonpath控制显示那个小萝莉模型，下面这个就是我觉得最可爱的小萝莉模型
+        //jsonPath: "https://unpkg.com/live2d-widget-model-koharu@1.0.5/assets/koharu.model.json",
+        jsonPath: "https://unpkg.com/live2d-widget-model-hijiki@1.0.5/assets/hijiki.model.json",
+        "scale": 1
+      },
+      "display": {
+        "position": "right", //看板娘的表现位置,默认左边
+        "width": 150, //小萝莉的宽度
+        "height": 150, //小萝莉的高度
+        "hOffset": 0, //水平
+        "vOffset": -20 //垂直
+      },
+      "mobile": {
+        "show": true,
+        "scale": 0.5
+      },
+      "react": {
+        "opacityDefault": 0.7, //不透明度，可调
+        "opacityOnHover": 0.2
+      }
+    });
+  </script>
 </body>
 
 </html>
