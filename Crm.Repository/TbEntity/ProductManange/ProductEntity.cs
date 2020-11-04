@@ -23,6 +23,13 @@ namespace Crm.Repository.TbEntity
         public string Subtitle { get; set; }
 
         /// <summary>
+        /// 封面图
+        /// </summary>
+        [Required]
+        [StringLength(200)]
+        public string CoverPath { get; set; }
+
+        /// <summary>
         /// 底价(不展示在前台)
         /// </summary>
         [Required]

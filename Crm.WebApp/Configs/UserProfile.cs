@@ -19,6 +19,8 @@ namespace Crm.WebApp.Models.Configs
             CreateMap<TabMenuEntity, TabMenuMapper>();
             CreateMap<OperationLogEntity, OperationLogMapper>();
 
+            CreateMap<ProductEntity, ProductMapper>();
+            CreateMap<ProductVideoEntity, ProductVideoMapper>();
         }
     }
 }

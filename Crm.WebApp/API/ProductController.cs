@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Crm.Service.ProductManageService;
 using Crm.WebApp.Models;

@@ -20,6 +20,11 @@ namespace Crm.Repository.MapperEntity
         public string VideoName { get; set; }
 
         /// <summary>
+        /// 封面图
+        /// </summary>
+        public string CoverPath { get; set; }
+
+        /// <summary>
         /// 大小(自动计算)
         /// </summary>
         public string VideoSize { get; set; }

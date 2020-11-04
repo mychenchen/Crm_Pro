@@ -18,6 +18,11 @@ namespace Crm.Repository.MapperEntity
         public string Subtitle { get; set; }
 
         /// <summary>
+        /// 封面图
+        /// </summary>
+        public string CoverPath { get; set; }
+
+        /// <summary>
         /// 底价(不展示在前台)
         /// </summary>
         public double FloorPrice { get; set; }

@@ -174,10 +174,12 @@
       $("#showIframe").attr("src", url);
     }
 
+    //控制展示的内容
     function isShowMenu(menuName) {
       var logUserInfo = JSON.parse(localStorage.LoginUser);
       var flag = true;
       switch (menuName) {
+        case "门户管理":
         case "系统管理":
           if (logUserInfo.LoginUser != "admin")
             flag = false;
