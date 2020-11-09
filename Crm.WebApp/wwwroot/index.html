@@ -91,6 +91,9 @@
   <script type="text/javascript">
     $(function () {
 
+      if (IsNullOrEmpty(localStorage.LoginUser))
+        location.href = "login.html";
+
       var str = "";
       $.each(menuJson, function (i, val) {
         if (isShowMenu(val.name)) {
