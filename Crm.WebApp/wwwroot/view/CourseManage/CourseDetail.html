@@ -49,15 +49,15 @@
       <div class="layui-col-xs8">
         <div class="grid-demo">
           <div class="layui-col-md3 div_img">
-            <img src="http://edu.zomds.com/files/course/2020/11-07/1549520c4b17053223.jpg" />
+            <img src="#" />
           </div>
 
           <div class="layui-col-md8" style="margin-top: 35px;margin-left: -25px;">
             <div style="margin-bottom: 5px;">
-              <strong>拼多多指导</strong>
+              <strong id="str_title">拼多多指导</strong>
             </div>
             <div style="color: red;">
-              <strong>$3666.00</strong>
+              <strong id="str_price">$3666.00</strong>
             </div>
           </div>
         </div>
@@ -112,7 +112,6 @@
 
       var element = layui.element;
       table = layui.table;
-
 
       showCourseInfo();
       showTable();
@@ -224,6 +223,11 @@
     function showCourseInfo() {
       var info = JSON.parse(localStorage.detail);
       $("#tebName").html(info.Title);
+      $(".div_img img").attr("src", ApiService.SystemApi.APIService + info.CoverPath);
+
+      $("#str_title").html(info.Title);
+      $("#str_price").html("$" + (info.DiscountPrice > 0 ? info.DiscountPrice : info.Price));
+
       $("#div_txt").html(info.ProductContent);
     }
   </script>

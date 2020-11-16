@@ -83,7 +83,7 @@ namespace Crm.WebApp.API
         /// <summary>
         /// 保存或修改
         /// </summary>
-        /// <param name="model">热点轮播</param>
+        /// <param name="model">产品</param>
         /// <returns></returns>
         [HttpPost]
         public ResultObject SaveModel(ProductMapper model)
@@ -92,7 +92,6 @@ namespace Crm.WebApp.API
             var errStr = "成功";
             try
             {
-                model.CreateTime = DateTime.Now;
                 var saveEntity = _mapper.Map<ProductEntity>(model);
                 var entity = _product.GetModel(saveEntity.Id);
                 if (entity != null)
@@ -101,19 +100,27 @@ namespace Crm.WebApp.API
                     saveEntity.IsDelete = entity.IsDelete;
                     optEvent = "修改";
                 }
+                else
+                {
+                    model.CreateTime = DateTime.Now;
+                    model.FloorPrice = model.Price;
+                    model.HotNum = 0;
+                    model.OnShelfStatus = 0;
+                    model.IssueDateTime = DateTime.Now;
+                }
 
                 _product.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
             {
-                errStr = "失败,请查看日志";
                 LogHelper.Error(ex.ToString());
-                return Error(ex.Message);
+                errStr = "失败,请查看日志";
+                return Error(errStr);
             }
             finally
             {
-                SaveUserOperation("ProductController", optEvent, $"添加公告,结果:{errStr})");
+                SaveUserOperation("ProductController", optEvent, $"添加产品,结果:{errStr})");
             }
         }
 
@@ -129,6 +136,33 @@ namespace Crm.WebApp.API
             try
             {
                 _product.Delete(Guid.Parse(gid));
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                errStr = "失败,请查看日志";
+                LogHelper.Error(ex.ToString());
+                return Error(ex.Message);
+            }
+            finally
+            {
+                SaveUserOperation("ProductController", "删除", $"删除公告,结果:{errStr}");
+            }
+        }
+
+        /// <summary>
+        /// 产品发行
+        /// </summary>
+        /// <param name="gid"></param>
+        /// <param name="onShelf"> 1上架 2下架</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject ProductIssue(string gid, int onShelf)
+        {
+            var errStr = "成功";
+            try
+            {
+                _product.UpdateOnShelf(Guid.Parse(gid), onShelf);
                 return Success();
             }
             catch (Exception ex)

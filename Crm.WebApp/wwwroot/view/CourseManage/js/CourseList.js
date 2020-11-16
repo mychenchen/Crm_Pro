@@ -1,5 +1,6 @@
 var table = null;
 var layer = null;
+var form = null;
 var active = {
   //条件查询
   search: function () {
@@ -21,9 +22,35 @@ var active = {
   }
 };
 
-layui.use(['table', 'layer'], function () {
+layui.use(['form', 'table', 'layer'], function () {
   table = layui.table;
   layer = layui.layer;
+  form = layui.form;
+
+  //监听指定开关
+  form.on('switch(switchTest)', function (data) {
+    let onShelf = 0;
+    if (this.checked) onShelf = 1;
+
+    ajaxGet({
+      url: ApiService.SystemApi.APIService + "/Api/Product/ProductIssue",
+      headers: {
+        "ToKenStr": localStorage.Token
+      },
+      data: {
+        gid: this.id,
+        onShelf: onShelf
+      },
+      success: function (res) {
+        if (onShelf == 1)
+          layer.msg("上架" + res.message);
+        else
+          layer.msg("下架" + res.message);
+      }
+    });
+  });
+
+
   table.render({
 
     elem: '#tableData',
@@ -67,7 +94,10 @@ layui.use(['table', 'layer'], function () {
           field: 'OnShelfStatus',
           title: '状态',
           templet: function (m) {
-            return m.OnShelfStatus == 0 ? "未上架" : m.OnShelfStatus == 1 ? "已上架" : "已下架";
+            let str = '<input id="' + m.Id + '" type="checkbox" lay-skin="switch" lay-filter="switchTest" lay-text="上架|下架">';
+            if (m.OnShelfStatus == 1)
+              str = '<input id="' + m.Id + '" type="checkbox" checked="" lay-skin="switch" lay-filter="switchTest" lay-text="上架|下架">';
+            return str;
           }
         },
         {
@@ -147,9 +177,13 @@ layui.use(['table', 'layer'], function () {
       });
     } else if (obj.event === 'edit') {
       localStorage.detail = JSON.stringify(data);
+      OpenDetail();
+    } else if (obj.event === 'detail') {
+      localStorage.detail = JSON.stringify(data);
       location.href = "CourseDetail.html";
     }
   });
+
 });
 
 //保存信息
@@ -165,20 +199,24 @@ function OpenDetail() {
     yes: function (indexs, layero) {
       //获取详情页指定函数
       var model = $(layero).find("iframe")[0].contentWindow.getNowDetailJson();
-      if (IsNullOrEmpty(model.NickName)) {
-        layer.msg("请填写昵称");
+      if (IsNullOrEmpty(model.Title)) {
+        layer.msg("请填写课程标题");
         return false;
       }
-      if (IsNullOrEmpty(model.LoginName)) {
-        layer.msg("请填写用户名");
+      if (IsNullOrEmpty(model.Price)) {
+        layer.msg("请填写售价");
         return false;
       }
-      if (IsNullOrEmpty(model.LoginPwd)) {
-        layer.msg("请填写密码");
+      if (!IsNullOrEmpty(model.Discount) && IsNullOrEmpty(model.DiscountPrice)) {
+        layer.msg("请填写折后价");
+        return false;
+      }
+      if (IsNullOrEmpty(model.CoverPath)) {
+        layer.msg("请上传封面图");
         return false;
       }
       ajaxPost({
-        url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
+        url: ApiService.SystemApi.APIService + "/Api/Product/SaveModel",
         headers: {
           "ToKenStr": localStorage.Token
         },

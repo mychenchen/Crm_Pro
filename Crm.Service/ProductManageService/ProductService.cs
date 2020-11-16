@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Currency.Common.LogManange;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -84,6 +85,29 @@ namespace Crm.Service.ProductManageService
                 _mydb.Update(model);
             }
             _mydb.SaveChanges();
+        }
+
+        /// <summary>
+        /// 产品上架/下架
+        /// </summary>
+        /// <param name="gid"></param>
+        /// <param name="onShelfStatus"></param>
+        public bool UpdateOnShelf(Guid gid, int onShelfStatus)
+        {
+            try
+            {
+                var info = _mydb.Product.AsNoTracking().FirstOrDefault(a => a.Id == gid);
+                info.IssueDateTime = DateTime.Now;
+                info.OnShelfStatus = onShelfStatus;
+                _mydb.Update(info);
+                _mydb.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.ToString());
+                return false;
+            }
         }
 
         /// <summary>

@@ -44,5 +44,11 @@ namespace Crm.Service.ProductManageService
         /// <param name="isDelete">true 真删除 false 假删除</param>
         bool Delete(Guid gid, bool isDelete = false);
 
+        /// <summary>
+        /// 产品上架/下架
+        /// </summary>
+        /// <param name="gid"></param>
+        /// <param name="onShelfStatus"></param>
+        bool UpdateOnShelf(Guid gid, int onShelfStatus);
     }
 }

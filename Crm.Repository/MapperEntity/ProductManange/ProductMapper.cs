@@ -53,7 +53,7 @@ namespace Crm.Repository.MapperEntity
         public DateTime IssueDateTime { get; set; }
 
         /// <summary>
-        /// 状态 0 未上架 1已上架 2下架 
+        /// 状态 0 未上架 1已上架 
         /// </summary>
         public int OnShelfStatus { get; set; }
 
