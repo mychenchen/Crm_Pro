@@ -177,6 +177,79 @@ namespace Crm.WebApp.API
             }
         }
 
+        #region 课时视频
+
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        /// <param name="gid">名称</param>
+        /// <param name="page">页码</param>
+        /// <param name="limit">每页条数</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject GetVideoData(string gid, int page, int limit)
+        {
+            try
+            {
+                var count = 0;
+                var data = _product.GetVideoList(Guid.Parse(gid), page, limit, ref count);
+                var list = _mapper.Map<List<ProductVideoMapper>>(data);
+
+                return SuccessPage(page, limit, count, list);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.ToString());
+                return Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 保存或修改
+        /// </summary>
+        /// <param name="model">课时</param>
+        /// <returns></returns>
+        [HttpPost]
+        public ResultObject SaveVideoModel(ProductVideoMapper model)
+        {
+            var optEvent = "添加";
+            var errStr = "成功";
+            try
+            {
+                var saveEntity = _mapper.Map<ProductVideoEntity>(model);
+                var entity = _product.GetVideoModel(saveEntity.Id);
+                if (entity != null)
+                {
+                    saveEntity.CoverPath = "";
+                    saveEntity.TypeName = "";
+                    saveEntity.CreateTime = entity.CreateTime;
+                    saveEntity.IsDelete = entity.IsDelete;
+                    optEvent = "修改";
+                }
+                else
+                {
+                    model.CreateTime = DateTime.Now;
+                    model.CoverPath = "";
+                    model.TypeName = "0000";
+                }
+
+                _product.AddUpdateVideoModel(saveEntity);
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.ToString());
+                errStr = "失败,请查看日志";
+                return Error(errStr);
+            }
+            finally
+            {
+                SaveUserOperation("ProductController", optEvent, $"添加产品,结果:{errStr})");
+            }
+        }
+
+        #endregion
+
         #endregion
 
     }

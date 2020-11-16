@@ -219,7 +219,11 @@ namespace Crm.WebApp.API
                 if (model.page != model.totalPage)
                     return Success(1, "继续上传", url);
                 else
+                {
+                    //合并文件
+                    url = FileMerge(uploadPath, model.fileName);
                     return Success(2, "上传完成", url);
+                }
             }
             catch (Exception ex)
             {
@@ -232,8 +236,7 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="filePath">文件夹路径</param>
         /// <param name="fullName">存放路径</param>
-        [HttpGet, NoSign]
-        public string FileMerge(string filePath, string fullName)
+        private string FileMerge(string filePath, string fullName)
         {
             var wuliPath = Directory.GetCurrentDirectory();
             if (!Directory.Exists(wuliPath + filePath))

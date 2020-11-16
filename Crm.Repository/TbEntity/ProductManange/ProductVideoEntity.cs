@@ -16,7 +16,6 @@ namespace Crm.Repository.TbEntity
         /// <summary>
         /// 所属类别
         /// </summary>
-        [Required]
         [StringLength(50)]
         public string TypeName { get; set; }
 

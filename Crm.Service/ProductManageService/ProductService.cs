@@ -142,18 +142,45 @@ namespace Crm.Service.ProductManageService
         /// 分页查询
         /// </summary>
         /// <param name="proId">产品ID</param>
-        /// <param name="title">视频名称</param>
+        /// <param name="page"></param>
+        /// <param name="rows"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
-        public List<ProductVideoEntity> GetVideoList(Guid proId, string title)
+        public List<ProductVideoEntity> GetVideoList(Guid proId, int page, int rows, ref int count)
         {
             var list = _mydb.ProductVideo.Where(a => a.ProId == proId);
-            if (!string.IsNullOrEmpty(title))
-            {
-                list = list.Where(a => a.VideoName.Contains(title));
-            }
-            var data = list.OrderBy(a => a.VideoName).ToList();
-
+            var data = list.OrderByDescending(a => a.CreateTime)
+                .Skip((page - 1) * rows).Take(rows).ToList();
+            count = list.Count();
             return data;
+        }
+
+        /// <summary>
+        /// 查询
+        /// </summary>
+        /// <param name="model"></param>
+        public ProductVideoEntity GetVideoModel(Guid gid)
+        {
+            return _mydb.ProductVideo.AsNoTracking().FirstOrDefault(a => a.Id == gid);
+        }
+
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="model"></param>
+        public void AddUpdateVideoModel(ProductVideoEntity model)
+        {
+            if (model.Id == Guid.Empty)
+            {
+                model.Id = Guid.NewGuid();
+                model.CreateTime = DateTime.Now;
+                _mydb.ProductVideo.Add(model);
+            }
+            else
+            {
+                _mydb.Update(model);
+            }
+            _mydb.SaveChanges();
         }
 
         #endregion

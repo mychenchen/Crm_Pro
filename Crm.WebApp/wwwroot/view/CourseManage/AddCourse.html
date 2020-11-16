@@ -120,14 +120,14 @@
         choose: function (obj) {
           //自定义文件名称
           var oldPath = $("input[name='ImgPath']").val();
-          this.url = ApiService.SystemApi.APIService + '/Api/Common/UploadFile?oldPath=' + oldPath;
+          this.url = ApiService.UpLoadApi.APIService + '/Api/Common/UploadFile?oldPath=' + oldPath;
         },
         done: function (res) {
           //如果上传失败
           if (res.code != 1) {
             return layer.msg('上传失败');
           }
-          $('#up_img').attr('src', ApiService.SystemApi.APIService + res.data);
+          $('#up_img').attr('src', ApiService.UpLoadApi.APIService + res.data);
           $("input[name='CoverPath']").val(res.data);
         },
         error: function () {}
@@ -152,7 +152,7 @@
         "DiscountPrice": info.DiscountPrice,
         "CoverPath": info.CoverPath
       });
-      $('#up_img').attr('src', ApiService.SystemApi.APIService + info.CoverPath);
+      $('#up_img').attr('src', ApiService.UpLoadApi.APIService + info.CoverPath);
       editor.txt.html(info.ProductContent)
     }
 
@@ -214,7 +214,7 @@
 
         $.ajax({
           type: "POST",
-          url: ApiService.SystemApi.APIService + '/Api/Common/WangEditorUpload',
+          url: ApiService.UpLoadApi.APIService + '/Api/Common/WangEditorUpload',
           //beforeSend: function (xhr) {
           //    xhr.setRequestHeader("XSRF-TOKEN",
           //        $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -226,7 +226,7 @@
           success: function (response) {
             for (var i = 0; i < response.length; i++) {
               // 上传代码返回结果之后，将图片插入到编辑器中
-              insert(ApiService.SystemApi.APIService + response[i]);
+              insert(ApiService.UpLoadApi.APIService + response[i]);
             }
           },
           failure: function (response) {

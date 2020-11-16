@@ -51,7 +51,7 @@
     <div class="layui-form-item">
       <label class="layui-form-label">课时标题<label style="color: red;">*</label></label>
       <div class="layui-input-block">
-        <input type="text" name="VideoName" autocomplete="off" placeholder="请输入标题" class="layui-input">
+        <input type="text" name="VideoName" autocomplete="off" placeholder="请输入标题" class="layui-input" maxlength="50">
       </div>
     </div>
 
@@ -62,8 +62,10 @@
           <input type="hidden" id="totalPage" value="0" />
           <input type="hidden" id="page" value="1" />
           <input type="hidden" id="status" value="0" />
+          <input type="hidden" id="sizeLength" name="VideoSize" value="0" />
+          <input type="hidden" id="downUrl" name="VideoPath" value="" />
           <div class="layui-input-block">
-            <button type="button" class="layui-btn" id="fileUpload"><i class="layui-icon"></i>上传文件</button>
+            <button type="button" class="layui-btn" id="fileUpload"><i class="layui-icon"></i>上传视频</button>
           </div>
         </div>
       </div>
@@ -76,6 +78,14 @@
       </div>
     </div>
 
+    <div class="layui-form-item">
+      <label class="layui-form-label">时长</label>
+      <div class="layui-input-block">
+        <input type="text" name="TimeLength" autocomplete="off" class="layui-input" placeholder="例(时:分:秒):01:30:10"
+          maxlength="30">
+      </div>
+    </div>
+
     <div class="mask"></div>
     <div class="loading">
       <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="uploadProgress">
@@ -85,32 +95,25 @@
 
   </form>
 
-  <script src="../../../layui/layui.js"></script>
-  <script src="../../../js/jquery.min.js"></script>
-  <script src="../../../js/main.js"></script>
+  <script src="../../layui/layui.js"></script>
+  <script src="../../js/jquery.min.js"></script>
+  <script src="../../js/main.js"></script>
 
-  <script src="../../../js/wangEditor/wangEditor.min.js"></script>
   <script type="text/javascript">
     var element = null;
     var layer = null;
-    var model = {
-      ProId: "",
-      TypeName: "0000",
-      VideoName: "",
-      CoverPath: "",
-      VideoSize: "",
-      TimeLength: "",
-      VideoPath: ""
-    };
+    var form = null;
+    var ProId = "";
     layui.use(['form', 'element', 'upload'], function () {
 
+      form = layui.form;
       element = layui.element;
       layer = layui.layer;
       var upload = layui.upload;
 
       upload.render({
         elem: '#fileUpload',
-        url: 'http://localhost:13973/api/Common/UploadFileWj', //处理上传文件接口
+        url: ApiService.UpLoadApi.APIService + '/api/Common/UploadFileWj', //处理上传文件接口
         accept: 'file',
         auto: false,
         choose: function (obj) {
@@ -123,6 +126,7 @@
           obj.preview(function (index, file, result) {
             var totalSize = file.size;
             var totalPage = Math.ceil(totalSize / LENGTH);
+            $('#sizeLength').val(totalSize);
             $('#totalPage').val(totalPage);
             $('#page').val('1');
             $('#status').val('1');
@@ -151,7 +155,6 @@
           });
         },
         done: function (res) {
-          console.log(res);
           if (res.code == 1) { //分片上传
             var page = parseInt($('#page').val());
             var totalPage = parseInt($('#totalPage').val());
@@ -192,12 +195,37 @@
         }
       });
 
-      var info = localStorage.detail;
+      ProId = GetQueryString("pid");
+      console.log(ProId);
+      var info = localStorage.VideoDetail;
       if (!IsNullOrEmpty(info)) {
-
+        getDetail(JSON.parse(info));
       }
 
     });
+
+    //获取详情
+    function getDetail(info) {
+      //表单赋值 标签 name='NickName'
+      form.val('example', {
+        "Id": info.Id,
+        "ProId": info.ProId,
+        "TypeName": info.TypeName,
+        "VideoName": info.VideoName,
+        "VideoPath": info.VideoPath,
+        "VideoSize": info.VideoSize,
+        "TimeLength": info.TimeLength
+      });
+      var sp = info.VideoPath.split('/');
+      $('#name').val(sp[sp.length - 1]);
+    }
+
+    //获取页面的值
+    function getNowDetailJson() {
+      var detail = form.val('example');
+      detail.ProId = ProId;
+      return detail;
+    }
 
     //用于生成uuid
     function S4() {

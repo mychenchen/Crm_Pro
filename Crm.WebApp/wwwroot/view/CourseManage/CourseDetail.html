@@ -113,15 +113,16 @@
       var element = layui.element;
       table = layui.table;
 
-      showCourseInfo();
-      showTable();
+      var info = JSON.parse(localStorage.detail);
+      showCourseInfo(info);
+      showTable(info.Id);
     });
 
-    function showTable() {
+    function showTable(gid) {
       table.render({
         elem: '#tableData',
         id: "tableReload",
-        url: ApiService.SystemApi.APIService + '/Api/Product/GetData',
+        url: ApiService.SystemApi.APIService + '/Api/Product/GetVideoData',
         headers: {
           "ToKenStr": localStorage.Token
         },
@@ -132,11 +133,11 @@
         height: 600,
         limit: 20,
         where: {
-          name: ''
+          gid: gid
         },
         cols: [
           [{
-              field: 'Title',
+              field: 'VideoName',
               title: '课程名称'
             },
             {
@@ -177,8 +178,9 @@
         // var checkStatus = table.checkStatus(obj.config.id); var data = checkStatus.data; 获取check选中的数据行
         switch (obj.event) {
           case 'add':
-            localStorage.detail = '';
-            OpenDetail();
+            localStorage.VideoDetail = '';
+            let dModel = JSON.parse(localStorage.detail);
+            OpenVideo(dModel.Id);
             break;
         };
       });
@@ -213,22 +215,66 @@
             });
           });
         } else if (obj.event === 'edit') {
-          localStorage.detail = JSON.stringify(data);
-          location.href = "CourseDetail.html";
+          localStorage.VideoDetail = JSON.stringify(data);
+          OpenVideo(data.ProId);
         }
       });
 
     }
 
-    function showCourseInfo() {
-      var info = JSON.parse(localStorage.detail);
+    function showCourseInfo(info) {
       $("#tebName").html(info.Title);
-      $(".div_img img").attr("src", ApiService.SystemApi.APIService + info.CoverPath);
+      $(".div_img img").attr("src", ApiService.UpLoadApi.APIService + info.CoverPath);
 
       $("#str_title").html(info.Title);
       $("#str_price").html("$" + (info.DiscountPrice > 0 ? info.DiscountPrice : info.Price));
 
       $("#div_txt").html(info.ProductContent);
+    }
+
+
+    //保存信息
+    function OpenVideo(pid) {
+      layer.open({
+        type: 2,
+        title: "课时详情",
+        scrollbar: false,
+        area: ['1200px', '800px'],
+        content: 'AddVideo.html?pid=' + pid,
+        btn: ['提交', '取消'],
+        btnAlign: 'c',
+        yes: function (indexs, layero) {
+          //获取详情页指定函数
+          var model = $(layero).find("iframe")[0].contentWindow.getNowDetailJson();
+          if (IsNullOrEmpty(model.VideoName)) {
+            layer.msg("请填写课程标题");
+            return false;
+          }
+          if (IsNullOrEmpty(model.VideoPath)) {
+            layer.msg("请上传课时文件");
+            return false;
+          }
+          if (IsNullOrEmpty(model.TimeLength)) {
+            layer.msg("请填写时长");
+            return false;
+          }
+          ajaxPost({
+            url: ApiService.SystemApi.APIService + "/Api/Product/SaveVideoModel",
+            headers: {
+              "ToKenStr": localStorage.Token
+            },
+            data: model,
+            success: function (res) {
+              layer.msg(res.message);
+              if (res.code != 1) {
+                return false;
+              }
+              layer.closeAll();
+              active.reload();
+            }
+          });
+        }
+      });
     }
   </script>
 </body>

@@ -1,9 +1,16 @@
 var ApiService = {
   "SystemApi": {
-    "ApiName": "用户相关服务API--> UserService-->陈浩", //API名称
+    "ApiName": "服务API--> Service-->陈浩", //API名称
     "Sandbox": "http://localhost:13973", //测试环境
     "Running": "http://134.175.30.213:8011", //正式环境
     "RuntimeType": "Sandbox", //当前运行的环境   类型1：Sandbox:测试环境,类型2：Running正式环境
+    "APIService": "" //API输出地址
+  },
+  "UpLoadApi": {
+    "ApiName": "上传文件--> 陈浩", //API名称
+    "Sandbox": "http://localhost:13973", //测试环境
+    "Running": "http://134.175.30.213:8011", //正式环境
+    "RuntimeType": "Running", //当前运行的环境   类型1：Sandbox:测试环境,类型2：Running正式环境
     "APIService": "" //API输出地址
   },
   HtmlInfo: {
