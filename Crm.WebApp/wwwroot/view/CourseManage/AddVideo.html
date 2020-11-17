@@ -165,7 +165,7 @@
           } else if (res.code == 2) { //上传完成
             element.progress('uploadProgress', '100%');
             $('#status').val('2');
-            $('#downUrl').val(res.downUrl);
+            $('#downUrl').val(res.data);
             layer.msg('上传成功', {
               time: 1000,
               anim: 0
@@ -176,9 +176,8 @@
           } else { //上传错误
             $('#status').val('-1');
             element.progress('uploadProgress', '0%');
-            console.log(!typeof (res.downUrl) == "undefined");
-            if (typeof (res.downUrl) == "undefined") {} else {
-              $('#downUrl').val(res.downUrl);
+            if (typeof (res.data) != "undefined") {
+              $('#downUrl').val(res.data);
             }
             layer.msg("上传失败，请重试", {
               time: 3000,

@@ -201,15 +201,15 @@ namespace Crm.WebApp.API
             //页码 model.page
             //总页码 model.totalPage
             //格式 model.fileExt 
-            string uploadPath = "uploads" + "/" + model.fileName;
-            if (!Directory.Exists(uploadPath))
+            string uploadPath = "/uploads/" + model.fileName;
+            if (!Directory.Exists(wuliPath + uploadPath))
             {
-                Directory.CreateDirectory(uploadPath);
+                Directory.CreateDirectory(wuliPath + uploadPath);
             }
             string newFileName = model.fileName + "#" + model.page; //随机生成新的文件名
 
-            var filePath = Path.Combine(uploadPath, newFileName);
-            var url = $@"/{uploadPath}/{newFileName}";
+            var filePath = wuliPath + Path.Combine(uploadPath, newFileName);
+            var url = $@"{uploadPath}/{newFileName}.{model.fileExt}";
             try
             {
                 using (var stream = new FileStream(filePath, FileMode.Create))
@@ -221,8 +221,12 @@ namespace Crm.WebApp.API
                 else
                 {
                     //合并文件
-                    url = FileMerge(uploadPath, model.fileName);
-                    return Success(2, "上传完成", url);
+                    url = $"{uploadPath}/{model.fileName}.{model.fileExt}";
+                    string resStr = FileMerge(@uploadPath, model.fileName + "." + model.fileExt);
+                    if (resStr != "ok")
+                        return Success(-1, "上传失败", url);
+                    else
+                        return Success(2, "上传完成", url);
                 }
             }
             catch (Exception ex)
@@ -263,7 +267,8 @@ namespace Crm.WebApp.API
             list_s = list_s.OrderBy(a => a.nameNum).ToList();
 
             byte[] buffer = new byte[1024 * 100];
-            using (FileStream outStream = new FileStream(wuliPath + fullName, FileMode.Create))
+            var mergePath = wuliPath + filePath + "/" + fullName;
+            using (FileStream outStream = new FileStream(mergePath, FileMode.Create))
             {
                 int readedLen = 0;
                 FileStream srcStream = null;
@@ -278,7 +283,7 @@ namespace Crm.WebApp.API
                     srcStream.Close();
                 });
             }
-            return fullName;
+            return "ok";
         }
 
         public class fileList

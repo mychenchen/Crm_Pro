@@ -382,3 +382,4 @@ Error Number:207,State:1,Class:16
    at Microsoft.EntityFrameworkCore.DbContext.SaveChanges()
    at Crm.Service.ProductManageService.ProductService.AddUpdateVideoModel(ProductVideoEntity model) in C:\my_chh_project\Crm_Pro_File\Crm.Service\ProductManageService\ProductService.cs:line 183
    at Crm.WebApp.API.ProductController.SaveVideoModel(ProductVideoMapper model) in C:\my_chh_project\Crm_Pro_File\Crm.WebApp\API\ProductController.cs:line 234
+2020-11-17 09:53:29,951 [18] ERROR  [(null)] - Could not find a part of the path 'C:\my_chh_project\Crm_Pro_File\Crm.WebApp\uploads\d9a61738-3355-c4c3-046c-320b115a02ea\d9a61738-3355-c4c3-046c-320b115a02ea#17'.
