@@ -23,6 +23,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="log-file.log" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Content Include="wwwroot\.vscode\settings.json" />
 	</ItemGroup>
 

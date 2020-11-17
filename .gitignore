@@ -23,3 +23,4 @@ uploads
 /Currency.Quartz/bin
 /Currency.aliyun/bin
 /Currency.aliyun/obj
+/Crm.WebApp/*.log
