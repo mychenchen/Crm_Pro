@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Crm.WebApp.API
 {
@@ -245,6 +246,44 @@ namespace Crm.WebApp.API
             finally
             {
                 SaveUserOperation("ProductController", optEvent, $"添加产品,结果:{errStr})");
+            }
+        }
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="gid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject DeleteVideoModel(Guid gid)
+        {
+            var errStr = "成功";
+            try
+            {
+                var model = _product.GetVideoModel(gid);
+                var flag = _product.DeleteVideo(gid, true);
+                if (!string.IsNullOrEmpty(model.VideoPath) && flag)
+                {
+                    var sp = model.VideoPath.Split("/");
+                    string path = "";
+                    for (int i = 1; i < sp.Length - 1; i++)
+                    {
+                        path += "/" + sp[i];
+                    }
+                    var wuliPath = Directory.GetCurrentDirectory();
+                    Directory.Delete(wuliPath + path, true);
+                }
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                errStr = "失败,请查看日志";
+                LogHelper.Error(ex.ToString());
+                return Error(ex.Message);
+            }
+            finally
+            {
+                SaveUserOperation("ProductController", "删除", $"删除课时视频,结果:{errStr}");
             }
         }
 

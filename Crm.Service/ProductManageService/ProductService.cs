@@ -149,7 +149,7 @@ namespace Crm.Service.ProductManageService
         public List<ProductVideoEntity> GetVideoList(Guid proId, int page, int rows, ref int count)
         {
             var list = _mydb.ProductVideo.Where(a => a.ProId == proId);
-            var data = list.OrderByDescending(a => a.CreateTime)
+            var data = list.OrderBy(a => a.VideoName)
                 .Skip((page - 1) * rows).Take(rows).ToList();
             count = list.Count();
             return data;
@@ -183,6 +183,29 @@ namespace Crm.Service.ProductManageService
             _mydb.SaveChanges();
         }
 
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="gid"></param>
+        /// <param name="isDelete">true 真删除 false 假删除</param>
+        public bool DeleteVideo(Guid gid, bool isDelete = false)
+        {
+            var model = GetVideoModel(gid);
+            if (model == null)
+                return false;
+
+            if (isDelete)
+            {
+                _mydb.ProductVideo.Remove(model);
+            }
+            else
+            {
+                model.IsDelete = 1;
+                _mydb.ProductVideo.Update(model);
+            }
+            _mydb.SaveChanges();
+            return true;
+        }
         #endregion
 
     }

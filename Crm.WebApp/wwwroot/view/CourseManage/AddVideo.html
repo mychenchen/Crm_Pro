@@ -41,6 +41,12 @@
       overflow: hidden;
       display: none;
     }
+
+    .inputLeft {
+      width: 120px !important;
+      float: left;
+      margin-left: 10px;
+    }
   </style>
 </head>
 
@@ -72,17 +78,18 @@
     </div>
 
     <div class="layui-form-item">
-      <label class="layui-form-label">文件名</label>
+      <label class="layui-form-label">文件名<label style="color: red;">*</label></label>
       <div class="layui-input-block">
         <input type="text" id="name" autocomplete="off" class="layui-input" disabled>
       </div>
     </div>
 
     <div class="layui-form-item">
-      <label class="layui-form-label">时长</label>
+      <label class="layui-form-label">时长<label style="color: red;">*</label></label>
       <div class="layui-input-block">
-        <input type="text" name="TimeLength" autocomplete="off" class="layui-input" placeholder="例(时:分:秒):01:30:10"
-          maxlength="30">
+        <input type="number" id="txt_hour" autocomplete="off" class="layui-input inputLeft " placeholder="时">
+        <input type="number" id="txt_minute" autocomplete="off" class="layui-input inputLeft" placeholder="分">
+        <input type="number" id="txt_second" autocomplete="off" class="layui-input inputLeft" placeholder="秒">
       </div>
     </div>
 
@@ -217,12 +224,36 @@
       });
       var sp = info.VideoPath.split('/');
       $('#name').val(sp[sp.length - 1]);
+      var tiemSp = info.TimeLength.split(':');
+      $("#txt_hour").val(tiemSp[0]);
+      $("#txt_minute").val(tiemSp[1]);
+      $("#txt_second").val(tiemSp[2]);
+
     }
 
     //获取页面的值
     function getNowDetailJson() {
       var detail = form.val('example');
       detail.ProId = ProId;
+      if ($("#txt_hour").val() == undefined) {
+        detail.TimeLength = "00";
+      } else {
+        var h = parseInt($("#txt_hour").val());
+        detail.TimeLength = h > 9 ? h : "0" + h;
+      }
+      if ($("#txt_minute").val() == undefined) {
+        detail.TimeLength += ":00";
+      } else {
+        var m = parseInt($("#txt_minute").val());
+        detail.TimeLength += m > 9 ? ":" + m : ":0" + m;
+      }
+      if ($("#txt_second").val() == undefined) {
+        detail.TimeLength += ":00";
+      } else {
+        var s = parseInt($("#txt_second").val());
+        detail.TimeLength += s > 9 ? ":" + s : ":0" + s;
+      }
+
       return detail;
     }
 

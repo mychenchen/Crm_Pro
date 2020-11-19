@@ -93,13 +93,17 @@
         <table class="layui-hide" id="tableData" lay-filter="tableData"></table>
 
         <script type="text/html" id="barDemo">
-          <a class="layui-btn layui-btn-xs" lay-event="show">播放</a>
+          <a class="layui-btn layui-btn-xs" lay-event="play">播放</a>
           <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
           <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
         </script>
 
       </div>
     </div>
+  </div>
+
+  <div id="pathHtml" hidden>
+    你好你好是顶顶顶
   </div>
 
   <script src="../../layui/layui.js"></script>
@@ -190,14 +194,10 @@
         var data = obj.data; //当前选中记录了数据
         //console.log(obj)
         if (obj.event === 'del') {
-          if (data.LoginName == "admin") {
-            layer.msg("最高权限账号,无法删除");
-            return false;
-          }
           layer.confirm('真的删除行么', function (index) {
 
             $.ajax({
-              url: ApiService.SystemApi.APIService + "/Api/Product/DeleteModel",
+              url: ApiService.SystemApi.APIService + "/Api/Product/DeleteVideoModel",
               type: "get",
               headers: {
                 "ToKenStr": localStorage.Token
@@ -210,13 +210,15 @@
                 if (res.code != 1) {
                   return false;
                 }
-                active.reload();
+                table.reload("tableReload");
               }
             });
           });
         } else if (obj.event === 'edit') {
           localStorage.VideoDetail = JSON.stringify(data);
           OpenVideo(data.ProId);
+        } else if (obj.event === "play") {
+          playVideo(data.VideoPath, data.VideoName);
         }
       });
 
@@ -254,7 +256,7 @@
             layer.msg("请上传课时文件");
             return false;
           }
-          if (IsNullOrEmpty(model.TimeLength)) {
+          if (model.TimeLength == "00:00:00") {
             layer.msg("请填写时长");
             return false;
           }
@@ -270,11 +272,24 @@
                 return false;
               }
               layer.closeAll();
-              active.reload();
+              table.reload("tableReload");
             }
           });
         }
       });
+    }
+
+    //播放视频
+    function playVideo(path, title) {
+      layer.open({
+        type: 2,
+        title: "课时:" + title,
+        scrollbar: false,
+        area: ['1200px', '800px'],
+        content: "PlayVideo.html?p=" + path,
+        btn: ['取消']
+      });
+
     }
   </script>
 </body>

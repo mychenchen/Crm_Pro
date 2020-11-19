@@ -74,6 +74,13 @@ namespace Crm.Service.ProductManageService
         /// </summary>
         /// <param name="model"></param>
         void AddUpdateVideoModel(ProductVideoEntity model);
+
+        /// <summary>
+        /// 删除
+        /// </summary>
+        /// <param name="gid"></param>
+        /// <param name="isDelete">true 真删除 false 假删除</param>
+        bool DeleteVideo(Guid gid, bool isDelete = false);
         #endregion
 
     }
