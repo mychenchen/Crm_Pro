@@ -2759,21 +2759,23 @@
 					}
 				}
 			}
-			this.PD.oncontextmenu = function(event) {
-				var eve = event || window.event;
-				var client = thisTemp.client(event);
-				if (eve.button == 2) {
-					eve.returnvalue = false;
-					var x = client['x'] + thisTemp.pdCoor['x'] - 2;
-					var y = client['y'] + thisTemp.pdCoor['y'] - 2;
-					thisTemp.css(thisTemp.CB['menu'], {
-						display: 'block',
-						left: x + 'px',
-						top: y + 'px'
-					});
-					return false;
-				}
-				return true;
+			/** 鼠标右键*/
+			this.PD.oncontextmenu = function (event) {
+				return false;
+				//var eve = event || window.event;
+				//var client = thisTemp.client(event);
+				//if (eve.button == 2) {
+				//	eve.returnvalue = false;
+				//	var x = client['x'] + thisTemp.pdCoor['x'] - 2;
+				//	var y = client['y'] + thisTemp.pdCoor['y'] - 2;
+				//	thisTemp.css(thisTemp.CB['menu'], {
+				//		display: 'block',
+				//		left: x + 'px',
+				//		top: y + 'px'
+				//	});
+				//	return false;
+				//}
+				//return true;
 			};
 			var setTimeOutPClose = function() {
 				if (setTimeOutP) {
