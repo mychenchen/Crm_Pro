@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Crm.Repository.MapperEntity;
 using Crm.Service.GatewayService;
+using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
 using Currency.Common.Caching;
@@ -30,19 +31,22 @@ namespace Crm.WebApp.API
     {
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ITabMenuService _tabMenu;
+        private readonly IUserLabelService _userLabel;
         public CommonController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
             IStaticCacheManager cache,
             IHostingEnvironment hostingEnvironment,
-            ITabMenuService tabMenu
+            ITabMenuService tabMenu,
+            IUserLabelService userLabel
             ) : base(configStr, mapper, cache)
         {
             _hostingEnvironment = hostingEnvironment;
             _tabMenu = tabMenu;
+            _userLabel = userLabel;
         }
 
-        #region 下拉菜单
+        #region 下拉框
 
         /// <summary>
         /// 查询tab菜单
@@ -58,6 +62,29 @@ namespace Crm.WebApp.API
                 var list = _mapper.Map<List<TabMenuMapper>>(data);
 
                 return Success(list);
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 查询标签
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject GetAllLable()
+        {
+            try
+            {
+                var data = _userLabel.GetList().Select(a => new
+                {
+                    id = a.Id,
+                    name = a.LabelName
+                }).ToList();
+
+                return Success(data);
             }
             catch (Exception ex)
             {
@@ -181,7 +208,7 @@ namespace Crm.WebApp.API
 
         #endregion
 
-        #region 上传文件
+        #region 分片上传文件
 
         /// <summary>
         /// 上传 文件,并返回相对url(不包含 host port wwwroot)

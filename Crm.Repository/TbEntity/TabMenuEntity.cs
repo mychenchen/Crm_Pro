@@ -5,48 +5,46 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Crm.Repository.TbEntity
 {
     /// <summary>
-    /// 系统用户
+    /// tab导航菜单管理
     /// </summary>
-    [Table("User")]
-    public class User : BaseEntity
+    [Table("tb_TabMenu")]
+    public class TabMenuEntity : BaseEntity
     {
         /// <summary>
-        /// 标签ID
+        /// 父级ID
         /// </summary>
-        public Guid LableId { get; set; }
+        [Required]
+        public Guid ParentGid { get; set; }
 
         /// <summary>
-        /// 昵称
+        /// 名称
         /// </summary>
         [Required]
         [StringLength(50)]
-        public string NickName { get; set; }
+        public string Name { get; set;}
 
         /// <summary>
-        /// 登陆账号
+        /// 排序
         /// </summary>
         [Required]
-        [StringLength(50)]
-        public string LoginName { get; set; }
+        public int SortNum { get; set; }
 
         /// <summary>
-        /// 登陆密码
+        /// 路径
+        /// </summary>
+        [StringLength(50)]
+        public string Location { get; set; }
+
+        /// <summary>
+        /// 菜单类型 1 PC端 2 小程序端 
         /// </summary>
         [Required]
-        [StringLength(50)]
-        public string LoginPwd { get; set; }
+        public int MenuType { get; set; }
 
         /// <summary>
-        /// 加盐
+        /// 是否显示 0否 1是 
         /// </summary>
         [Required]
-        [StringLength(50)]
-        public string Salt { get; set; }
-
-        /// <summary>
-        /// 修改时间
-        /// </summary>
-        public DateTime? UpdateTime { get; set; }
-                
+        public int IsShow { get; set; }
     }
 }

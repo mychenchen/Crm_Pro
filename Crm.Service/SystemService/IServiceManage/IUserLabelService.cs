@@ -7,15 +7,15 @@ using System.Text;
 namespace Crm.Service.SystemService
 {
     /// <summary>
-    /// 系统用户接口
+    /// 用户标签
     /// </summary>
-    public interface IUserService
+    public interface IUserLabelService
     {
         /// <summary>
         /// 查询列表
         /// </summary>
         /// <returns></returns>
-        List<User> GetList();
+        List<UserLabel> GetList();
 
         /// <summary>
         /// 分页查询
@@ -25,26 +25,19 @@ namespace Crm.Service.SystemService
         /// <param name="rows"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        List<UserMapper> GetMapperPageList(string name, int page, int rows, ref int count);
+        List<UserLabel> GetPageList(string name, int page, int rows, ref int count);
 
         /// <summary>
         /// 查询
         /// </summary>
         /// <param name="model"></param>
-        User GetModel(Guid gid);
-
-        /// <summary>
-        /// 根据登陆名称查询
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        User UserLoginModel(string name);
+        UserLabel GetModel(Guid gid);
 
         /// <summary>
         /// 添加
         /// </summary>
         /// <param name="model"></param>
-        void AddUpdateModel(User model);
+        void AddUpdateModel(UserLabel model);
 
         /// <summary>
         /// 删除
@@ -53,16 +46,5 @@ namespace Crm.Service.SystemService
         /// <param name="isDelete">true 真删除 false 假删除</param>
         bool Delete(Guid gid, bool isDelete = false);
 
-        #region 验证
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        bool VerifyLoginName(Guid gid, string name);
-
-        #endregion
     }
 }

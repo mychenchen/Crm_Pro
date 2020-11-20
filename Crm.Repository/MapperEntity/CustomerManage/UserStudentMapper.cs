@@ -1,14 +1,11 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Crm.Repository.TbEntity
+namespace Crm.Repository.MapperEntity
 {
     /// <summary>
-    /// 系统用户
+    /// 学员表
     /// </summary>
-    [Table("User")]
-    public class User : BaseEntity
+    public class UserStudentMapper : BaseEntityMapper
     {
         /// <summary>
         /// 标签ID
@@ -18,35 +15,32 @@ namespace Crm.Repository.TbEntity
         /// <summary>
         /// 昵称
         /// </summary>
-        [Required]
-        [StringLength(50)]
         public string NickName { get; set; }
 
         /// <summary>
         /// 登陆账号
         /// </summary>
-        [Required]
-        [StringLength(50)]
         public string LoginName { get; set; }
 
         /// <summary>
         /// 登陆密码
         /// </summary>
-        [Required]
-        [StringLength(50)]
         public string LoginPwd { get; set; }
 
         /// <summary>
         /// 加盐
         /// </summary>
-        [Required]
-        [StringLength(50)]
         public string Salt { get; set; }
 
         /// <summary>
-        /// 修改时间
+        /// 手机号
         /// </summary>
-        public DateTime? UpdateTime { get; set; }
-                
+        public string Telephone { get; set; }
+
+        /// <summary>
+        /// 是否为VIP
+        /// </summary>
+        public int IsVIP { get; set; }
+
     }
 }

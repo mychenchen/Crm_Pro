@@ -4,6 +4,9 @@ using Crm.Repository.TbEntity;
 
 namespace Crm.WebApp.Models.Configs
 {
+    /// <summary>
+    /// 数据表映射
+    /// </summary>
     public class UserProfile : Profile
     {
 
@@ -13,14 +16,26 @@ namespace Crm.WebApp.Models.Configs
 
             CreateMap<User, UserMapper>();
             CreateMap<UserLoginLog, UserLoginLogMapper>();
-            CreateMap<HotNewsEntity, HotNewsMapper>();
-            CreateMap<HotSpotEntity, HotSpotMapper>();
-            CreateMap<NoticeEntity, NoticeMapper>();
+
             CreateMap<TabMenuEntity, TabMenuMapper>();
             CreateMap<OperationLogEntity, OperationLogMapper>();
 
+            CreateMap<HotNewsEntity, HotNewsMapper>();
+            CreateMap<HotSpotEntity, HotSpotMapper>();
+            CreateMap<NoticeEntity, NoticeMapper>();
+
             CreateMap<ProductEntity, ProductMapper>();
             CreateMap<ProductVideoEntity, ProductVideoMapper>();
+
+
+            CreateMap<SystemMenuEntity, SystemMenuMapper>();
+            CreateMap<UserRoleEntity, UserRoleMapper>();
+            CreateMap<RoleMenuEntity, RoleMenuMapper>();
+
+            CreateMap<UserStudentEntity, UserStudentMapper>();
+            CreateMap<UserCommentEntity, UserCommentMapper>();
+            CreateMap<UserOrderEntity, UserOrderMapper>();
+
         }
     }
 }

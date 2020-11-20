@@ -14,8 +14,8 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-	  <OutputPath>bin\Release\netcoreapp2.2\publish\</OutputPath>
-	  <DocumentationFile>bin\Release\netcoreapp2.2\publish\Crm.WebApp.xml</DocumentationFile>
+		<OutputPath>bin\Release\netcoreapp2.2\publish\</OutputPath>
+		<DocumentationFile>bin\Release\netcoreapp2.2\publish\Crm.WebApp.xml</DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -23,7 +23,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="log-file.log" />
+		<None Remove="log-file.log" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -94,7 +94,9 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.App" />
+		<PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" >
+			<AllowExplicitVersion>true</AllowExplicitVersion>
+		</PackageReference>
 		<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
 		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.4" />
 		<PackageReference Include="MSBuild.Microsoft.VisualStudio.Web.targets" Version="14.0.0.3" />
@@ -115,23 +117,23 @@
 
 
 	<ItemGroup>
-	  <Folder Include="wwwroot\js\wangEditor\" />
+		<Folder Include="wwwroot\js\wangEditor\" />
 	</ItemGroup>
 
 
 	<ItemGroup>
-	  <Content Update="wwwroot\view\GatewayManage\NoticeManage\Detail.html">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  </Content>
-	  <Content Update="wwwroot\view\GatewayManage\NoticeManage\Index.html">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  </Content>
-	  <Content Update="wwwroot\view\GatewayManage\NoticeManage\js\index.js">
-	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-	    <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-	  </Content>
+		<Content Update="wwwroot\view\GatewayManage\NoticeManage\Detail.html">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\view\GatewayManage\NoticeManage\Index.html">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
+		<Content Update="wwwroot\view\GatewayManage\NoticeManage\js\index.js">
+			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</Content>
 	</ItemGroup>
 
 

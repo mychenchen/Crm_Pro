@@ -30,7 +30,6 @@ namespace Crm.Repository.DB
                    new User()
                    {
                        CreateTime = DateTime.Now,
-                       LastLoginTime = DateTime.Now,
                        UpdateTime = DateTime.Now,
                        Id = Guid.NewGuid(),
                        LoginName = "admin",

@@ -5,29 +5,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Crm.Repository.TbEntity
 {
     /// <summary>
-    /// tab菜单管理
+    /// 用户评论
     /// </summary>
-    [Table("tb_TabMenu")]
-    public class TabMenuEntity : BaseEntity
+    [Table("tb_UserComment")]
+    public class UserCommentEntity : BaseEntity
     {
         /// <summary>
-        /// 父级ID
+        /// 回复评论Id
         /// </summary>
         [Required]
-        public Guid ParentGid { get; set; }
+        public Guid ReplyId { get; set; }
 
         /// <summary>
-        /// 名称
+        /// 内容
         /// </summary>
         [Required]
-        [StringLength(50)]
-        public string Name { get; set;}
+        public string CommentTxt { get; set; }
 
         /// <summary>
-        /// 排序
+        /// 用户ID
         /// </summary>
         [Required]
-        public int SortNum { get; set; }
+        public Guid UserId { get; set; }
 
     }
 }

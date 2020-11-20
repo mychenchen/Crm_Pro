@@ -46,7 +46,7 @@ namespace Crm.WebApp.API
             try
             {
                 var count = 0;
-                var data = _user.GetPageList(name, page, limit, ref count);
+                var data = _user.GetMapperPageList(name, page, limit, ref count);
                 var list = _mapper.Map<List<UserMapper>>(data);
 
                 return SuccessPage(page, limit, count, list);

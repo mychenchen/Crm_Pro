@@ -1,5 +1,4 @@
 ﻿using Crm.Repository.DB;
-using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -10,18 +9,18 @@ using static Currency.Common.NetCoreDIModuleRegister;
 namespace Crm.Service.SystemService
 {
     /// <summary>
-    /// 用户管理
+    /// 用户标签
     /// UseDI特性用于注入必须加
     /// </summary>
-    [UseDI(ServiceLifetime.Scoped, typeof(IUserService))]
-    public class UserService : IUserService
+    [UseDI(ServiceLifetime.Scoped, typeof(IUserLabelService))]
+    public class UserLabelService : IUserLabelService
     {
         /// <summary>
         /// 数据库
         /// </summary>
         protected readonly MyDbContext _mydb;
 
-        public UserService(MyDbContext mydb)
+        public UserLabelService(MyDbContext mydb)
         {
             _mydb = mydb;
         }
@@ -30,9 +29,9 @@ namespace Crm.Service.SystemService
         /// 查询
         /// </summary>
         /// <param name="model"></param>
-        public List<User> GetList()
+        public List<UserLabel> GetList()
         {
-            return _mydb.User.ToList();
+            return _mydb.UserLabel.ToList();
         }
 
         /// <summary>
@@ -43,28 +42,13 @@ namespace Crm.Service.SystemService
         /// <param name="rows"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public List<UserMapper> GetMapperPageList(string name, int page, int rows, ref int count)
+        public List<UserLabel> GetPageList(string name, int page, int rows, ref int count)
         {
-            var list = from a in _mydb.User
-                       join b in _mydb.UserLabel on a.LableId equals b.Id into temp
-                       from bb in temp.DefaultIfEmpty()
-                       select new UserMapper
-                       {
-                           Id = a.Id,
-                           CreateTime = a.CreateTime,
-                           IsDelete = a.IsDelete,
-                           Salt = a.Salt,
-                           LableId = bb.Id,
-                           LableImgPath = bb.ImgPath,
-                           LableName = bb.LabelName,
-                           LoginName = a.LoginName,
-                           LoginPwd = a.LoginPwd,
-                           NickName = a.NickName
-                       };
+            var list = _mydb.UserLabel.Where(a => a.IsDelete == 0);
 
             if (!string.IsNullOrEmpty(name))
             {
-                list = list.Where(a => a.NickName.Contains(name));
+                list = list.Where(a => a.LabelName.Contains(name));
             }
             var data = list.OrderByDescending(a => a.CreateTime)
                 .Skip((page - 1) * rows).Take(rows).ToList();
@@ -76,30 +60,21 @@ namespace Crm.Service.SystemService
         /// 查询
         /// </summary>
         /// <param name="model"></param>
-        public User GetModel(Guid gid)
+        public UserLabel GetModel(Guid gid)
         {
-            return _mydb.User.FirstOrDefault(a => a.Id == gid);
-        }
-
-        /// <summary>
-        /// 根据登陆名称查询
-        /// </summary>
-        /// <param name="name"></param>
-        public User UserLoginModel(string name)
-        {
-            return _mydb.User.FirstOrDefault(a => a.LoginName == name);
+            return _mydb.UserLabel.FirstOrDefault(a => a.Id == gid);
         }
 
         /// <summary>
         /// 添加
         /// </summary>
         /// <param name="model"></param>
-        public void AddUpdateModel(User model)
+        public void AddUpdateModel(UserLabel model)
         {
             if (model.Id == Guid.Empty)
             {
                 model.Id = Guid.NewGuid();
-                _mydb.User.Add(model);
+                _mydb.UserLabel.Add(model);
             }
             else
             {
@@ -119,30 +94,15 @@ namespace Crm.Service.SystemService
             if (model == null)
                 return false;
             if (isDelete)
-                _mydb.User.Remove(model);
+                _mydb.UserLabel.Remove(model);
             else
             {
                 model.IsDelete = 1;
-                _mydb.User.Update(model);
+                _mydb.UserLabel.Update(model);
             }
             _mydb.SaveChanges();
             return true;
         }
-
-        #region 验证
-
-        /// <summary>
-        /// 验证登陆账号是否重复
-        /// </summary>
-        /// <param name="model"></param>
-        public bool VerifyLoginName(Guid gid, string name)
-        {
-            var model = _mydb.User.FirstOrDefault(a => a.IsDelete == 0 && a.LoginName == name && a.Id != gid);
-
-            return model == null ? false : true;
-        }
-
-        #endregion
 
     }
 }

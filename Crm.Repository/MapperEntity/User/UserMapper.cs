@@ -3,10 +3,25 @@
 namespace Crm.Repository.MapperEntity
 {
     /// <summary>
-    /// 用户信息
+    /// 系统用户
     /// </summary>
     public class UserMapper : BaseEntityMapper
     {
+        /// <summary>
+        /// 标签名称
+        /// </summary>
+        public Guid LableId { get; set; }
+
+        /// <summary>
+        /// 标签名称
+        /// </summary>
+        public string LableName { get; set; }
+
+        /// <summary>
+        /// 标签图片
+        /// </summary>
+        public string LableImgPath { get; set; }
+
         /// <summary>
         /// 昵称
         /// </summary>
@@ -26,23 +41,6 @@ namespace Crm.Repository.MapperEntity
         /// 加盐
         /// </summary>
         public string Salt { get; set; }
-
-        /// <summary>
-        /// 最近一次登陆时间
-        /// </summary>
-        public DateTime? LastLoginTime { get; set; }
-
-        /// <summary>
-        /// 创建时间格式化
-        /// </summary>        
-        public string LastLoginTimeStr
-        {
-            get
-            {
-                return LastLoginTime == null ? "" : LastLoginTime.Value.ToString("yyyy-MM-dd HH:mm:ss");
-
-            }
-        }
 
     }
 }

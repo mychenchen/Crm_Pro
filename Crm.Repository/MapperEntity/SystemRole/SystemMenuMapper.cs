@@ -3,9 +3,9 @@
 namespace Crm.Repository.MapperEntity
 {
     /// <summary>
-    /// tab菜单管理
+    /// tab导航菜单管理
     /// </summary>
-    public class TabMenuMapper : BaseEntityMapper
+    public class SystemMenuMapper : BaseEntityMapper
     {
         /// <summary>
         /// 父级ID
@@ -18,8 +18,24 @@ namespace Crm.Repository.MapperEntity
         public string Name { get; set; }
 
         /// <summary>
+        /// 图标 
+        /// </summary>
+        public int Icon { get; set; }
+
+        /// <summary>
         /// 排序
         /// </summary>
         public int SortNum { get; set; }
+
+        /// <summary>
+        /// 路径
+        /// </summary>
+        public string Location { get; set; }
+
+        /// <summary>
+        /// 是否显示 0否 1是 
+        /// </summary>
+        public int IsShow { get; set; }
+
     }
 }
