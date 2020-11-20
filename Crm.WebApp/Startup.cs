@@ -52,7 +52,7 @@ namespace Crm.WebApp
             //services.Configure<DataSettingsModel>(Configuration.GetSection("DataSettings")).AddMvc();
             services.Configure<CmsAppSettingModel>(Configuration.GetSection("CmsAppSetting")).AddMvc();
             services.Configure<RabbitBaseInfo>(Configuration.GetSection("RabbitSetting")).AddMvc();
-            
+
             //services.AddQuartz(typeof(QuartzJob));
 
             var connection = Configuration.GetConnectionString("SqlServer");
@@ -168,12 +168,16 @@ namespace Crm.WebApp
 
             //开启后,可直接访问静态页面,静态文件
             app.UseStaticFiles();
-
+            string upl = Directory.GetCurrentDirectory() + @"/uploads";
+            if (!Directory.Exists(upl))
+            {
+                Directory.CreateDirectory(upl);
+            }
             //自定义资源
             app.UseStaticFiles(new StaticFileOptions
             {
                 //资源所在的绝对路径。
-                FileProvider = new PhysicalFileProvider(System.IO.Path.Combine(Directory.GetCurrentDirectory(), "uploads")),
+                FileProvider = new PhysicalFileProvider(upl),
                 //表示访问路径,必须'/'开头
                 RequestPath = "/uploads"
             });
