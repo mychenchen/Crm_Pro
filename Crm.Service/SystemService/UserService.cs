@@ -46,7 +46,7 @@ namespace Crm.Service.SystemService
         public List<UserMapper> GetMapperPageList(string name, int page, int rows, ref int count)
         {
             var list = from a in _mydb.User
-                       join b in _mydb.UserLabel on a.LableId equals b.Id into temp
+                       join b in _mydb.UserLabel on a.LabelId equals b.Id into temp
                        from bb in temp.DefaultIfEmpty()
                        select new UserMapper
                        {
@@ -54,9 +54,9 @@ namespace Crm.Service.SystemService
                            CreateTime = a.CreateTime,
                            IsDelete = a.IsDelete,
                            Salt = a.Salt,
-                           LableId = bb.Id,
-                           LableImgPath = bb.ImgPath,
-                           LableName = bb.LabelName,
+                           LabelId = bb.Id,
+                           LabelImgPath = bb.ImgPath,
+                           LabelName = bb.LabelName,
                            LoginName = a.LoginName,
                            LoginPwd = a.LoginPwd,
                            NickName = a.NickName

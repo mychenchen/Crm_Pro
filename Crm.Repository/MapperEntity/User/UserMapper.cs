@@ -10,17 +10,17 @@ namespace Crm.Repository.MapperEntity
         /// <summary>
         /// 标签名称
         /// </summary>
-        public Guid LableId { get; set; }
+        public Guid LabelId { get; set; }
 
         /// <summary>
         /// 标签名称
         /// </summary>
-        public string LableName { get; set; }
+        public string LabelName { get; set; }
 
         /// <summary>
         /// 标签图片
         /// </summary>
-        public string LableImgPath { get; set; }
+        public string LabelImgPath { get; set; }
 
         /// <summary>
         /// 昵称

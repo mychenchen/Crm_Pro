@@ -49,6 +49,15 @@ namespace Crm.WebApp.API
         }
 
         /// <summary>
+        /// 获取当前登录用户信息
+        /// </summary>
+        /// <returns></returns>
+        protected LoginUserInfo GetLoginUserDetail()
+        {
+            return _cache.Get<LoginUserInfo>("userLogin_" + Request.Headers["ToKenStr"]);
+        }
+
+        /// <summary>
         /// 记录用户操作
         /// </summary>
         /// <param name="controllerStr">模块</param>

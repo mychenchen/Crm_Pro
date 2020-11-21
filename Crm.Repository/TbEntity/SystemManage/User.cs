@@ -13,7 +13,7 @@ namespace Crm.Repository.TbEntity
         /// <summary>
         /// 标签ID
         /// </summary>
-        public Guid LableId { get; set; }
+        public Guid LabelId { get; set; }
 
         /// <summary>
         /// 昵称

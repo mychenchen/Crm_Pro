@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>详情页</title>
+    <title>用户详情</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -21,22 +21,32 @@
     <form class="layui-form" action="" lay-filter="example">
         <input type="hidden" name="Id" value="" />
         <div class="layui-form-item">
-            <label class="layui-form-label">用户昵称</label>
+            <label class="layui-form-label">标签<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <select id="sel_UserLabel" name='LabelId' lay-search="" lay-filter="sel_UserLabel">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户昵称<label style="color: red;">*</label></label>
             <div class="layui-input-block">
                 <input type="text" name="NickName" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">用户账号</label>
+            <label class="layui-form-label">用户账号<label style="color: red;">*</label></label>
             <div class="layui-input-block">
                 <input type="text" name="LoginName" autocomplete="off" placeholder="请输入账号" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label class="layui-form-label">用户密码</label>
+            <label class="layui-form-label">用户密码<label style="color: red;">*</label></label>
             <div class="layui-input-block">
                 <input type="password" name="LoginPwd" placeholder="请输入密码" autocomplete="off" value="123123"
-                    class="layui-input">
+                       class="layui-input">
             </div>
         </div>
         <div class="layui-form-item" style="display:none" id="div_nows">
@@ -53,14 +63,15 @@
 
     <script type="text/javascript">
         var form = null;
+        $(function () {
+        });
         layui.use(['form', 'layedit', 'laydate'], function () {
             form = layui.form;
-            var layer = layui.layer
-                , layedit = layui.layedit
-                , laydate = layui.laydate;
+            var layer = layui.layer;
 
             var uType = GetQueryString("u");
             if (uType == "nows") {
+                //右上角进入,修改个人资料
                 $("#div_nows").show();
                 var logUserInfo = JSON.parse(localStorage.LoginUser);
                 ajaxGet({
@@ -76,11 +87,17 @@
                     }
                 });
             } else {
+                //用户菜单列表进入,修改个人资料
                 var info = localStorage.detail;
                 if (!IsNullOrEmpty(info)) {
-                    getDetail(JSON.parse(info));
+                    var res = JSON.parse(info);
+                    getDetail(res);
+                } else {
+                    getUserLableSelect("sel_UserLabel", "", "");
                 }
             }
+            form.render('select');
+
         });
 
         //获取详情
@@ -93,11 +110,12 @@
                 , "LoginPwd": info.LoginPwd
             });
 
-            var logUserInfo = JSON.parse(localStorage.LoginUser);
             if (info.LoginName == "admin") {
                 $("input[name='NickName']").attr("disabled", true);
                 $("input[name='LoginName']").attr("disabled", true);
             }
+            getUserLableSelect("sel_UserLabel", "", info.LabelId);
+            form.render('select');
         }
 
         //获取页面的值
