@@ -4,7 +4,7 @@ var menuJson = [{
     src: "./else/assets/img/menu_icon/camera.png",
     link: "",
     children: [{
-        name: "菜单管理",
+        name: "导航菜单",
         icon: "",
         link: "/view/GatewayManage/TabMenuManage/Index.html"
     },

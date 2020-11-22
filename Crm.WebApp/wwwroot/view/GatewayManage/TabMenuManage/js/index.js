@@ -55,6 +55,22 @@ layui.use(['table', 'layer', 'element'], function () {
             },
             { field: 'Name', title: '菜单名称', align: 'center' }
             , { field: 'SortNum', title: '排序', align: 'center' }
+            , {
+                field: 'MenuType', title: '平台', align: 'center',
+                templet: function (m) {
+                    return m.MenuType == 1 ? "PC端" : "小程序端";
+                }
+            }
+            , {
+                field: 'IsShow', title: '是否显示', align: 'center',
+                templet: function (m) {
+                    let str = ' ';
+                    if (m.IsShow == 1)
+                        str = 'checked="" ';
+                    str = '<input type="checkbox" lay-skin="switch" lay-text="显示|隐藏" disabled="" ' + str + ' >';
+                    return str;
+                }
+            }
             , { field: 'CreateTimeStr', title: '创建时间', align: 'center' }
             , { field: '', title: '操作', align: 'center', toolbar: '#barDemo' }
         ]]
@@ -154,6 +170,22 @@ function addRowChild(trIndex, tr, table, pid) {
         , cols: [[
             { field: 'Name', title: '菜单名称', align: 'center' }
             , { field: 'SortNum', title: '排序', align: 'center' }
+            , {
+                field: 'MenuType', title: '平台', align: 'center',
+                templet: function (m) {
+                    return m.MenuType == 1 ? "PC端" : "小程序端";
+                }
+            }
+            , {
+                field: 'IsShow', title: '是否显示', align: 'center',
+                templet: function (m) {
+                    let str = ' ';
+                    if (m.IsShow == 1)
+                        str = 'checked="" ';
+                    str = '<input type="checkbox" lay-skin="switch" lay-text="显示|隐藏" disabled="" ' + str + ' >';
+                    return str;
+                }
+            }
             , { field: 'CreateTimeStr', title: '创建时间', align: 'center' }
             , { field: '', title: '操作', align: 'center', toolbar: '#barDemoChild' }
         ]]
@@ -213,7 +245,7 @@ function OpenDetail(title, type) {
         type: 2,
         title: title,
         scrollbar: false,
-        area: ['550px', '300px'],
+        area: ['550px', '450px'],
         content: 'Detail.html',
         btn: ['提交', '取消'],
         btnAlign: 'c',
@@ -231,6 +263,14 @@ function OpenDetail(title, type) {
             }
             if (!isNumber(model.SortNum)) {
                 layer.msg("排序格式错误,请填写数字");
+                return false;
+            }
+            if (IsNullOrEmpty(model.Location)) {
+                layer.msg("请输入地址链接");
+                return false;
+            }
+            if (IsNullOrEmpty(model.MenuType)) {
+                layer.msg("请输入选择平台");
                 return false;
             }
 

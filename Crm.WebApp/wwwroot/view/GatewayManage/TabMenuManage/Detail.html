@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 
 <head>
@@ -33,6 +33,26 @@
                 <input type="text" name="SortNum" autocomplete="off" placeholder="请输入排序" class="layui-input">
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">Url路径<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <input type="text" name="Location" autocomplete="off" placeholder="请输入路径" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">平台<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <input type="radio" name="MenuType" value="1" title="PC端" checked="">
+                <input type="radio" name="MenuType" value="2" title="小程序端">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否显示<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <input type="radio" name="IsShow" value="1" title="显示" checked="">
+                <input type="radio" name="IsShow" value="0" title="隐藏">
+            </div>
+        </div>
 
     </form>
 
@@ -44,9 +64,6 @@
         var form = null;
         layui.use(['form', 'layedit'], function () {
             form = layui.form;
-            var layer = layui.layer,
-                layedit = layui.layedit;
-
 
             var info = localStorage.detail;
             if (!IsNullOrEmpty(info)) {
@@ -63,6 +80,9 @@
                 , "Name": info.Name
                 , "ParentGid": info.ParentGid
                 , "SortNum": info.SortNum
+                , "Location": info.Location
+                , "MenuType": info.MenuType
+                , "IsShow": info.IsShow
             });
         }
 
