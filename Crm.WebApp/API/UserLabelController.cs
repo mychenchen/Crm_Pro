@@ -2,7 +2,6 @@
 using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
 using Crm.WebApp.Models;
-using Currency.Common.Caching;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -22,9 +21,8 @@ namespace Crm.WebApp.API
         public UserLabelController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IStaticCacheManager cache,
             IUserLabelService label
-            ) : base(configStr, mapper, cache)
+            ) : base(configStr, mapper)
         {
             _label = label;
         }

@@ -3,7 +3,7 @@ using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
 using Crm.WebApp.Models;
 using Currency.Common;
-using Currency.Common.Caching;
+using Currency.Common.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -30,21 +30,20 @@ namespace Crm.WebApp.API
         /// </summary>
         protected readonly IMapper _mapper;
 
-        protected readonly IStaticCacheManager _cache;
+        protected readonly RedisCommon _redis;
 
         protected readonly IOperationLogService _opt;
 
         public ApiBaseController(
             //IOptions<DataSettingsModel> configDbStr,
             IOptions<CmsAppSettingModel> configStr,
-            IMapper mapper,
-            IStaticCacheManager cache
+            IMapper mapper
             )
         {
             //_configDbStr = configDbStr.Value;
             _configStr = configStr.Value;
             _mapper = mapper;
-            _cache = cache;
+            _redis = RedisHelperNetCore.Default;
             _opt = DI.GetService<IOperationLogService>();
         }
 
@@ -54,7 +53,7 @@ namespace Crm.WebApp.API
         /// <returns></returns>
         protected LoginUserInfo GetLoginUserDetail()
         {
-            return _cache.Get<LoginUserInfo>("userLogin_" + Request.Headers["ToKenStr"]);
+            return _redis.GetKey<LoginUserInfo>("userLogin_" + Request.Headers["ToKenStr"]);
         }
 
         /// <summary>
@@ -65,7 +64,7 @@ namespace Crm.WebApp.API
         /// <param name="txt">操作内容</param>
         protected async void SaveUserOperation(string controllerStr, string optEvent, string txt)
         {
-            var userLogin = _cache.Get<LoginUserInfo>("userLogin_" + Request.Headers["ToKenStr"]);
+            var userLogin = GetLoginUserDetail();
             if (userLogin != null)
             {
                 OperationLogEntity optModel = new OperationLogEntity

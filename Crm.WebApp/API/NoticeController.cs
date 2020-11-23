@@ -2,9 +2,7 @@
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Crm.Service.GatewayService;
-using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
-using Currency.Common.Caching;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +23,8 @@ namespace Crm.WebApp.API
         public NoticeController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IStaticCacheManager cache,
             INoticeService notice
-            ) : base(configStr, mapper, cache)
+            ) : base(configStr, mapper)
         {
             _notice = notice;
         }

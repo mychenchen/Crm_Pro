@@ -15,20 +15,20 @@ namespace Currency.Common.Redis
                 return new RedisCommon(0, "134.175.30.213:6379,password=chenhao");
             }
         }
-        public static RedisCommon One
-        {
-            get
-            {
-                return new RedisCommon(1, "134.175.30.213:6379");
-            }
-        }
-        public static RedisCommon Two
-        {
-            get
-            {
-                return new RedisCommon(2, "134.175.30.213:6379");
-            }
-        }
+        //public static RedisCommon One
+        //{
+        //    get
+        //    {
+        //        return new RedisCommon(1, "134.175.30.213:6379");
+        //    }
+        //}
+        //public static RedisCommon Two
+        //{
+        //    get
+        //    {
+        //        return new RedisCommon(2, "134.175.30.213:6379");
+        //    }
+        //}
     }
     /// <summary>
     /// Redis操作类

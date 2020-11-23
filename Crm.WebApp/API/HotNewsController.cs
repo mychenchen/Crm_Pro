@@ -4,7 +4,6 @@ using Crm.Repository.TbEntity;
 using Crm.Service.GatewayService;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
-using Currency.Common.Caching;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +24,8 @@ namespace Crm.WebApp.API
         public HotNewsController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IStaticCacheManager cache,
             IHotNewsService hotNews
-            ) : base(configStr, mapper, cache)
+            ) : base(configStr, mapper)
         {
             _hotNews = hotNews;
         }

@@ -4,7 +4,6 @@ using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
 using Crm.WebApp.Models;
 using Currency.Common;
-using Currency.Common.Caching;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +24,8 @@ namespace Crm.WebApp.API
         public UserController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IStaticCacheManager cache,
             IUserService user
-            ) : base(configStr, mapper, cache)
+            ) : base(configStr, mapper)
         {
 
             _user = user;

@@ -1,18 +1,15 @@
 ﻿using AutoMapper;
-using Crm.WebApp.Models;
 using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
+using Crm.WebApp.AuthorizeHelper;
+using Crm.WebApp.Models;
 using Currency.Common;
-using Currency.Common.Caching;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
-using Crm.WebApp.AuthorizeHelper;
-using Crm.WebApp.Infrastructure;
-using Currency.Common.Redis;
 
 namespace Crm.WebApp.API
 {
@@ -30,7 +27,6 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="configStr"></param>
         /// <param name="mapper"></param>
-        /// <param name="cache"></param>
         /// <param name="user"></param>
         /// <param name="log"></param>
         public LoginHomeController(
@@ -81,7 +77,7 @@ namespace Crm.WebApp.API
                 {
                     return Error("账号不存在");
                 }
-                string pwd = (login.password + user.Salt).ToMD5(); ;
+                string pwd = (login.password + user.Salt).ToMD5();
                 if (pwd != user.LoginPwd)
                 {
                     return Error("账号或密码错误");
@@ -96,7 +92,7 @@ namespace Crm.WebApp.API
                     LoginTime = DateTime.Now
                 };
 
-                _cache.Set("userLogin_" + info.Token, info, 24 * 60);
+                _redis.SetStringKey("userLogin_" + info.Token, info, TimeSpan.FromDays(7));
                 SaveUserLoginLog(info.Gid, info.LoginUser);
                 return Success(info);
             }
@@ -117,7 +113,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var info = _cache.Get<LoginUserInfo>("userLogin_" + token);
+                var info = _redis.GetKey<LoginUserInfo>("userLogin_" + token);
                 if (info == null || info.LoginTime == null)
                 {
                     return Error("自动登陆过期,请重新登陆!!!");
@@ -143,7 +139,7 @@ namespace Crm.WebApp.API
         [HttpGet]
         public ResultObject LogOut(string token)
         {
-            _cache.Remove("userLogin_" + token);
+            _redis.KeyDelete("userLogin_" + token);
             return Success();
         }
 
