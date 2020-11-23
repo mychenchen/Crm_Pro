@@ -24,3 +24,4 @@ uploads
 /Currency.aliyun/bin
 /Currency.aliyun/obj
 /Crm.WebApp/*.log
+/Crm.WebApp/Properties/PublishProfiles/FolderProfile.pubxml.user

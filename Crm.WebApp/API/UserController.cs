@@ -92,6 +92,11 @@ namespace Crm.WebApp.API
             string errStr = "成功";
             try
             {
+                var userInfo = GetLoginUserDetail();
+                if (userInfo.LoginUser != "admin" && model.LoginName == "admin")
+                {
+                    return Error("最高权限账号,不可修改");
+                }
                 var entity = new User();
                 if (model.Id == Guid.Empty)
                 {

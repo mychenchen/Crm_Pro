@@ -32,5 +32,9 @@ namespace Crm.Repository.MapperEntity
         /// </summary>
         public int MenuType { get; set; }
 
+        /// <summary>
+        /// 是否显示 0否 1是 
+        /// </summary>
+        public int IsShow { get; set; }
     }
 }

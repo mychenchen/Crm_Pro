@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -62,7 +63,7 @@ namespace Crm.Service.SystemService
         /// <param name="model"></param>
         public UserLabel GetModel(Guid gid)
         {
-            return _mydb.UserLabel.FirstOrDefault(a => a.Id == gid);
+            return _mydb.UserLabel.AsNoTracking().FirstOrDefault(a => a.Id == gid);
         }
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace Crm.Service.SystemService
             }
             else
             {
-                _mydb.Update(model);
+                _mydb.UserLabel.Update(model);
             }
             _mydb.SaveChanges();
         }
