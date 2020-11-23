@@ -4,14 +4,12 @@ using Crm.Service.GatewayService;
 using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
-using Currency.Common.Caching;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using MongoDB.Bson.IO;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,11 +33,10 @@ namespace Crm.WebApp.API
         public CommonController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IStaticCacheManager cache,
             IHostingEnvironment hostingEnvironment,
             ITabMenuService tabMenu,
             IUserLabelService userLabel
-            ) : base(configStr, mapper, cache)
+            ) : base(configStr, mapper)
         {
             _hostingEnvironment = hostingEnvironment;
             _tabMenu = tabMenu;

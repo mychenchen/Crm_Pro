@@ -1,50 +1,53 @@
 ﻿using AutoMapper;
+using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
 using Crm.WebApp.Models;
+using Currency.Common;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
 
 namespace Crm.WebApp.API
 {
     /// <summary>
-    /// 用户标签
+    /// 系统菜单管理
     /// </summary>
     [EnableCors("allow_all")]
     [Route("api/[controller]/[action]")]
-    public class UserLabelController : ApiBaseController
+    public class SystemMenuController : ApiBaseController
     {
-        protected readonly IUserLabelService _label;
-        public UserLabelController(
+        protected readonly ISystemMenuService _user;
+        public SystemMenuController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IUserLabelService label
+            ISystemMenuService user
             ) : base(configStr, mapper)
         {
-            _label = label;
-        }
 
-        #region 后台服务接口
+            _user = user;
+        }
 
         /// <summary>
         /// 查询列表
         /// </summary>
-        /// <param name="title">名称</param>
+        /// <param name="name">名称</param>
         /// <param name="page">页码</param>
         /// <param name="limit">每页条数</param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject GetData(string title, int page, int limit)
+        public ResultObject GetData(string name, int page, int limit)
         {
             try
             {
                 var count = 0;
-                var data = _label.GetPageList(title, page, limit, ref count);
+                var data = _user.GetPageList(name, page, limit, ref count);
+                var list = _mapper.Map<List<SystemMenuMapper>>(data);
 
-                return SuccessPage(page, limit, count, data);
+                return SuccessPage(page, limit, count, list);
             }
             catch (Exception ex)
             {
@@ -54,18 +57,19 @@ namespace Crm.WebApp.API
         }
 
         /// <summary>
-        /// 查询详情,根据ID
+        /// 查询账号详情,根据ID
         /// </summary>
         /// <param name="gid">名称</param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject GetDetailByGid(Guid gid)
+        public ResultObject GetSystemMenuDetailByGid(Guid gid)
         {
             try
             {
-                var data = _label.GetModel(gid);
+                var data = _user.GetModel(gid);
+                var info = _mapper.Map<SystemMenuMapper>(data);
 
-                return Success(data);
+                return Success(info);
             }
             catch (Exception ex)
             {
@@ -77,24 +81,37 @@ namespace Crm.WebApp.API
         /// <summary>
         /// 保存或修改
         /// </summary>
-        /// <param name="model">热点轮播</param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public ResultObject SaveModel(UserLabel model)
+        public ResultObject SaveModel(SystemMenuMapper model)
         {
-            var optEvent = "添加";
-            var errStr = "成功";
+            string optEvent = "添加";
+            string errStr = "成功";
             try
             {
-                var entity = _label.GetModel(model.Id);
-                if (entity != null)
+                var userInfo = GetLoginUserDetail();
+                if (userInfo.LoginUser != "admin")
                 {
-                    model.CreateTime = entity.CreateTime;
-                    model.IsDelete = 0;
+                    return Error("非最高管理员,无法修改");
+                }
+                var entity = new SystemMenuEntity();
+                if (model.Id == Guid.Empty)
+                {
+                    entity.CreateTime = DateTime.Now;
+                    entity.IsDelete = 0;
+                }
+                else
+                {
+                    entity = _user.GetModel(model.Id);
+                    if (entity == null)
+                    {
+                        return Error("信息不存在,修改失败");
+                    }
                     optEvent = "修改";
                 }
 
-                _label.AddUpdateModel(model);
+                _user.AddUpdateModel(entity);
                 return Success();
             }
             catch (Exception ex)
@@ -105,7 +122,7 @@ namespace Crm.WebApp.API
             }
             finally
             {
-                SaveUserOperation("UserLabelController", optEvent, $"用户标签({model.LabelName},结果:{errStr})");
+                SaveUserOperation("SystemMenuController", optEvent, $"系统菜单({model.Name},结果:{errStr})");
             }
         }
 
@@ -115,12 +132,12 @@ namespace Crm.WebApp.API
         /// <param name="gid"></param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject DeleteModel(Guid gid)
+        public ResultObject DeleteModel(string gid)
         {
-            var errStr = "成功";
+            string errStr = "成功";
             try
             {
-                _label.Delete(gid, true);
+                _user.Delete(Guid.Parse(gid));
                 return Success();
             }
             catch (Exception ex)
@@ -131,11 +148,9 @@ namespace Crm.WebApp.API
             }
             finally
             {
-                SaveUserOperation("UserLabelController", "删除", $"用户标签{gid},结果:{errStr}");
+                SaveUserOperation("SystemMenuController", "删除", $"系统菜单({gid},结果:{errStr})");
             }
         }
-
-        #endregion
 
     }
 }

@@ -3,7 +3,6 @@ using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Crm.Service.ProductManageService;
 using Crm.WebApp.Models;
-using Currency.Common.Caching;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +24,8 @@ namespace Crm.WebApp.API
         public ProductController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IStaticCacheManager cache,
             IProductService notice
-            ) : base(configStr, mapper, cache)
+            ) : base(configStr, mapper)
         {
             _product = notice;
         }

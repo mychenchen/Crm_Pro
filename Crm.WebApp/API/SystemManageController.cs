@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Crm.WebApp.Models;
 using Crm.Repository.MapperEntity;
 using Crm.Service.SystemService;
-using Currency.Common.Caching;
+using Crm.WebApp.Models;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -25,10 +24,9 @@ namespace Crm.WebApp.API
         public SystemManageController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IStaticCacheManager cache,
             IUserLoginLogService userLog,
             IOperationLogService optLog
-            ) : base(configStr, mapper, cache)
+            ) : base(configStr, mapper)
         {
 
             _userLog = userLog;

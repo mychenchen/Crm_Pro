@@ -34,7 +34,7 @@ layui.use(['table', 'layer'], function () {
         , url: ApiService.SystemApi.APIService + '/Api/HotNews/GetData'
         , headers: { "ToKenStr": localStorage.Token }
         , page: true
-        , height: 'full-44'
+        , height: 'full-60'
         , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
         , defaultToolbar: ['filter']
         , where: searchModel

@@ -48,6 +48,7 @@ namespace Crm.Service.SystemService
             var list = from a in _mydb.User
                        join b in _mydb.UserLabel on a.LabelId equals b.Id into temp
                        from bb in temp.DefaultIfEmpty()
+                       where a.IsDelete == 0
                        select new UserMapper
                        {
                            Id = a.Id,
