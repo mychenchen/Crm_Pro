@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using Crm.WebApp.AuthorizeHelper;
+using Crm.WebApp.Infrastructure;
+using Currency.Common.Redis;
 
 namespace Crm.WebApp.API
 {
@@ -35,13 +37,32 @@ namespace Crm.WebApp.API
             //IOptions<DataSettingsModel> configDbStr,
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IStaticCacheManager cache,
              IUserService user,
              IUserLoginLogService log
-            ) : base(configStr, mapper, cache)
+            ) : base(configStr, mapper)
         {
             _user = user;
             _log = log;
+
+        }
+
+
+        /// <summary>
+        /// 用户登陆
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [NoSign]
+        public ResultObject Demo()
+        {
+            try
+            {
+                return Success("ok");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
         }
 
         /// <summary>
@@ -85,7 +106,6 @@ namespace Crm.WebApp.API
                 return Error(ex.Message);
             }
         }
-
         /// <summary>
         /// 自动登陆
         /// </summary>
