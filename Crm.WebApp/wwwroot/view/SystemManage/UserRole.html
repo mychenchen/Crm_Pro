@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>角色权限</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../../../layui/css/layui.css">
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+  <style type="text/css">
+    body {
+      padding: 10px;
+      overflow: hidden;
+    }
+  </style>
+</head>
+
+<body>
+
+  <form class="layui-form" action="">
+    <div class="layui-col-md6">
+      <div class="layui-card">
+        <div class="layui-card-header">
+
+          <label>角色：</label>
+          <div class="layui-inline">
+            <select id="sel_UserRole" lay-filter="sel_UserRole">
+              <option value="">请选择</option>
+            </select>
+          </div>
+
+        </div>
+        <div class="layui-card-body" style="height: 225px;overflow: auto;">
+          <div id="test7" class="demo-tree"></div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <script src="../../../layui/layui.js"></script>
+  <script src="../../../js/jquery.min.js"></script>
+  <script src="../../../js/main.js"></script>
+
+  <script type="text/javascript">
+    var form = null;
+    var layer = null;
+    var tree = null;
+
+    layui.use(['form', 'layer', 'tree'], function () {
+      form = layui.form;
+      layer = layui.layer;
+      tree = layui.tree;
+
+      var roleId = GetQueryString("rid");
+
+      getAllUserRole(roleId);
+      if (!IsNullOrEmpty(roleId)) {
+        getRoleDetail(roleId);
+      }
+
+      form.on('select(sel_UserRole)', function (data) {
+        if (data.value != "")
+          getRoleDetail(data.value);
+        else {
+          //开启复选框
+          tree.render({
+            id: 'test7',
+            elem: '#test7',
+            data: []
+          });
+        }
+
+      });
+
+      form.render();
+
+    });
+
+    //获取角色
+    function getAllUserRole(defultId) {
+      var msgIndex = layer.msg("正在拼命加载...", {
+        icon: 16,
+        time: false,
+        shade: 0.5
+      });
+      ajaxGet({
+        url: ApiService.SystemApi.APIService + "/Api/Common/GetAllUserRole",
+        async: false,
+        success: function (res) {
+          layer.close(msgIndex);
+          var str = '<option value="">请选择</option>';
+          $.each(res.data, function (i, val) {
+            if (defultId == val.id) {
+              str += '<option value="' + val.id + '" selected>' + val.name + '</option>';
+            } else {
+              str += '<option value="' + val.id + '">' + val.name + '</option>';
+            }
+          })
+          $("#sel_UserRole").html(str);
+          // form.render('select');
+        }
+      });
+    }
+
+    //获取指定角色的菜单
+    function getRoleDetail(rId) {
+
+      var msgIndex = layer.msg("正在拼命加载...", {
+        icon: 16,
+        time: false,
+        shade: 0.5,
+
+      });
+
+      ajaxGet({
+        url: ApiService.SystemApi.APIService + "/Api/SystemUserRole/GetRoleMenuMenuTree",
+        data: {
+          rId: rId
+        },
+        success: function (res) {
+          layer.close(msgIndex);
+          if (res.code != 1) {
+            layer.msg(res.message);
+            return false;
+          }
+          if (res.data.length > 0) {
+            $.each(res.data, function (i, val) {
+              val.spread = true;
+            })
+            //开启复选框
+            tree.render({
+              id: 'test7',
+              elem: '#test7',
+              data: res.data
+            });
+
+          }
+        }
+      });
+    }
+
+
+    //获取页面的值
+    function getNowDetailJson() {
+      var roleId = $("#sel_UserRole").val();
+      return roleId;
+    }
+
+  </script>
+
+</body>
+
+</html>

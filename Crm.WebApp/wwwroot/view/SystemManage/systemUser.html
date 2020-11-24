@@ -98,30 +98,30 @@
         page: true,
         height: 'full-60',
         toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-          ,
+        ,
         defaultToolbar: ['filter'],
         where: {
           name: ''
         },
         cols: [
           [{
-              type: 'checkbox'
-            }, {
-              title: '标签',
-              templet: '#imgShow'
-            }, {
-              field: 'LoginName',
-              title: '用户名'
-            }, {
-              field: 'NickName',
-              title: '昵称'
-            }
+            type: 'checkbox'
+          }, {
+            title: '标签',
+            templet: '#imgShow'
+          }, {
+            field: 'LoginName',
+            title: '用户名'
+          }, {
+            field: 'NickName',
+            title: '昵称'
+          }
             //, { field: 'LastLoginTime', title: '上次登陆时间' }
             , {
-              field: '',
-              title: '操作',
-              toolbar: '#barDemo'
-            }
+            field: '',
+            title: '操作',
+            toolbar: '#barDemo'
+          }
           ]
         ],
         response: {
@@ -195,7 +195,7 @@
           OpenDetail();
         } else if (obj.event === "role") {
           //分配角色
-          OpenUserRole(data.Id);
+          OpenUserRole(data.Id, data.RoleId);
         }
       });
     });
@@ -245,34 +245,40 @@
     }
 
     //保存信息
-    function OpenUserRole(userId) {
+    function OpenUserRole(uId, rId) {
       layer.open({
         type: 2,
         title: "分配角色权限",
         scrollbar: false,
         area: ['550px', '400px'],
-        content: 'systemUserDetail.html',
+        content: 'UserRole.html?uid=' + uId + '&rid=' + rId,
         btn: ['提交', '取消'],
         btnAlign: 'c',
         yes: function (indexs, layero) {
 
-          layer.closeAll();
-
-          // ajaxPost({
-          //   url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
-          //   headers: {
-          //     "ToKenStr": localStorage.Token
-          //   },
-          //   data: model,
-          //   success: function (res) {
-          //     layer.msg(res.message);
-          //     if (res.code != 1) {
-          //       return false;
-          //     }
-          //     layer.closeAll();
-          //     active.reload();
-          //   }
-          // });
+          var role_Id = $(layero).find("iframe")[0].contentWindow.getNowDetailJson();
+          if (IsNullOrEmpty(role_Id)) {
+            layer.msg("请选择角色");
+            return false;
+          }
+          ajaxPost({
+            url: ApiService.SystemApi.APIService + "/Api/SystemUserRole/UserBindRole",
+            headers: {
+              "ToKenStr": localStorage.Token
+            },
+            data: {
+              userId: uId,
+              roleId: role_Id
+            },
+            success: function (res) {
+              layer.msg(res.message);
+              if (res.code != 1) {
+                return false;
+              }
+              layer.closeAll();
+              active.reload();
+            }
+          });
         }
       });
     }

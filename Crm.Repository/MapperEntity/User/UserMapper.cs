@@ -13,6 +13,11 @@ namespace Crm.Repository.MapperEntity
         public Guid LabelId { get; set; }
 
         /// <summary>
+        /// 角色ID
+        /// </summary>
+        public Guid RoleId { get; set; }
+
+        /// <summary>
         /// 标签名称
         /// </summary>
         public string LabelName { get; set; }

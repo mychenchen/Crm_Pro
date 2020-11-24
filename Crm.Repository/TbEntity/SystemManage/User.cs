@@ -16,6 +16,11 @@ namespace Crm.Repository.TbEntity
         public Guid LabelId { get; set; }
 
         /// <summary>
+        /// 角色ID
+        /// </summary>
+        public Guid RoleId { get; set; }
+
+        /// <summary>
         /// 昵称
         /// </summary>
         [Required]

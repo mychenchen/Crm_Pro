@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8">
-  <title>角色详情</title>
+  <title>角色菜单</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -20,13 +20,7 @@
 <body>
   <div class="layui-col-md6">
     <div class="layui-card">
-      <div class="layui-card-header">
-        <label>菜单名称：</label>
-        <div class="layui-inline">
-          <input class="layui-input" id="txt_Title" autocomplete="off" placeholder="菜单名称">
-        </div>
-        <a class="layui-btn" onclick="active.search()">搜索</a>
-      </div>
+
       <div class="layui-card-body" style="height: 390px;overflow: auto;">
         <div id="test7" class="demo-tree"></div>
       </div>
@@ -42,23 +36,7 @@
     var layer = null;
     var tree = null;
     var treeList = [];
-    // //模拟数据2
-    // var data2 = [{
-    //   title: '早餐',
-    //   id: 1,
-    //   children: [{
-    //     checked: true,
-    //     title: '油条',
-    //     id: 2
-    //   }, {
-    //     disabled: true,
-    //     title: '包子',
-    //     id: 6
-    //   }, {
-    //     title: '豆浆',
-    //     id: 7
-    //   }]
-    // }];
+
     layui.use(['form', 'layer', 'tree'], function () {
       form = layui.form;
       layer = layui.layer;
@@ -66,25 +44,16 @@
 
       getAllMenu();
 
-      getDetail();
-
       //开启复选框
       tree.render({
         id: 'test7',
         elem: '#test7',
         data: treeList,
-        showCheckbox: true,
-        oncheck: function (obj) {
-          console.log(obj.checked); //得到当前节点是否选中
-          console.log(obj.data); //得到当前点击的节点数据
-          if (obj.data.children.length > 0) {
-            //父级
-          } else {
-            //子级
-          }
-        }
+        showCheckbox: true
       });
       // tree.setChecked('test7', true); //批量勾选 id 为 2、3 的节点
+
+      getDetail();
 
     });
 
@@ -110,20 +79,38 @@
         data: {
           rid: GetQueryString("id")
         },
-        async: false,
         success: function (res) {
           if (res.code != 1) {
             return false;
           }
-          tree.setChecked('test7', res.data);
+          if (res.data.length > 0) {
+            console.log(res.data)
+            tree.setChecked('test7', res.data);
+          }
         }
       });
     }
 
     //获取页面的值
     function getNowDetailJson() {
-      return form.val('example');
+      var menuIds = [];
+      var checkData = tree.getChecked('test7');
+      $.each(checkData, function (i, val) {
+        menuIds.push(val.id);
+        $.each(val.children, function (j, item) {
+          menuIds.push(item.id);
+        });
+      });
+      var obj = {
+        RoleId: GetQueryString("id"),
+        MenuIds: menuIds.join(',')
+      };
+      return obj;
     }
+
+
+
+
   </script>
 
 </body>

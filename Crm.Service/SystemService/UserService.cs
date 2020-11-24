@@ -60,7 +60,8 @@ namespace Crm.Service.SystemService
                            LabelName = bb.LabelName,
                            LoginName = a.LoginName,
                            LoginPwd = a.LoginPwd,
-                           NickName = a.NickName
+                           NickName = a.NickName,
+                           RoleId = a.RoleId
                        };
 
             if (!string.IsNullOrEmpty(name))

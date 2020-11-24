@@ -87,6 +87,15 @@ function getUserLableSelect(selId, pid, defultId) {
     });
 }
 
+//获取数据中的指定元素
+function getListFirt(v_list, index) {
+    for (var i = 0; i < v_list.length; i++) {
+        var element = v_list[i];
+        if (element.Id == index) {
+            return element;
+        }
+    }
+}
 function ajaxGet(dom) {
     $.ajax({
         type: 'get',

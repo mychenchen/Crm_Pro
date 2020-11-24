@@ -50,5 +50,10 @@ namespace Crm.Service.SystemService
         /// <param name="model"></param>
         RoleMenuEntity RoleMenu_GetModel(Guid rid);
 
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="model"></param>
+        void RoleMenu_AddUpdateModel(RoleMenuEntity model);
     }
 }

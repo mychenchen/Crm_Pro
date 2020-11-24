@@ -114,5 +114,26 @@ namespace Crm.Service.SystemService
         {
             return _mydb.RoleMenu.AsNoTracking().FirstOrDefault(a => a.RoleId == rid);
         }
+
+        /// <summary>
+        /// 添加
+        /// </summary>
+        /// <param name="model"></param>
+        public void RoleMenu_AddUpdateModel(RoleMenuEntity model)
+        {
+            if (model.Id == Guid.Empty)
+            {
+                model.Id = Guid.NewGuid();
+                model.CreateTime = DateTime.Now;
+                _mydb.RoleMenu.Add(model);
+            }
+            else
+            {
+                _mydb.RoleMenu.Update(model);
+            }
+            _mydb.SaveChanges();
+        }
+
+
     }
 }

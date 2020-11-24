@@ -37,7 +37,7 @@ layui.use(['table', 'layer'], function () {
     page: true,
     height: 'full-60',
     toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-      ,
+    ,
     defaultToolbar: ['filter'],
     where: searchModel,
     cols: [
@@ -53,6 +53,7 @@ layui.use(['table', 'layer'], function () {
         }, {
           field: '',
           title: '操作',
+          align: 'center',
           toolbar: '#barDemo'
         }
       ]
@@ -167,29 +168,30 @@ function OpenUseRole(rId) {
     type: 2,
     title: "角色权限",
     scrollbar: false,
-    area: ['550px', '600px'],
-    content: 'UserRole.html?id=' + rId,
+    area: ['500px', '550px'],
+    content: 'RoleMenu.html?id=' + rId,
     btn: ['提交', '取消'],
     btnAlign: 'c',
     yes: function (indexs, layero) {
       //获取详情页指定函数
       var model = $(layero).find("iframe")[0].contentWindow.getNowDetailJson();
 
-      if (IsNullOrEmpty(model.RoleName)) {
-        layer.msg("请填写名称");
+      if (IsNullOrEmpty(model.MenuIds)) {
+        layer.msg("请选择菜单");
         return false;
       }
 
       ajaxPost({
-        url: ApiService.SystemApi.APIService + "/Api/SystemUserRole/SysUserSaveModel",
+        url: ApiService.SystemApi.APIService + "/Api/SystemUserRole/RoleMenuSaveModel",
         data: model,
         success: function (res) {
           layer.msg(res.message);
           if (res.code != 1) {
             return false;
           }
-          layer.closeAll();
-          active.reload();
+          setTimeout(() => {
+            layer.closeAll();
+          }, 1000);
         }
       });
     }
