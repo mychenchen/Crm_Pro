@@ -23,6 +23,10 @@ namespace Crm.WebApp.Models
         public string Gid { get; set; }
 
         /// <summary>
+        /// 唯一ID
+        /// </summary>
+        public Guid RoleId { get; set; }
+        /// <summary>
         /// 用户昵称
         /// </summary>
         public string Name { get; set; }

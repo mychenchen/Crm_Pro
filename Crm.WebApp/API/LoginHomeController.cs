@@ -89,11 +89,13 @@ namespace Crm.WebApp.API
                     LoginUser = user.LoginName,
                     Name = user.NickName,
                     Token = Guid.NewGuid().ToString("N"),
-                    LoginTime = DateTime.Now
+                    LoginTime = DateTime.Now,
+                    RoleId = user.RoleId
                 };
 
                 _redis.SetStringKey("userLogin_" + info.Token, info, TimeSpan.FromDays(7));
                 SaveUserLoginLog(info.Gid, info.LoginUser);
+
                 return Success(info);
             }
             catch (Exception ex)

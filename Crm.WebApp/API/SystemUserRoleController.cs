@@ -80,7 +80,7 @@ namespace Crm.WebApp.API
         /// 查询角色菜单
         /// </summary>
         /// <param name="rId">角色ID</param>
-        /// <returns></returns>
+        /// <returns>返回 menuIds</returns>
         [HttpGet]
         public ResultObject GetRoleMenu(Guid rId)
         {
@@ -100,9 +100,9 @@ namespace Crm.WebApp.API
                 return Error(ex.Message);
             }
         }
-        
+
         /// <summary>
-        /// 查询角色菜单
+        /// 角色菜单树形
         /// </summary>
         /// <param name="rId">角色ID</param>
         /// <returns></returns>
@@ -120,6 +120,37 @@ namespace Crm.WebApp.API
                     var menuList = _sysMenu.GetList().Where(a => list.Contains(a.Id)).ToList();
                     //返回树组件实体模型
                     var reslist = RecursionTree.LayuiTreeList(menuList, Guid.Empty);
+                    return Success(reslist);
+                }
+
+                return Success(null);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.ToString());
+                return Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 获取首页左侧菜单
+        /// </summary>
+        /// <param name="roleId">角色ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject GetUserRoleSystemMenu(Guid roleId)
+        {
+            try
+            {
+                var info = _sysUser.RoleMenu_GetModel(roleId);
+                if (info != null)
+                {
+                    //获取角色权限对应的菜单ID
+                    List<Guid> list = info.MenuIds.Split(',').Select(a => Guid.Parse(a)).ToList();
+                    //筛选指定菜单ID的数据
+                    var menuList = RedisSystemMenu.Default.GetRedisMenuList().Where(a => list.Contains(a.Id)).ToList();
+                    //实体模型
+                    var reslist = RecursionTree.SystemMenuList(menuList, Guid.Empty);
                     return Success(reslist);
                 }
 

@@ -2,6 +2,7 @@
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
+using Crm.WebApp.Infrastructure;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.LogManange;
@@ -138,6 +139,7 @@ namespace Crm.WebApp.API
                 }
 
                 _menu.AddUpdateModel(saveEntity);
+
                 return Success();
             }
             catch (Exception ex)
@@ -148,6 +150,7 @@ namespace Crm.WebApp.API
             }
             finally
             {
+                RedisSystemMenu.Default.ReloadMenuList();
                 SaveUserOperation("SystemMenuController", optEvent, $"系统菜单({model.Name},结果:{errStr})");
             }
         }
@@ -174,6 +177,7 @@ namespace Crm.WebApp.API
             }
             finally
             {
+                RedisSystemMenu.Default.ReloadMenuList();
                 SaveUserOperation("SystemMenuController", "删除", $"系统菜单({gid},结果:{errStr})");
             }
         }
@@ -205,6 +209,7 @@ namespace Crm.WebApp.API
             }
             finally
             {
+                RedisSystemMenu.Default.ReloadMenuList();
                 SaveUserOperation("SystemMenuController", "更新", $"更新菜单,结果:{errStr})");
             }
         }

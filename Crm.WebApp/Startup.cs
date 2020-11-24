@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Crm.Repository.DB;
 using Crm.WebApp.AuthorizeHelper;
+using Crm.WebApp.Infrastructure;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.Caching;
@@ -62,6 +63,7 @@ namespace Crm.WebApp
 
             services.AddScoped<DefaultDataSeed>();
 
+
             //设置json数据返回
             services.AddMvc().AddJsonOptions(options =>
             {
@@ -73,8 +75,9 @@ namespace Crm.WebApp
             services.AddAutoMapper();
 
             services.AutoRegisterServicesFromAssembly("Crm.Service");
-            //注入 碰到MemoryCacheManager 就实例给 IStaticCacheManager
-            services.AddSingleton<IStaticCacheManager, MemoryCacheManager>();
+            //单个注入 
+
+            //services.AddSingleton<IStaticCacheManager, MemoryCacheManager>();
 
             //services.AddSingleton<IMqSend, SendMessage>();
             //services.AddSingleton<IMqReceive, ReceiveMessage>();

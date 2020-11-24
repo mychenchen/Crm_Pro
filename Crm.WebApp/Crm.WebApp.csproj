@@ -19,6 +19,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="logfile\**" />
+	  <Content Remove="logfile\**" />
+	  <EmbeddedResource Remove="logfile\**" />
+	  <None Remove="logfile\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Remove="Configs\HttpGlobalExceptionFilter.cs" />
 	</ItemGroup>
 
@@ -94,7 +101,7 @@
 	<ItemGroup>
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
 		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
-		<PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0" >
+		<PackageReference Include="Microsoft.AspNetCore.App" Version="2.2.0">
 			<AllowExplicitVersion>true</AllowExplicitVersion>
 		</PackageReference>
 		<PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />

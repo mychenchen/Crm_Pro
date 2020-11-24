@@ -94,33 +94,13 @@
   <script src="js/L2Dwidget.min.js"></script>
   <script src="js/L2Dwidget.0.min.js"></script>
   <script type="text/javascript">
-    $(function () {
+    var element = null;
+    layui.use(['element', 'layer'], function () {
+      element = layui.element;
+      var layer = layui.layer;
 
       if (IsNullOrEmpty(localStorage.LoginUser))
         location.href = "login.html";
-
-      var str = "";
-      $.each(menuJson, function (i, val) {
-        str += '<li class="layui-nav-item">';
-        str += '    <a class="" href="javascript:;">';
-        // str += '      <i class="layui-icon ' + val.icon + '"></i>';
-        str += val.name;
-        str += '    </a>';
-        str += '<dl class="layui-nav-child">';
-
-        $.each(val.children, function (i, item) {
-          str += '<dd><a href="javascript:;" data-src="' + item.link + '" target="_top">' + item.name +
-            '</a></dd>';
-        });
-        str += '    </dl>';
-        str += '</li>';
-      });
-      $(".layui-nav-tree").html(str);
-    });
-
-    layui.use(['element', 'layer'], function () {
-      var element = layui.element;
-      var layer = layui.layer;
 
       document.title = ApiService.HtmlInfo.topTitle;
       $("#div_LogTitle").html(ApiService.HtmlInfo.LogTitle);
@@ -154,12 +134,45 @@
         }, 2000);
       }
 
+      userRoleSystemMenu(logUserInfo.RoleId);
+
       $("dd > a").on("click", function () {
         var address = $(this).attr("data-src");
         $("#showIframe").attr("src", address);
       });
 
     });
+
+    function userRoleSystemMenu(roleId) {
+      ajaxGet({
+        url: ApiService.SystemApi.APIService + '/Api/SystemUserRole/GetUserRoleSystemMenu',
+        data: {
+          roleId
+        },
+        async: false,
+        success: function (res) {
+
+          var str = "";
+          $.each(res.data, function (i, val) {
+            str += '<li class="layui-nav-item">';
+            str += '    <a class="" href="javascript:;">';
+            // str += '      <i class="layui-icon ' + val.icon + '"></i>';
+            str += val.name;
+            str += '    </a>';
+            str += '<dl class="layui-nav-child">';
+
+            $.each(val.children, function (i, item) {
+              str += '<dd><a href="javascript:;" data-src="' + item.link + '" target="_top">' + item.name +
+                '</a></dd>';
+            });
+            str += '    </dl>';
+            str += '</li>';
+          });
+          $(".layui-nav-tree").html(str);
+          element.init();
+        }
+      });
+    }
 
     function logOut() {
       layer.confirm('是否确定退出账号', function (index) {
