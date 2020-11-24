@@ -31,6 +31,7 @@ var menuJson = [{
     type: "img",
     src: "./else/assets/img/menu_icon/camera.png",
     link: "",
+    icon: "layui-icon-chat",
     children: [{
       name: "课程列表",
       icon: "",
@@ -46,6 +47,10 @@ var menuJson = [{
       name: "系统菜单",
       icon: "",
       link: "/view/SystemRoleManage/SystemMenu/index.html"
+    }, {
+      name: "系统角色",
+      icon: "",
+      link: "/view/SystemRoleManage/UserRole/index.html"
     }]
   },
   {

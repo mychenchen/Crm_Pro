@@ -21,6 +21,7 @@
   <form class="layui-form" action="" lay-filter="example">
     <input type="hidden" name="Id" value="" />
     <input type="hidden" name="ParentGid" value="" />
+    <input type="hidden" name="Icon" value="00" />
     <div class="layui-form-item">
       <label class="layui-form-label">名称<label style="color: red;">*</label></label>
       <div class="layui-input-block">
@@ -39,13 +40,13 @@
         <input type="text" name="Location" autocomplete="off" placeholder="请输入路径" class="layui-input">
       </div>
     </div>
-    <div class="layui-form-item">
+    <!-- <div class="layui-form-item">
       <label class="layui-form-label">图标<label style="color: red;">*</label></label>
       <div class="layui-input-block">
         <input type="radio" name="MenuType" value="1" title="PC端" checked="">
         <input type="radio" name="MenuType" value="2" title="小程序端">
       </div>
-    </div>
+    </div> -->
     <div class="layui-form-item">
       <label class="layui-form-label">是否显示<label style="color: red;">*</label></label>
       <div class="layui-input-block">
@@ -81,7 +82,7 @@
         "ParentGid": info.ParentGid,
         "SortNum": info.SortNum,
         "Location": info.Location,
-        "MenuType": info.MenuType,
+        "Icon": info.Icon,
         "IsShow": info.IsShow
       });
     }

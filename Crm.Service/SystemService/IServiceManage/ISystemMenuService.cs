@@ -26,6 +26,12 @@ namespace Crm.Service.SystemService
         List<SystemMenuEntity> GetPageList(string name, int page, int rows, ref int count);
 
         /// <summary>
+        /// 查询子级菜单
+        /// </summary>
+        /// <param name="pid"></param>
+        List<SystemMenuEntity> GetListByPid(Guid pid);
+
+        /// <summary>
         /// 查询
         /// </summary>
         /// <param name="model"></param>
@@ -44,5 +50,21 @@ namespace Crm.Service.SystemService
         /// <param name="isDelete">true 真删除 false 假删除</param>
         bool Delete(Guid gid, bool isDelete = false);
 
+        /// <summary>
+        /// 修改排序
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="pid"></param>
+        /// <param name="sortNum"></param>
+        /// <returns></returns>
+        bool UpdateSortNum(Guid id, Guid pid, int sortNum);
+
+        /// <summary>
+        /// 验证排序是否存在
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="pid"></param>
+        /// <param name="sortNum"></param>
+        bool VerifySortNum(Guid id, Guid pid, int sortNum);
     }
 }

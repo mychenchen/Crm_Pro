@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Crm.Repository.TbEntity
 {
     /// <summary>
-    /// tab导航菜单管理
+    /// 菜单管理
     /// </summary>
     [Table("tb_SystemMenu")]
     public class SystemMenuEntity : BaseEntity
@@ -27,7 +27,7 @@ namespace Crm.Repository.TbEntity
         /// 图标 
         /// </summary>
         [StringLength(200)]
-        public int Icon { get; set; }
+        public string Icon { get; set; }
 
         /// <summary>
         /// 排序

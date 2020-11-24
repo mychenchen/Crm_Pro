@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Crm.Repository.MapperEntity;
+using Crm.Repository.TbEntity;
 using Crm.Service.GatewayService;
 using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
@@ -30,17 +31,23 @@ namespace Crm.WebApp.API
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly ITabMenuService _tabMenu;
         private readonly IUserLabelService _userLabel;
+        protected readonly ISystemUserRoleService _sysUser;
+        protected readonly ISystemMenuService _sysMenu;
         public CommonController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
             IHostingEnvironment hostingEnvironment,
             ITabMenuService tabMenu,
-            IUserLabelService userLabel
+            IUserLabelService userLabel,
+            ISystemUserRoleService sysUser,
+            ISystemMenuService sysMenu
             ) : base(configStr, mapper)
         {
             _hostingEnvironment = hostingEnvironment;
             _tabMenu = tabMenu;
             _userLabel = userLabel;
+            _sysUser = sysUser;
+            _sysMenu = sysMenu;
         }
 
         #region 下拉框
@@ -87,6 +94,72 @@ namespace Crm.WebApp.API
             {
                 return Error(ex.Message);
             }
+        }
+
+        /// <summary>
+        /// 角色权限
+        /// </summary>
+        /// <returns></returns>
+        public ResultObject GetAllUserRole()
+        {
+            try
+            {
+                var list = _sysUser.SysUser_GetList()
+                            .Select(a => new
+                            {
+                                id = a.Id,
+                                name = a.RoleName
+                            }).ToList();
+
+                return Success(list);
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 角色权限
+        /// </summary>
+        /// <returns></returns>
+        public ResultObject GetSystemMenuTree()
+        {
+            try
+            {
+                var data = _sysMenu.GetList();
+                var list = RecursionLayuiTreeList(data, Guid.Empty);
+
+                return Success(list);
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 递归树形结构
+        /// </summary>
+        /// <param name="list"></param>
+        /// <param name="pid"></param>
+        /// <returns></returns>
+        protected List<LayuiTreeModel> RecursionLayuiTreeList(List<SystemMenuEntity> list, Guid pid)
+        {
+            var resList = new List<LayuiTreeModel>();
+            var list_p = list.Where(a => a.ParentGid == pid).ToList();
+            list_p.ForEach(a =>
+            {
+                LayuiTreeModel model = new LayuiTreeModel()
+                {
+                    title = a.Name,
+                    id = a.Id.ToString()
+                };
+                model.children = RecursionLayuiTreeList(list, a.Id);
+
+                resList.Add(model);
+            });
+
+            return resList;
         }
 
         #endregion

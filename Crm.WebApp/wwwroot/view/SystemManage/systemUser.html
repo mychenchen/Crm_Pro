@@ -2,223 +2,281 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>分页列表</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../layui/css/layui.css">
-    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
-    <style type="text/css">
-        body {
-            overflow: hidden;
-            padding: 10px;
-        }
+  <meta charset="utf-8">
+  <title>分页列表</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../../layui/css/layui.css">
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+  <style type="text/css">
+    body {
+      overflow: hidden;
+      padding: 10px;
+    }
 
-        /* 设置table每一行的height */
-        .layui-table-cell {
-            height: auto;
-            line-height: 30px;
-        }
-    </style>
+    /* 设置table每一行的height */
+    .layui-table-cell {
+      height: auto;
+      line-height: 30px;
+    }
+  </style>
 </head>
 
 <body>
 
-    <div class="demoTable">
-        <label>用户名：</label>
-        <div class="layui-inline">
-            <input class="layui-input" id="demoReload" autocomplete="off">
-        </div>
-        <button class="layui-btn" onclick="active.search()">搜索</button>
-        <button class="layui-btn" onclick="active.reload()">刷新</button>
+  <div class="demoTable">
+    <label>用户名：</label>
+    <div class="layui-inline">
+      <input class="layui-input" id="demoReload" autocomplete="off">
     </div>
+    <button class="layui-btn" onclick="active.search()">搜索</button>
+    <button class="layui-btn" onclick="active.reload()">刷新</button>
+  </div>
 
-    <table class="layui-hide" id="tableData" lay-filter="tableData"></table>
+  <table class="layui-hide" id="tableData" lay-filter="tableData"></table>
 
-    <script type="text/html" id="toolbarDemo">
-        <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
-        </div>
-    </script>
+  <script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
+    </div>
+  </script>
 
-    <script type="text/html" id="imgShow">
-        <div class="layer-photos-demo">
-            <img style="width:50px" src="{{ApiService.UpLoadApi.APIService + d.LabelImgPath}}"
-                 layer-src="{{ApiService.UpLoadApi.APIService + d.LabelImgPath}}">
-            <label>{{d.LabelName}}</label>
-        </div>
-    </script>
+  <script type="text/html" id="imgShow">
+    <div class="layer-photos-demo">
+      <img style="width:50px" src="{{ApiService.UpLoadApi.APIService + d.LabelImgPath}}"
+        layer-src="{{ApiService.UpLoadApi.APIService + d.LabelImgPath}}">
+      <label>{{d.LabelName}}</label>
+    </div>
+  </script>
 
-    <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    </script>
+  <script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="role">分配角色</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  </script>
 
-    <script src="../../layui/layui.js"></script>
-    <script src="../../js/jquery.min.js"></script>
-    <script src="../../js/main.js"></script>
+  <script src="../../layui/layui.js"></script>
+  <script src="../../js/jquery.min.js"></script>
+  <script src="../../js/main.js"></script>
 
-    <script type="text/javascript">
-        var table = null;
-        var layer = null;
-        var active = {
-            //条件查询
-            search: function () {
-                var demoReload = $('#demoReload').val();
+  <script type="text/javascript">
+    var table = null;
+    var layer = null;
+    var active = {
+      //条件查询
+      search: function () {
+        var demoReload = $('#demoReload').val();
 
-                //执行重载
-                table.reload('tableReload', {
-                    page: {
-                        curr: 1 //重新从第 1 页开始
-                    }
-                    , where: {
-                        name: demoReload
-                    }
-                }, 'data');
-            },
-            //刷新页面
-            reload: function () {
-                window.location.reload();
+        //执行重载
+        table.reload('tableReload', {
+          page: {
+            curr: 1 //重新从第 1 页开始
+          },
+          where: {
+            name: demoReload
+          }
+        }, 'data');
+      },
+      //刷新页面
+      reload: function () {
+        window.location.reload();
+      }
+    };
+
+    layui.use(['table', 'layer'], function () {
+      table = layui.table;
+      layer = layui.layer;
+      table.render({
+
+        elem: '#tableData',
+        id: "tableReload",
+        url: ApiService.SystemApi.APIService + '/Api/User/GetData',
+        headers: {
+          "ToKenStr": localStorage.Token
+        },
+        page: true,
+        height: 'full-60',
+        toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+          ,
+        defaultToolbar: ['filter'],
+        where: {
+          name: ''
+        },
+        cols: [
+          [{
+              type: 'checkbox'
+            }, {
+              title: '标签',
+              templet: '#imgShow'
+            }, {
+              field: 'LoginName',
+              title: '用户名'
+            }, {
+              field: 'NickName',
+              title: '昵称'
             }
-        };
-
-        layui.use(['table', 'layer'], function () {
-            table = layui.table;
-            layer = layui.layer;
-            table.render({
-
-                elem: '#tableData'
-                , id: "tableReload"
-                , url: ApiService.SystemApi.APIService + '/Api/User/GetData'
-                , headers: { "ToKenStr": localStorage.Token }
-                , page: true
-                , height: 'full-60'
-                , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-                , defaultToolbar: ['filter']
-                , where: {
-                    name: ''
-                }
-                , cols: [[
-                    { type: 'checkbox' }
-                    , { title: '标签', templet: '#imgShow' }
-                    , { field: 'LoginName', title: '用户名' }
-                    , { field: 'NickName', title: '昵称' }
-                    //, { field: 'LastLoginTime', title: '上次登陆时间' }
-                    , { field: '', title: '操作', toolbar: '#barDemo' }
-                ]]
-                , response: {
-                    statusCode: 1 //重新规定成功的状态码为 1 ，table 组件默认为 0
-                }
-                , parseData: function (res) {
-                    var count = 0;
-                    var tableList = [];
-                    //将原始数据解析成 table 组件所规定的数据
-                    if (res.code == 1 && res.data != null) {
-                        count = res.data.count;
-                        tableList = res.data.list;
-                    }
-                    return {
-                        "code": res.code, //解析接口状态
-                        "msg": res.message, //解析提示文本
-                        "count": count, //解析数据长度
-                        "data": tableList //解析数据列表
-                    };
-                }
-            });
-
-            //头工具栏事件
-            table.on('toolbar(tableData)', function (obj) {
-
-                // var checkStatus = table.checkStatus(obj.config.id); var data = checkStatus.data; 获取check选中的数据行
-                switch (obj.event) {
-                    case 'add':
-                        localStorage.detail = '';
-                        OpenDetail();
-                        break;
-                };
-            });
-
-            //监听行工具事件
-            table.on('tool(tableData)', function (obj) {
-                var data = obj.data;//当前选中记录了数据
-                //console.log(obj)
-                if (obj.event === 'del') {
-                    if (data.LoginName == "admin") {
-                        layer.msg("最高权限账号,无法删除");
-                        return false;
-                    }
-                    layer.confirm('真的删除行么', function (index) {
-
-                        $.ajax({
-                            url: ApiService.SystemApi.APIService + "/Api/User/DeleteModel",
-                            type: "get",
-                            headers: { "ToKenStr": localStorage.Token },
-                            data: { gid: data.Id },
-                            success: function (res) {
-                                layer.msg(res.message);
-                                if (res.code != 1) {
-                                    return false;
-                                }
-                                active.reload();
-                            }
-                        });
-                    });
-                } else if (obj.event === 'edit') {
-                    var logUserInfo = JSON.parse(localStorage.LoginUser);
-                    if (logUserInfo.LoginUser != "admin" && data.LoginName == "admin") {
-                        layer.msg("最高权限账号,不可修改");
-                        return false;
-                    }
-                    localStorage.detail = JSON.stringify(data);
-                    OpenDetail();
-                }
-            });
-        });
-
-        //保存信息
-        function OpenDetail() {
-            layer.open({
-                type: 2,
-                title: "系统用户",
-                scrollbar: false,
-                area: ['550px', '400px'],
-                content: 'systemUserDetail.html',
-                btn: ['提交', '取消'],
-                btnAlign: 'c',
-                yes: function (indexs, layero) {
-                    //获取详情页指定函数
-                    var model = $(layero).find("iframe")[0].contentWindow.getNowDetailJson();
-                    if (IsNullOrEmpty(model.NickName)) {
-                        layer.msg("请填写昵称");
-                        return false;
-                    }
-                    if (IsNullOrEmpty(model.LoginName)) {
-                        layer.msg("请填写用户名");
-                        return false;
-                    }
-                    if (IsNullOrEmpty(model.LoginPwd)) {
-                        layer.msg("请填写密码");
-                        return false;
-                    }
-                    ajaxPost({
-                        url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
-                        headers: { "ToKenStr": localStorage.Token },
-                        data: model,
-                        success: function (res) {
-                            layer.msg(res.message);
-                            if (res.code != 1) {
-                                return false;
-                            }
-                            layer.closeAll();
-                            active.reload();
-                        }
-                    });
-                }
-            });
+            //, { field: 'LastLoginTime', title: '上次登陆时间' }
+            , {
+              field: '',
+              title: '操作',
+              toolbar: '#barDemo'
+            }
+          ]
+        ],
+        response: {
+          statusCode: 1 //重新规定成功的状态码为 1 ，table 组件默认为 0
+        },
+        parseData: function (res) {
+          var count = 0;
+          var tableList = [];
+          //将原始数据解析成 table 组件所规定的数据
+          if (res.code == 1 && res.data != null) {
+            count = res.data.count;
+            tableList = res.data.list;
+          }
+          return {
+            "code": res.code, //解析接口状态
+            "msg": res.message, //解析提示文本
+            "count": count, //解析数据长度
+            "data": tableList //解析数据列表
+          };
         }
+      });
 
-    </script>
+      //头工具栏事件
+      table.on('toolbar(tableData)', function (obj) {
+
+        // var checkStatus = table.checkStatus(obj.config.id); var data = checkStatus.data; 获取check选中的数据行
+        switch (obj.event) {
+          case 'add':
+            localStorage.detail = '';
+            OpenDetail();
+            break;
+        };
+      });
+
+      //监听行工具事件
+      table.on('tool(tableData)', function (obj) {
+        var data = obj.data; //当前选中记录了数据
+        //console.log(obj)
+        if (obj.event === 'del') {
+          if (data.LoginName == "admin") {
+            layer.msg("最高权限账号,无法删除");
+            return false;
+          }
+          layer.confirm('真的删除行么', function (index) {
+
+            $.ajax({
+              url: ApiService.SystemApi.APIService + "/Api/User/DeleteModel",
+              type: "get",
+              headers: {
+                "ToKenStr": localStorage.Token
+              },
+              data: {
+                gid: data.Id
+              },
+              success: function (res) {
+                layer.msg(res.message);
+                if (res.code != 1) {
+                  return false;
+                }
+                active.reload();
+              }
+            });
+          });
+        } else if (obj.event === 'edit') {
+          var logUserInfo = JSON.parse(localStorage.LoginUser);
+          if (logUserInfo.LoginUser != "admin" && data.LoginName == "admin") {
+            layer.msg("最高权限账号,不可修改");
+            return false;
+          }
+          localStorage.detail = JSON.stringify(data);
+          OpenDetail();
+        } else if (obj.event === "role") {
+          //分配角色
+          OpenUserRole(data.Id);
+        }
+      });
+    });
+
+    //保存信息
+    function OpenDetail() {
+      layer.open({
+        type: 2,
+        title: "系统用户",
+        scrollbar: false,
+        area: ['550px', '400px'],
+        content: 'systemUserDetail.html',
+        btn: ['提交', '取消'],
+        btnAlign: 'c',
+        yes: function (indexs, layero) {
+          //获取详情页指定函数
+          var model = $(layero).find("iframe")[0].contentWindow.getNowDetailJson();
+          if (IsNullOrEmpty(model.NickName)) {
+            layer.msg("请填写昵称");
+            return false;
+          }
+          if (IsNullOrEmpty(model.LoginName)) {
+            layer.msg("请填写用户名");
+            return false;
+          }
+          if (IsNullOrEmpty(model.LoginPwd)) {
+            layer.msg("请填写密码");
+            return false;
+          }
+          ajaxPost({
+            url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
+            headers: {
+              "ToKenStr": localStorage.Token
+            },
+            data: model,
+            success: function (res) {
+              layer.msg(res.message);
+              if (res.code != 1) {
+                return false;
+              }
+              layer.closeAll();
+              active.reload();
+            }
+          });
+        }
+      });
+    }
+
+    //保存信息
+    function OpenUserRole(userId) {
+      layer.open({
+        type: 2,
+        title: "分配角色权限",
+        scrollbar: false,
+        area: ['550px', '400px'],
+        content: 'systemUserDetail.html',
+        btn: ['提交', '取消'],
+        btnAlign: 'c',
+        yes: function (indexs, layero) {
+
+          layer.closeAll();
+
+          // ajaxPost({
+          //   url: ApiService.SystemApi.APIService + "/Api/User/SaveModel",
+          //   headers: {
+          //     "ToKenStr": localStorage.Token
+          //   },
+          //   data: model,
+          //   success: function (res) {
+          //     layer.msg(res.message);
+          //     if (res.code != 1) {
+          //       return false;
+          //     }
+          //     layer.closeAll();
+          //     active.reload();
+          //   }
+          // });
+        }
+      });
+    }
+  </script>
 
 </body>
 

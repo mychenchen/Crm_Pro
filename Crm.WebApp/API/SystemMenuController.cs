@@ -20,15 +20,15 @@ namespace Crm.WebApp.API
     [Route("api/[controller]/[action]")]
     public class SystemMenuController : ApiBaseController
     {
-        protected readonly ISystemMenuService _user;
+        protected readonly ISystemMenuService _menu;
         public SystemMenuController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            ISystemMenuService user
+            ISystemMenuService menu
             ) : base(configStr, mapper)
         {
 
-            _user = user;
+            _menu = menu;
         }
 
         /// <summary>
@@ -44,10 +44,32 @@ namespace Crm.WebApp.API
             try
             {
                 var count = 0;
-                var data = _user.GetPageList(name, page, limit, ref count);
+                var data = _menu.GetPageList(name, page, limit, ref count);
                 var list = _mapper.Map<List<SystemMenuMapper>>(data);
 
                 return SuccessPage(page, limit, count, list);
+            }
+            catch (Exception ex)
+            {
+                LogHelper.Error(ex.ToString());
+                return Error(ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 查询列表
+        /// </summary>
+        /// <param name="pid">父级ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject GetDataByPid(Guid pid)
+        {
+            try
+            {
+                var data = _menu.GetListByPid(pid);
+                var list = _mapper.Map<List<SystemMenuMapper>>(data);
+
+                return Success(list);
             }
             catch (Exception ex)
             {
@@ -66,7 +88,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _user.GetModel(gid);
+                var data = _menu.GetModel(gid);
                 var info = _mapper.Map<SystemMenuMapper>(data);
 
                 return Success(info);
@@ -95,23 +117,27 @@ namespace Crm.WebApp.API
                 {
                     return Error("非最高管理员,无法修改");
                 }
-                var entity = new SystemMenuEntity();
-                if (model.Id == Guid.Empty)
+
+                //判断排序是否重复
+                if (_menu.VerifySortNum(model.Id, model.ParentGid, model.SortNum))
                 {
-                    entity.CreateTime = DateTime.Now;
-                    entity.IsDelete = 0;
+                    return Error("排序已存在,请更换");
+                }
+
+                var saveEntity = _mapper.Map<SystemMenuEntity>(model);
+                var entity = _menu.GetModel(saveEntity.Id);
+                if (entity != null)
+                {
+                    saveEntity.CreateTime = entity.CreateTime;
+                    saveEntity.IsDelete = entity.IsDelete;
+                    optEvent = "修改";
                 }
                 else
                 {
-                    entity = _user.GetModel(model.Id);
-                    if (entity == null)
-                    {
-                        return Error("信息不存在,修改失败");
-                    }
-                    optEvent = "修改";
+                    saveEntity.CreateTime = DateTime.Now; ;
                 }
 
-                _user.AddUpdateModel(entity);
+                _menu.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
@@ -137,7 +163,7 @@ namespace Crm.WebApp.API
             string errStr = "成功";
             try
             {
-                _user.Delete(Guid.Parse(gid));
+                _menu.Delete(Guid.Parse(gid));
                 return Success();
             }
             catch (Exception ex)
@@ -152,5 +178,35 @@ namespace Crm.WebApp.API
             }
         }
 
+        /// <summary>
+        /// 更换排序
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="pid"></param>
+        /// <param name="sortNum"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject UpdateSortNum(Guid id, Guid pid, int sortNum)
+        {
+            string errStr = "成功";
+            try
+            {
+                var flag = _menu.UpdateSortNum(id, pid, sortNum);
+                if (flag)
+                    return Success();
+                else
+                    return Error("修改失败");
+            }
+            catch (Exception ex)
+            {
+                errStr = "失败,请查看日志";
+                LogHelper.Error(ex.ToString());
+                return Error(ex.Message);
+            }
+            finally
+            {
+                SaveUserOperation("SystemMenuController", "更新", $"更新菜单,结果:{errStr})");
+            }
+        }
     }
 }

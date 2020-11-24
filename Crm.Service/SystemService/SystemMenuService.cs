@@ -45,7 +45,7 @@ namespace Crm.Service.SystemService
         /// <returns></returns>
         public List<SystemMenuEntity> GetPageList(string name, int page, int rows, ref int count)
         {
-            var list = _mydb.SystemMenu.Where(a => a.IsDelete == 0);
+            var list = _mydb.SystemMenu.Where(a => a.IsDelete == 0 && a.ParentGid == Guid.Empty);
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -64,6 +64,15 @@ namespace Crm.Service.SystemService
         public SystemMenuEntity GetModel(Guid gid)
         {
             return _mydb.SystemMenu.AsNoTracking().FirstOrDefault(a => a.Id == gid);
+        }
+
+        /// <summary>
+        /// 查询子级菜单
+        /// </summary>
+        /// <param name="pid"></param>
+        public List<SystemMenuEntity> GetListByPid(Guid pid)
+        {
+            return _mydb.SystemMenu.Where(a => a.IsDelete == 0 && a.ParentGid == pid).OrderBy(a => a.SortNum).ToList();
         }
 
         /// <summary>
@@ -105,5 +114,44 @@ namespace Crm.Service.SystemService
             return true;
         }
 
+        /// <summary>
+        /// 修改排序
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="pid"></param>
+        /// <param name="sortNum"></param>
+        /// <returns></returns>
+        public bool UpdateSortNum(Guid id, Guid pid, int sortNum)
+        {
+            var model_1 = _mydb.SystemMenu.FirstOrDefault(a => a.Id == id);
+            var model_2 = _mydb.SystemMenu.FirstOrDefault(a => a.IsDelete == 0 && a.ParentGid == pid && a.SortNum == sortNum);
+
+            //交换sortNum
+            if (model_2 != null)
+            {
+                model_2.SortNum = model_1.SortNum;
+                model_1.SortNum = sortNum;
+
+                _mydb.SaveChanges();
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// 验证排序是否存在
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="pid"></param>
+        /// <param name="sortNum"></param>
+        public bool VerifySortNum(Guid id, Guid pid, int sortNum)
+        {
+            var num = _mydb.SystemMenu.Count(a => a.IsDelete == 0 && a.ParentGid == pid && a.Id != pid && a.SortNum == sortNum);
+
+            if (num > 0)
+                return true;
+            else
+                return false;
+        }
     }
 }

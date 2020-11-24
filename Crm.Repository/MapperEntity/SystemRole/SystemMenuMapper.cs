@@ -3,7 +3,7 @@
 namespace Crm.Repository.MapperEntity
 {
     /// <summary>
-    /// tab导航菜单管理
+    /// 菜单管理
     /// </summary>
     public class SystemMenuMapper : BaseEntityMapper
     {
@@ -20,7 +20,7 @@ namespace Crm.Repository.MapperEntity
         /// <summary>
         /// 图标 
         /// </summary>
-        public int Icon { get; set; }
+        public string Icon { get; set; }
 
         /// <summary>
         /// 排序

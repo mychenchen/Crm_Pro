@@ -2,67 +2,60 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
-    <title>热点轮播</title>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../../layui/css/layui.css">
-    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
-    <style type="text/css">
-        body {
-            overflow: hidden;
-            padding: 10px;
-        }
+  <meta charset="utf-8" />
+  <title>热点轮播</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../../../layui/css/layui.css">
+  <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+  <style type="text/css">
+    body {
+      overflow: hidden;
+      padding: 10px;
+    }
 
-        /* .layui-table-cell {
+    /* .layui-table-cell {
             height: auto;
             line-height: 28px;
         } */
-    </style>
+  </style>
 </head>
 
 <body>
 
-    <div class="demoTable">
-        <form class="layui-form">
-            <div class="layui-row">
-                <div class="layui-col-md3">
-                    <div class="grid-demo grid-demo-bg1">
-                        <label>标题：</label>
-                        <div class="layui-inline">
-                            <input class="layui-input" id="txt_Title" autocomplete="off">
-                        </div>
-                    </div>
-                </div>
-        </form>
-
-        <a class="layui-btn" onclick="active.search()">搜索</a>
-        <a class="layui-btn" onclick="active.reload()">刷新</a>
+  <div class="demoTable">
+    <label>菜单：</label>
+    <div class="layui-inline">
+      <input class="layui-input" id="txt_Title" autocomplete="off" placeholder="菜单名称">
     </div>
+    <a class="layui-btn" onclick="active.search()">搜索</a>
+    <a class="layui-btn" onclick="active.reload()">刷新</a>
+  </div>
+
+
+  <table class="layui-hide" id="tableData" lay-filter="tableData"></table>
+
+  <script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+      <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
     </div>
+  </script>
+  <script type="text/html" id="imgShow">
+    <div class="layer-photos-demo">
+      <img src="{{ApiService.SystemApi.APIService + d.ImgPath}}"
+        layer-src="{{ApiService.SystemApi.APIService + d.ImgPath}}">
+    </div>
+  </script>
 
-    <table class="layui-hide" id="tableData" lay-filter="tableData"></table>
+  <script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+  </script>
 
-    <script type="text/html" id="toolbarDemo">
-        <div class="layui-btn-container">
-            <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
-        </div>
-    </script>
-    <script type="text/html" id="imgShow">
-        <div class="layer-photos-demo">
-            <img src="{{ApiService.SystemApi.APIService + d.ImgPath}}" layer-src="{{ApiService.SystemApi.APIService + d.ImgPath}}" >
-        </div>
-    </script>
-
-    <script type="text/html" id="barDemo">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
-    </script>
-
-    <script src="../../../layui/layui.js"></script>
-    <script src="../../../js/jquery.min.js"></script>
-    <script src="../../../js/main.js"></script>
-    <script src="js/index.js"></script>
+  <script src="../../../layui/layui.js"></script>
+  <script src="../../../js/jquery.min.js"></script>
+  <script src="../../../js/main.js"></script>
+  <script src="js/index.js"></script>
 </body>
 
 </html>

@@ -54,26 +54,25 @@ layui.use(['table', 'layer', 'element'], function () {
           templet: function (d) {
             return '<a class="a_btn" style="cursor: pointer;" lay-event="addRowTable">+</a>'
           }
+        }, {
+          field: 'SortNum',
+          title: '排序',
+          width: 80,
+          align: 'center'
         },
         {
           field: 'Name',
           title: '菜单名称',
+          width: 200,
           align: 'center'
         }, {
-          field: 'SortNum',
-          title: '排序',
-          align: 'center'
-        }, {
-          field: 'MenuType',
-          title: '平台',
-          align: 'center',
-          templet: function (m) {
-            return m.MenuType == 1 ? "PC端" : "小程序端";
-          }
+          field: 'Location',
+          title: '路径',
         }, {
           field: 'IsShow',
           title: '是否显示',
           align: 'center',
+          width: 120,
           templet: function (m) {
             let str = ' ';
             if (m.IsShow == 1)
@@ -84,7 +83,8 @@ layui.use(['table', 'layer', 'element'], function () {
         }, {
           field: 'CreateTimeStr',
           title: '创建时间',
-          align: 'center'
+          align: 'center',
+          width: 200,
         }, {
           field: '',
           title: '操作',
@@ -134,6 +134,10 @@ layui.use(['table', 'layer', 'element'], function () {
     } else if (obj.event === 'edit') {
       localStorage.detail = JSON.stringify(data);
       OpenDetail("菜单详情", 0);
+    } else if (obj.event === 'upSort') {
+      updateSortNum(0, data.Id, data.ParentGid, data.SortNum - 1);
+    } else if (obj.event === 'downSort') {
+      updateSortNum(0, data.Id, data.ParentGid, data.SortNum + 1);
     }
     //添加子级
     else if (obj.event === 'addChild') {
@@ -141,6 +145,7 @@ layui.use(['table', 'layer', 'element'], function () {
       data.Id = "";
       data.Name = "";
       data.SortNum = 0;
+      data.Location = "";
       localStorage.detail = JSON.stringify(data);
       OpenDetail("新增子级信息", 1);
     }
@@ -171,7 +176,7 @@ function addRowChild(trIndex, tr, table, pid) {
   var _html = [
     '<tr class="table-item">',
     '<td colspan="' + tr.find('td').length + '" style="padding: 6px 12px;">',
-    '<table id="' + childTableName + '" lay-filter="childtable"></table>',
+    '<table id="' + childTableName + '" lay-filter="childtable" ></table>',
     '</td>',
     '</tr>'
   ];
@@ -192,41 +197,43 @@ function addRowChild(trIndex, tr, table, pid) {
     },
     cols: [
       [{
-        field: 'Name',
-        title: '菜单名称',
-        align: 'center'
-      }, {
-        field: 'SortNum',
-        title: '排序',
-        align: 'center'
-      }, {
-        field: 'MenuType',
-        title: '平台',
-        align: 'center',
-        templet: function (m) {
-          return m.MenuType == 1 ? "PC端" : "小程序端";
+          field: 'SortNum',
+          title: '排序',
+          width: 80,
+          align: 'center'
+        },
+        {
+          field: 'Name',
+          title: '菜单名称',
+          width: 200,
+          align: 'center'
+        }, {
+          field: 'Location',
+          title: '路径',
+        }, {
+          field: 'IsShow',
+          title: '是否显示',
+          align: 'center',
+          width: 120,
+          templet: function (m) {
+            let str = ' ';
+            if (m.IsShow == 1)
+              str = 'checked="" ';
+            str = '<input type="checkbox" lay-skin="switch" lay-text="显示|隐藏" disabled="" ' + str + ' >';
+            return str;
+          }
+        }, {
+          field: 'CreateTimeStr',
+          title: '创建时间',
+          align: 'center',
+          width: 200,
+        }, {
+          field: '',
+          title: '操作',
+          align: 'center',
+          toolbar: '#barDemoChild'
         }
-      }, {
-        field: 'IsShow',
-        title: '是否显示',
-        align: 'center',
-        templet: function (m) {
-          let str = ' ';
-          if (m.IsShow == 1)
-            str = 'checked="" ';
-          str = '<input type="checkbox" lay-skin="switch" lay-text="显示|隐藏" disabled="" ' + str + ' >';
-          return str;
-        }
-      }, {
-        field: 'CreateTimeStr',
-        title: '创建时间',
-        align: 'center'
-      }, {
-        field: '',
-        title: '操作',
-        align: 'center',
-        toolbar: '#barDemoChild'
-      }]
+      ]
     ],
     response: {
       statusCode: 1 //重新规定成功的状态码为 1 ，table 组件默认为 0
@@ -255,10 +262,36 @@ function addRowChild(trIndex, tr, table, pid) {
       OpenDetail("修改子级信息", 1);
     } else if (obj.event === 'childDel') {
       deleteInfo(obj, data.Id);
+    } else if (obj.event === 'childUpSort') {
+      updateSortNum(1, data.Id, data.ParentGid, data.SortNum - 1);
+    } else if (obj.event === 'childSownSort') {
+      updateSortNum(1, data.Id, data.ParentGid, data.SortNum + 1);
     }
   });
 }
 
+//更新
+function updateSortNum(type, id, pid, sortNum) {
+  ajaxGet({
+    url: ApiService.SystemApi.APIService + "/Api/SystemMenu/UpdateSortNum",
+    data: {
+      id,
+      pid,
+      sortNum
+    },
+    success: function (res) {
+      layer.msg(res.message);
+      if (res.code != 1) {
+        return false;
+      }
+      if (type == 0) {
+        active.reload();
+      } else {
+        active.reloadCliTable(childTableName);
+      }
+    }
+  });
+}
 //删除信息
 function deleteInfo(obj, gid) {
   layer.confirm('真的删除行么', function (index) {
@@ -308,10 +341,6 @@ function OpenDetail(title, type) {
       }
       if (IsNullOrEmpty(model.Location)) {
         layer.msg("请输入地址链接");
-        return false;
-      }
-      if (IsNullOrEmpty(model.MenuType)) {
-        layer.msg("请输入选择平台");
         return false;
       }
 
