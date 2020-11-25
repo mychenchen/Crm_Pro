@@ -7,13 +7,32 @@
   <title>登录系统</title>
   <link rel="stylesheet" href="layui/css/layui.css">
   <link rel="stylesheet" href="css/loginStyle.css">
+  <style>
+    body {
+      background-image: url('./images/Background_img_2.png');
+    }
 
+    .layui-form>div {
+      margin-top: 20px;
+    }
+
+    header {
+      font-family: '微软雅黑';
+      font-weight: bold;
+      color: blue;
+    }
+  </style>
 </head>
 
 <body>
 
-  <div class="login-main">
-    <header class="layui-elip">登录</header>
+  <div class="login-main" style="left:835px !important;top: 50px !important;">
+    <header class="layui-elip">
+      平&nbsp;&nbsp;
+      台&nbsp;&nbsp;
+      登&nbsp;&nbsp;
+      陆
+    </header>
     <form class="layui-form">
       <div class="layui-input-inline">
         <input type="text" name="account" required lay-verify="required" placeholder="用户名" autocomplete="off"
@@ -23,8 +42,10 @@
         <input type="password" name="password" required lay-verify="required" placeholder="密码" autocomplete="off"
           class="layui-input">
       </div>
-      <div class="layui-input-inline login-btn">
-        <button lay-submit lay-filter="login" class="layui-btn">登录</button>
+      <div class="layui-input-inline login-btn" style="text-align: center;">
+        <label style="color: #aaa;">如果账号遇到问题,请联系管理员</label>
+        <button lay-submit lay-filter="login" style="margin-top:10px;"
+          class="layui-btn layui-btn-normal layui-btn-radius">登录</button>
       </div>
 
     </form>

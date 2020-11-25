@@ -138,9 +138,9 @@
 
       $("dd > a").on("click", function () {
         var address = $(this).attr("data-src");
-        $("#showIframe").attr("src", address);
+        OpenAppointHtml(address);
       });
-
+      OpenAppointHtml("/view/home/index.html");
     });
 
     function userRoleSystemMenu(roleId) {
@@ -162,7 +162,8 @@
             str += '<dl class="layui-nav-child">';
 
             $.each(val.children, function (i, item) {
-              str += '<dd><a href="javascript:;" data-src="' + item.link + '" target="_top">' + item.name +
+              str += '<dd><a href="javascript:;" data-src="' + item.link + '" target="_top">' + item
+                .name +
                 '</a></dd>';
             });
             str += '    </dl>';
