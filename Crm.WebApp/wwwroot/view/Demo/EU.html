@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>wangEditor demo</title>
+  <style type="text/css">
+    .toolbar {
+      border: 1px solid #ccc;
+    }
+
+    .text {
+      border: 1px solid #ccc;
+      height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="editor">
+    <p>欢迎使用 <b>wangEditor</b> 富文本编辑器</p>
+  </div>
+
+  <!-- 注意， 只需要引用 JS，无需引用任何 CSS ！！！-->
+  <script type="text/javascript" src="../../s/wangEditor/wangEditor.min.js"></script>
+  <script src="../../js/jquery.min.js"></script>
+  <script src="../../js/main.js"></script>
+  <script type="text/javascript">
+    $(function () {
+
+      var editor = new window.wangEditor('#editor');
+      // 上传图片到服务器
+      //editor.customConfig.uploadImgServer = ApiService.SystemApi.APIService + '/Api/Common/UploadFile';
+      // 隐藏“网络图片”tab
+      editor.customConfig.showLinkImg = false;
+      // 将图片大小限制为 3M
+      editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+      // 限制一次最多上传 5 张图片
+      editor.customConfig.uploadImgMaxLength = 5;
+      editor.customConfig.uploadImgParams = {
+        // 如果版本 <=v3.1.0 ，属性值会自动进行 encode ，此处无需 encode
+        // 如果版本 >=v3.1.1 ，属性值不会自动 encode ，如有需要自己手动 encode
+        token: 'abcdef12345'
+      };
+
+      editor.customConfig.customUploadImg = function (files, insert) {
+        // files 是 input 中选中的文件列表
+        // insert 是获取图片 url 后，插入到编辑器的方法
+        var uploadData = new FormData();
+        for (var i = 0; i < files.length; i++) {
+          uploadData.append(files[i].name, files[i]);
+        }
+
+        $.ajax({
+          type: "POST",
+          url: ApiService.SystemApi.APIService + '/Api/Common/WangEditorUpload',
+          //beforeSend: function (xhr) {
+          //    xhr.setRequestHeader("XSRF-TOKEN",
+          //        $('input:hidden[name="__RequestVerificationToken"]').val());
+          //},
+          data: uploadData,
+          processData: false,
+          contentType: false,
+          async: false,
+          success: function (response) {
+            for (var i = 0; i < response.length; i++) {
+              // 上传代码返回结果之后，将图片插入到编辑器中
+              insert(ApiService.SystemApi.APIService + response[i]);
+            }
+          },
+          failure: function (response) {
+            alert(response);
+          }
+        });
+      }
+
+      editor.create();
+
+    });
+  </script>
+</body>
+
+</html>

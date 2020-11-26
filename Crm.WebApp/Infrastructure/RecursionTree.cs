@@ -21,7 +21,7 @@ namespace Crm.WebApp.Infrastructure
         public static List<LayuiTreeModel> LayuiTreeList(List<SystemMenuEntity> list, Guid pid)
         {
             var resList = new List<LayuiTreeModel>();
-            var list_p = list.Where(a => a.ParentGid == pid).ToList();
+            var list_p = list.Where(a => a.ParentGid == pid).OrderBy(a => a.SortNum).ToList();
             list_p.ForEach(a =>
             {
                 LayuiTreeModel model = new LayuiTreeModel()
@@ -46,7 +46,7 @@ namespace Crm.WebApp.Infrastructure
         public static List<SystemLeftMenuModel> SystemMenuList(List<SystemMenuMapper> list, Guid pid)
         {
             var resList = new List<SystemLeftMenuModel>();
-            var list_p = list.Where(a => a.ParentGid == pid).ToList();
+            var list_p = list.Where(a => a.ParentGid == pid).OrderBy(a => a.SortNum).ToList();
             list_p.ForEach(a =>
             {
                 SystemLeftMenuModel model = new SystemLeftMenuModel()
