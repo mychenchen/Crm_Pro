@@ -1,5 +1,4 @@
-﻿using Crm.WebApp.Models;
-using Currency.Common;
+﻿using Currency.Common;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -8,31 +7,25 @@ using System.Threading.Tasks;
 
 namespace Crm.WebApp.Infrastructure
 {
-    public class ChatHub : Hub
+    public class ChatHub22 : Hub
     {
-        protected static List<LoginUserInfo> userList = new List<LoginUserInfo>();
+        private static Dictionary<string, string> userList = new Dictionary<string, string>();
 
         /// <summary>
         /// 用户登陆
         /// </summary>
-        /// <param name="obj">用户信息</param>
+        /// <param name="userName">用户Id</param>
         /// <returns></returns>
-        public void UserLoginSignalR(string obj)
+        public void UserLoginSignalR(string userName)
         {
-            var info = obj.ToObject<LoginUserInfo>();
-
             //每次登陆UserId都会改变
-            var old_info = userList.FirstOrDefault(a => a.Gid == info.Gid);
-            if (old_info != null)
+            if (userList.ContainsKey(userName))
             {
-                old_info.OnLine = true;
-                old_info.ConnectionId = Context.ConnectionId;
+                userList[userName] = Context.ConnectionId;
             }
             else
             {
-                info.OnLine = true;
-                info.ConnectionId = Context.ConnectionId;
-                userList.Add(info);
+                userList.Add(userName, Context.ConnectionId);
             }
         }
 
@@ -42,7 +35,7 @@ namespace Crm.WebApp.Infrastructure
         /// <returns></returns>
         public async Task GetUserList()
         {
-            await Clients.All.SendAsync("ReceiveUserList", userList.ToJson());
+            await Clients.All.SendAsync("ReceiveUserList", userList.ToArray().ToJson());
         }
 
         /// <summary>
@@ -76,12 +69,18 @@ namespace Crm.WebApp.Infrastructure
         /// 检测用户断开时处理(刷新页面也会进来)
         /// </summary>
         /// <returns></returns>
-        public async override Task OnDisconnectedAsync(Exception exception)
+        public override Task OnDisconnectedAsync(Exception exception)
         {
-            var info = userList.FirstOrDefault(a => a.ConnectionId == Context.ConnectionId);
-            info.OnLine = false;
-            info.ConnectionId = "";
-            await GetUserList();
+            var userId = Context.ConnectionId;
+            userList.ToList().ForEach(a =>
+            {
+                if (a.Value == Context.ConnectionId)
+                {
+                    userId = a.Key;
+                }
+            });
+            string ss = "";
+            return base.OnDisconnectedAsync(exception);
         }
     }
 

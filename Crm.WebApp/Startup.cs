@@ -9,6 +9,7 @@ using Currency.Common;
 using Currency.Common.Caching;
 using Currency.Common.LogManange;
 using Currency.Mq.Model;
+using Currency.Quartz;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -54,8 +55,6 @@ namespace Crm.WebApp
             services.Configure<CmsAppSettingModel>(Configuration.GetSection("CmsAppSetting")).AddMvc();
             services.Configure<RabbitBaseInfo>(Configuration.GetSection("RabbitSetting")).AddMvc();
 
-            //services.AddQuartz(typeof(QuartzJob));
-
             var connection = Configuration.GetConnectionString("SqlServer");
 
             services.AddDbContext<MyDbContext>(options =>
@@ -63,6 +62,19 @@ namespace Crm.WebApp
 
             services.AddScoped<DefaultDataSeed>();
 
+            #region Session
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            //启用内存缓存(该步骤需在AddSession()调用前使用)
+            services.AddDistributedMemoryCache();//启用session之前必须先添加内存
+                                                 //services.AddSession();
+            services.AddSession();
+
+            #endregion
 
             //设置json数据返回
             services.AddMvc().AddJsonOptions(options =>
@@ -77,18 +89,11 @@ namespace Crm.WebApp
             services.AutoRegisterServicesFromAssembly("Crm.Service");
             //单个注入 
 
-            //services.AddSingleton<IStaticCacheManager, MemoryCacheManager>();
-
             //services.AddSingleton<IMqSend, SendMessage>();
             //services.AddSingleton<IMqReceive, ReceiveMessage>();
 
             //接收mq的消息
             //services.AddSingleton<BatchHandle>();
-
-
-
-            ////注入 redis
-            //services.AddSingleton<RedisCacheHelper>();
 
             ////注入 MongoDB
             //services.AddSingleton<MongoDBService>();
@@ -167,7 +172,16 @@ namespace Crm.WebApp
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
+
+            #region Session
+
+            app.UseSession();//UseSession配置在UseMvc之前    开启session         
+            app.UseAuthentication();//开启权限
+
+            #endregion
+
             app.UseMvc();
+
 
             //开启后,可直接访问静态页面,静态文件
             app.UseStaticFiles();
@@ -195,11 +209,11 @@ namespace Crm.WebApp
             });
 
 
-            //app.UseCors("allow_all").UseSignalR(routes =>
-            //{
-            //    routes.MapHub<ChatHub>("/chatHub");
-            //});
-            //app.UseWebSockets();
+            app.UseCors("allow_all").UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
+            app.UseWebSockets();
 
             // 启动 CO2NET 全局注册，必须！
             IRegisterService register = RegisterService.Start(env, senparcSetting.Value)
@@ -214,7 +228,6 @@ namespace Crm.WebApp
             var myContext = DI.GetService<MyDbContext>();
             DefaultDataSeed.SeedAsync(myContext).Wait();
 
-            //QuartzService.StartJobs<QuartzJob>();  //多任务
 
         }
     }

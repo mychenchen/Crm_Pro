@@ -4,6 +4,7 @@ using Crm.Service.SystemService;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.Redis;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
@@ -79,6 +80,29 @@ namespace Crm.WebApp.API
                 };
                 await _opt.SaveLogAsync(optModel);
             }
+        }
+
+        /// <summary>
+        /// 设置Session
+        /// </summary>
+        /// <param name="key">键</param>
+        /// <param name="value">值</param>
+        public void SetSession(string key, string value)
+        {
+            HttpContext.Session.SetString(key, value);
+        }
+
+        /// <summary>
+        /// 获取Session
+        /// </summary>
+        /// <param name="key">键</param>
+        /// <returns>返回对应的值</returns>
+        public string GetSession(string key)
+        {
+            var value = HttpContext.Session.GetString(key);
+            if (string.IsNullOrEmpty(value))
+                value = string.Empty;
+            return value;
         }
 
         #region Success

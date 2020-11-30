@@ -45,5 +45,28 @@ namespace Crm.WebApp.Models
         /// 登陆时间
         /// </summary>
         public DateTime LoginTime { get; set; }
+
+        /// <summary>
+        /// 是否在线 
+        /// </summary>
+        public bool OnLine { get; set; }
+
+        /// <summary>
+        /// 是否在线 
+        /// </summary>
+        public string OnLineStr
+        {
+            get
+            {
+                if (OnLine)
+                    return "在线";
+                else
+                    return "离线";
+            }
+        }
+        /// <summary>
+        /// 连接ID
+        /// </summary>
+        public string ConnectionId { get; set; }
     }
 }

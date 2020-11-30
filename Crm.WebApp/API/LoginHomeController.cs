@@ -2,14 +2,18 @@
 using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
+using Crm.WebApp.Infrastructure;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.LogManange;
+using Currency.Quartz;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Crm.WebApp.API
 {
@@ -42,7 +46,6 @@ namespace Crm.WebApp.API
 
         }
 
-
         /// <summary>
         /// 用户登陆
         /// </summary>
@@ -53,7 +56,34 @@ namespace Crm.WebApp.API
         {
             try
             {
+                var key = Guid.NewGuid().ToString("N");
+                _redis.SetStringKey<int>("online_" + key, 1,TimeSpan.FromMinutes(5));
+                QuartzService.StartJob<UsrOnLineJob>(key, 10,
+                    new Dictionary<string, string>
+                    {
+                        {"userId",key }
+                    });
+
                 return Success("ok");
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 用户登陆
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [NoSign]
+        public ResultObject Demo2()
+        {
+            try
+            {
+                var ss = HttpContext.Session.Keys.ToArray();
+
+                return Success(ss);
             }
             catch (Exception ex)
             {
