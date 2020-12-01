@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Crm.Service.ProductManageService
 {
     /// <summary>
-    /// 新闻
+    /// 产品(课程)
     /// </summary>
     public interface IProductService
     {

@@ -113,10 +113,14 @@ namespace Crm.WebApp.API
                     entity.UpdateTime = DateTime.Now;
                     optEvent = "修改";
                 }
+                entity.LabelId = model.LabelId;
                 entity.LoginName = model.LoginName;
                 entity.NickName = model.NickName;
-                entity.LoginPwd = (model.LoginPwd + entity.Salt).ToMD5();
-
+                //密码修改
+                if (model.LoginPwd != entity.LoginPwd)
+                {
+                    entity.LoginPwd = (model.LoginPwd + entity.Salt).ToMD5();
+                }
                 if (_user.VerifyLoginName(entity.Id, entity.LoginName))
                 {
                     return Error("登陆账号已存在,无法重复添加");

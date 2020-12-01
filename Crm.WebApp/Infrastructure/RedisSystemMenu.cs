@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Crm.Repository.MapperEntity;
+using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
 using Currency.Common;
 using Currency.Common.Redis;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Crm.WebApp.Infrastructure
 {
@@ -54,8 +56,9 @@ namespace Crm.WebApp.Infrastructure
             public List<SystemMenuMapper> ReloadMenuList()
             {
                 string key = "all_system_menu";
+                RedisHelperNetCore.Default.KeyDelete(key);
                 var data = _sysMenu.GetList();
-                var list = _mapper.Map<List<SystemMenuMapper>>(data);
+                var list = _mapper.Map<List<SystemMenuMapper>>(data);               
                 RedisHelperNetCore.Default.SetStringKey(key, list, TimeSpan.FromDays(7));
                 return list;
             }

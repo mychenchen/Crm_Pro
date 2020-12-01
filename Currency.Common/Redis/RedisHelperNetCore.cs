@@ -179,7 +179,11 @@ namespace Currency.Common.Redis
         /// <returns></returns>
         public T GetKey<T>(string key)
         {
-            return JsonConvert.DeserializeObject<T>(CacheRedis.StringGet(key));
+            var redis_str = CacheRedis.StringGet(key);
+            if (!string.IsNullOrEmpty(redis_str))
+                return JsonConvert.DeserializeObject<T>(redis_str);
+            else
+                return default(T);
         }
 
         /// <summary>

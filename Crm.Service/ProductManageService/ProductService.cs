@@ -11,7 +11,7 @@ using static Currency.Common.NetCoreDIModuleRegister;
 namespace Crm.Service.ProductManageService
 {
     /// <summary>
-    /// 产品
+    /// 产品(课程)
     /// UseDI特性用于注入必须加
     /// </summary>
     [UseDI(ServiceLifetime.Scoped, typeof(IProductService))]

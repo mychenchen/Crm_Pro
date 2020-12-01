@@ -11,6 +11,11 @@ namespace Crm.Repository.TbEntity
     public class UserStudentEntity : BaseEntity
     {
         /// <summary>
+        /// 标签ID
+        /// </summary>
+        public Guid LabelId { get; set; }
+
+        /// <summary>
         /// 昵称
         /// </summary>
         [Required]
@@ -52,9 +57,8 @@ namespace Crm.Repository.TbEntity
         public int IsVIP { get; set; }
 
         /// <summary>
-        /// 标签ID
+        /// 当前登陆IP
         /// </summary>
-        public Guid LableId { get; set; }
-
+        public string RecentlyIp { get; set; }
     }
 }

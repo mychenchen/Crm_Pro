@@ -54,7 +54,7 @@ namespace Crm.WebApp.API
             try
             {
                 var saveEntity = _mapper.Map<RoleMenuEntity>(model);
-                var entity = _sysUser.RoleMenu_GetModel(saveEntity.Id);
+                var entity = _sysUser.RoleMenu_GetModel(saveEntity.RoleId);
                 if (entity != null)
                 {
                     saveEntity.CreateTime = entity.CreateTime;
@@ -92,7 +92,7 @@ namespace Crm.WebApp.API
                 {
                     list = info.MenuIds.Split(',').ToList();
                 }
-                return Success(list);
+                return Success(info.Id.ToString(), list);
             }
             catch (Exception ex)
             {

@@ -37,7 +37,7 @@ layui.use(['table', 'layer'], function () {
     page: true,
     height: 'full-60',
     toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-    ,
+      ,
     defaultToolbar: ['filter'],
     where: searchModel,
     cols: [
@@ -180,7 +180,7 @@ function OpenUseRole(rId) {
         layer.msg("请选择菜单");
         return false;
       }
-
+      //console.log(model)
       ajaxPost({
         url: ApiService.SystemApi.APIService + "/Api/SystemUserRole/RoleMenuSaveModel",
         data: model,

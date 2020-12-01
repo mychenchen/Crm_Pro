@@ -24,6 +24,7 @@ namespace Crm.WebApp.API
     [EnableCors("allow_all")]
     public class LoginHomeController : ApiBaseController
     {
+        protected readonly IUserStudentService _student;
         protected readonly IUserService _user;
         protected readonly IUserLoginLogService _log;
         /// <summary>
@@ -31,65 +32,72 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="configStr"></param>
         /// <param name="mapper"></param>
+        /// <param name="student"></param>
         /// <param name="user"></param>
         /// <param name="log"></param>
         public LoginHomeController(
             //IOptions<DataSettingsModel> configDbStr,
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
+             IUserStudentService student,
              IUserService user,
              IUserLoginLogService log
             ) : base(configStr, mapper)
         {
+            _student = student;
             _user = user;
             _log = log;
 
         }
 
+        #region 前台用户
+
         /// <summary>
         /// 用户登陆
         /// </summary>
+        /// <param name="login"></param>
         /// <returns></returns>
-        [HttpGet]
-        [NoSign]
-        public ResultObject Demo()
+        [HttpPost, NoSign]
+        public ResultObject UserLogin(LoginUserPwd login)
         {
             try
             {
-                var key = Guid.NewGuid().ToString("N");
-                _redis.SetStringKey<int>("online_" + key, 1,TimeSpan.FromMinutes(5));
-                QuartzService.StartJob<UsrOnLineJob>(key, 10,
-                    new Dictionary<string, string>
-                    {
-                        {"userId",key }
-                    });
+                var user = _student.UserLoginModel(login.account);
+                if (user == null)
+                {
+                    return Error("账号不存在");
+                }
+                string pwd = (login.password + user.Salt).ToMD5();
+                if (pwd != user.LoginPwd)
+                {
+                    return Error("账号或密码错误");
+                }
 
-                return Success("ok");
+                LoginUserInfo info = new LoginUserInfo()
+                {
+                    Gid = user.Id.ToString(),
+                    LoginUser = user.LoginName,
+                    Name = user.NickName,
+                    Token = Guid.NewGuid().ToString("N"),
+                    LoginTime = DateTime.Now
+                };
+
+                _redis.SetStringKey("userLogin_" + info.Token, info, TimeSpan.FromDays(7));
+                SaveUserLoginLog(info.Gid, info.LoginUser);
+
+                return Success(info);
             }
             catch (Exception ex)
             {
+                LogHelper.Error("登陆失败 =>>" + ex.ToString());
                 return Error(ex.Message);
             }
         }
-        /// <summary>
-        /// 用户登陆
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [NoSign]
-        public ResultObject Demo2()
-        {
-            try
-            {
-                var ss = HttpContext.Session.Keys.ToArray();
 
-                return Success(ss);
-            }
-            catch (Exception ex)
-            {
-                return Error(ex.Message);
-            }
-        }
+
+        #endregion
+
+        #region 后台用户
 
         /// <summary>
         /// 用户登陆
@@ -98,7 +106,7 @@ namespace Crm.WebApp.API
         /// <returns></returns>
         [HttpPost]
         [NoSign]
-        public ResultObject Login(LoginUserPwd login)
+        public ResultObject SystemLogin(LoginUserPwd login)
         {
             try
             {
@@ -175,6 +183,8 @@ namespace Crm.WebApp.API
             return Success();
         }
 
+        #endregion
+
         /// <summary>
         /// 保存登陆记录
         /// </summary>
@@ -195,5 +205,6 @@ namespace Crm.WebApp.API
 
             _log.SaveLog(model);
         }
+
     }
 }

@@ -32,7 +32,7 @@ namespace Crm.Service.SystemService
         /// <param name="model"></param>
         public List<SystemMenuEntity> GetList()
         {
-            return _mydb.SystemMenu.ToList();
+            return _mydb.SystemMenu.AsNoTracking().Where(a => a.IsDelete == 0).ToList();
         }
 
         /// <summary>

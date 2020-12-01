@@ -10,7 +10,17 @@ namespace Crm.Repository.MapperEntity
         /// <summary>
         /// 标签ID
         /// </summary>
-        public Guid LableId { get; set; }
+        public Guid LabelId { get; set; }
+
+        /// <summary>
+        /// 标签名称
+        /// </summary>
+        public string LabelName { get; set; }
+
+        /// <summary>
+        /// 标签图片
+        /// </summary>
+        public string LabelImgPath { get; set; }
 
         /// <summary>
         /// 昵称
@@ -41,6 +51,11 @@ namespace Crm.Repository.MapperEntity
         /// 是否为VIP
         /// </summary>
         public int IsVIP { get; set; }
+
+        /// <summary>
+        /// 当前登陆
+        /// </summary>
+        public string RecentlyIp { get; set; }
 
     }
 }

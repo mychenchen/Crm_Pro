@@ -79,9 +79,12 @@ namespace Crm.WebApp.Infrastructure
         public async override Task OnDisconnectedAsync(Exception exception)
         {
             var info = userList.FirstOrDefault(a => a.ConnectionId == Context.ConnectionId);
-            info.OnLine = false;
-            info.ConnectionId = "";
-            await GetUserList();
+            if (info != null)
+            {
+                info.OnLine = false;
+                info.ConnectionId = "";
+                await GetUserList();
+            }
         }
     }
 

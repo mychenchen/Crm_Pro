@@ -5,11 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="CustomerService\**" />
     <Compile Remove="UserService\**" />
-    <EmbeddedResource Remove="CustomerService\**" />
     <EmbeddedResource Remove="UserService\**" />
-    <None Remove="CustomerService\**" />
     <None Remove="UserService\**" />
   </ItemGroup>
 

@@ -36,7 +36,7 @@
     var layer = null;
     var tree = null;
     var treeList = [];
-
+    var id = "";
     layui.use(['form', 'layer', 'tree'], function () {
       form = layui.form;
       layer = layui.layer;
@@ -84,7 +84,7 @@
             return false;
           }
           if (res.data.length > 0) {
-            console.log(res.data)
+            id = res.message;
             tree.setChecked('test7', res.data);
           }
         }
@@ -102,15 +102,13 @@
         });
       });
       var obj = {
+        Id: id,
         RoleId: GetQueryString("id"),
         MenuIds: menuIds.join(',')
+        //MenuIds: menuIds
       };
       return obj;
     }
-
-
-
-
   </script>
 
 </body>
