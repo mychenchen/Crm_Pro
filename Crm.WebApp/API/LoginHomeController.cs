@@ -94,7 +94,6 @@ namespace Crm.WebApp.API
             }
         }
 
-
         #endregion
 
         #region 后台用户
@@ -142,13 +141,27 @@ namespace Crm.WebApp.API
                 return Error(ex.Message);
             }
         }
+
+        /// <summary>
+        /// 退出登陆
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject LogOut(string token)
+        {
+            _redis.KeyDelete("userLogin_" + token);
+            return Success();
+        }
+
+        #endregion
+
         /// <summary>
         /// 自动登陆
         /// </summary>
         /// <param name="token">用户token</param>
         /// <returns></returns>
-        [HttpGet]
-        [NoSign]
+        [HttpGet, NoSign]
         public ResultObject AutomaticLogin(string token)
         {
             try
@@ -170,20 +183,6 @@ namespace Crm.WebApp.API
                 return Error(ex.Message);
             }
         }
-
-        /// <summary>
-        /// 退出登陆
-        /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public ResultObject LogOut(string token)
-        {
-            _redis.KeyDelete("userLogin_" + token);
-            return Success();
-        }
-
-        #endregion
 
         /// <summary>
         /// 保存登陆记录
