@@ -65,7 +65,9 @@ namespace Crm.Service.SystemService
                            NickName = a.NickName,
                            IsVIP = a.IsVIP,
                            Telephone = a.Telephone,
-                           RecentlyIp = a.RecentlyIp
+                           Sex = a.Sex,
+                           MyIntroduce = a.MyIntroduce,
+                           HeadImg = a.HeadImg
                        };
 
             if (!string.IsNullOrEmpty(name))

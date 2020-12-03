@@ -61,7 +61,10 @@ namespace Crm.Service.SystemService
                            LoginName = a.LoginName,
                            LoginPwd = a.LoginPwd,
                            NickName = a.NickName,
-                           RoleId = a.RoleId
+                           RoleId = a.RoleId,
+                           Sex = a.Sex,
+                           MyIntroduce = a.MyIntroduce,
+                           HeadImg = a.HeadImg
                        };
 
             if (!string.IsNullOrEmpty(name))

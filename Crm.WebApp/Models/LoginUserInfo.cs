@@ -68,5 +68,10 @@ namespace Crm.WebApp.Models
         /// 连接ID
         /// </summary>
         public string ConnectionId { get; set; }
+
+        /// <summary>
+        /// 用户头像
+        /// </summary>
+        public string HeadImg { get; set; }
     }
 }

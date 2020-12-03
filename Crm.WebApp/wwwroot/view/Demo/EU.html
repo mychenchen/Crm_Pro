@@ -30,7 +30,7 @@
 
       var editor = new window.wangEditor('#editor');
       // 上传图片到服务器
-      //editor.customConfig.uploadImgServer = ApiService.SystemApi.APIService + '/Api/Common/UploadFile';
+      //editor.customConfig.uploadImgServer = ApiService.UpLoadApi.APIService + '/Api/Common/UploadFile';
       // 隐藏“网络图片”tab
       editor.customConfig.showLinkImg = false;
       // 将图片大小限制为 3M
@@ -53,7 +53,7 @@
 
         $.ajax({
           type: "POST",
-          url: ApiService.SystemApi.APIService + '/Api/Common/WangEditorUpload',
+          url: ApiService.UpLoadApi.APIService + '/Api/Common/WangEditorUpload',
           //beforeSend: function (xhr) {
           //    xhr.setRequestHeader("XSRF-TOKEN",
           //        $('input:hidden[name="__RequestVerificationToken"]').val());
@@ -65,7 +65,7 @@
           success: function (response) {
             for (var i = 0; i < response.length; i++) {
               // 上传代码返回结果之后，将图片插入到编辑器中
-              insert(ApiService.SystemApi.APIService + response[i]);
+              insert(ApiService.UpLoadApi.APIService + response[i]);
             }
           },
           failure: function (response) {

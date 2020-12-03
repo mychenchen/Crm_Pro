@@ -116,6 +116,9 @@ namespace Crm.WebApp.API
                 entity.LabelId = model.LabelId;
                 entity.LoginName = model.LoginName;
                 entity.NickName = model.NickName;
+                entity.Sex = model.Sex;
+                entity.HeadImg = model.HeadImg;
+                entity.MyIntroduce = model.MyIntroduce;
                 //密码修改
                 if (model.LoginPwd != entity.LoginPwd)
                 {

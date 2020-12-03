@@ -2,238 +2,235 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title>详情</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../../../layui/css/layui.css">
+  <meta charset="utf-8">
+  <title>详情</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" href="../../../layui/css/layui.css">
 
-    <style type="text/css">
-        body {
-            padding: 10px;
-        }
-    </style>
+  <style type="text/css">
+    body {
+      padding: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
-    <form class="layui-form" action="" lay-filter="example">
-        <input type="hidden" name="Id" value="" />
-        <input type="hidden" name="ParentGid" value="" />
-        <input type="hidden" name="ChildrenGid" value="" />
-        <div class="layui-form-item">
-            <label class="layui-form-label">所属菜单<label style="color: red;">*</label></label>
-            <div class="layui-input-inline">
-                <select id="sel_tabMenu" name='ParentGid' lay-filter="sel_tabMenu">
-                    <option value="">请选择</option>
-                </select>
-            </div>
-            <div class="layui-input-inline">
-                <select id="sel_tabMenuChildren" name="ChildrenGid">
-                    <option value="">请选择</option>
-                </select>
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">标题<label style="color: red;">*</label></label>
-            <div class="layui-input-block">
-                <input type="text" name="Title" autocomplete="off" placeholder="请输入标题" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">副标题</label>
-            <div class="layui-input-block">
-                <input type="text" name="Subtitle" autocomplete="off" placeholder="请输入副标题" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">消息来源</label>
-            <div class="layui-input-block">
-                <input type="text" name="InformationSource" placeholder="消息来源(原创则不填写)" autocomplete="off"
-                       class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">封面图<label style="color: red;">*</label></label>
-            <div class="layui-input-block">
-                <img src='../../../images/upload.png' class="layui-upload-img" id="up_img"
-                     style="width: 114px;height: 140px;">
-                <input type="hidden" name="CoverUrl" value="" />
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">新闻内容<label style="color: red;">*</label></label>
-            <div class="layui-input-block">
-                <div id="editor"></div>
-            </div>
-        </div>
-    </form>
+  <form class="layui-form" action="" lay-filter="example">
+    <input type="hidden" name="Id" value="" />
+    <input type="hidden" name="ParentGid" value="" />
+    <input type="hidden" name="ChildrenGid" value="" />
+    <div class="layui-form-item">
+      <label class="layui-form-label">所属菜单<label style="color: red;">*</label></label>
+      <div class="layui-input-inline">
+        <select id="sel_tabMenu" name='ParentGid' lay-filter="sel_tabMenu">
+          <option value="">请选择</option>
+        </select>
+      </div>
+      <div class="layui-input-inline">
+        <select id="sel_tabMenuChildren" name="ChildrenGid">
+          <option value="">请选择</option>
+        </select>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">标题<label style="color: red;">*</label></label>
+      <div class="layui-input-block">
+        <input type="text" name="Title" autocomplete="off" placeholder="请输入标题" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">副标题</label>
+      <div class="layui-input-block">
+        <input type="text" name="Subtitle" autocomplete="off" placeholder="请输入副标题" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">消息来源</label>
+      <div class="layui-input-block">
+        <input type="text" name="InformationSource" placeholder="消息来源(原创则不填写)" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">封面图<label style="color: red;">*</label></label>
+      <div class="layui-input-block">
+        <img src='../../../images/upload.png' class="layui-upload-img" id="up_img" style="width: 114px;height: 140px;">
+        <input type="hidden" name="CoverUrl" value="" />
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">新闻内容<label style="color: red;">*</label></label>
+      <div class="layui-input-block">
+        <div id="editor"></div>
+      </div>
+    </div>
+  </form>
 
-    <script src="../../../layui/layui.js"></script>
-    <script src="../../../js/jquery.min.js"></script>
-    <script src="../../../js/main.js"></script>
+  <script src="../../../layui/layui.js"></script>
+  <script src="../../../js/jquery.min.js"></script>
+  <script src="../../../js/main.js"></script>
 
-    <script src="../../../js/wangEditor/wangEditor.min.js"></script>
+  <script src="../../../js/wangEditor/wangEditor.min.js"></script>
 
-    <script type="text/javascript">
+  <script type="text/javascript">
+    var form = null;
+    layui.use(['form', 'layedit', 'laydate', 'upload'], function () {
+      form = layui.form;
+      var layer = layui.layer,
+        layedit = layui.layedit,
+        laydate = layui.laydate;
 
-        var form = null;
-        layui.use(['form', 'layedit', 'laydate', 'upload'], function () {
-            form = layui.form;
-            var layer = layui.layer
-                , layedit = layui.layedit
-                , laydate = layui.laydate;
+      showUEditor();
 
-            showUEditor();
+      var upload = layui.upload;
+      //普通图片上传
+      var uploadInst = upload.render({
+        elem: '#up_img',
+        url: '',
+        headers: {
+          "ToKenStr": localStorage.Token
+        },
+        choose: function (obj) {
+          //自定义文件名称
+          var oldPath = $("input[name='CoverUrl']").val();
+          var ToKenStr = localStorage.Token;
+          this.url = ApiService.UpLoadApi.APIService + '/Api/Common/UploadFile?oldPath=' + oldPath;
+        },
+        done: function (res) {
+          //如果上传失败
+          if (res.code != 1) {
+            return layer.msg('上传失败');
+          }
+          $('#up_img').attr('src', ApiService.UpLoadApi.APIService + res.data);
+          $("input[name='CoverUrl']").val(res.data);
+        },
+        error: function () {}
+      });
 
-            var upload = layui.upload;
-            //普通图片上传
-            var uploadInst = upload.render({
-                elem: '#up_img'
-                , url: ''
-                , headers: { "ToKenStr": localStorage.Token }
-                , choose: function (obj) {
-                    //自定义文件名称
-                    var oldPath = $("input[name='CoverUrl']").val();
-                    var ToKenStr = localStorage.Token;
-                    this.url = ApiService.SystemApi.APIService + '/Api/Common/UploadFile?oldPath=' + oldPath;
-                }
-                , done: function (res) {
-                    //如果上传失败
-                    if (res.code != 1) {
-                        return layer.msg('上传失败');
-                    }
-                    $('#up_img').attr('src', ApiService.SystemApi.APIService + res.data);
-                    $("input[name='CoverUrl']").val(res.data);
-                }
-                , error: function () {
-                }
-            });
+      var info = localStorage.detail;
+      if (!IsNullOrEmpty(info)) {
+        //修改,查看
+        getDetail(JSON.parse(info));
+      } else {
+        //新增
+        getTabMenu("sel_tabMenu", "", "");
+      }
 
-            var info = localStorage.detail;
-            if (!IsNullOrEmpty(info)) {
-                //修改,查看
-                getDetail(JSON.parse(info));
-            } else {
-                //新增
-                getTabMenu("sel_tabMenu", "", "");
+      form.render('select');
+
+      form.on('select(sel_tabMenu)', function (data) {
+        getTabMenu("sel_tabMenuChildren", data.value, "");
+        form.render('select');
+      });
+
+
+    });
+
+    //获取详情
+    function getDetail(info) {
+      //表单赋值 标签 name='NickName'
+      form.val('example', {
+        "Id": info.Id,
+        "ParentGid": info.ParentGid,
+        "ChildrenGid": info.ChildrenGid,
+        "Title": info.Title,
+        "Subtitle": info.Subtitle,
+        "InformationSource": info.InformationSource,
+        "NewsContent": info.NewsContent,
+        "CoverUrl": info.CoverUrl
+      });
+      getTabMenu("sel_tabMenu", "", info.ParentGid);
+      getTabMenu("sel_tabMenuChildren", info.ParentGid, info.ChildrenGid);
+      $('#up_img').attr('src', ApiService.SystemApi.APIService + info.CoverUrl);
+      editor.txt.html(info.NewsContent)
+      //UE.getEditor('editor').setContent(info.NewsContent);
+    }
+
+    //获取页面的值
+    function getNowDetailJson() {
+      var detail = form.val('example');
+      detail.NewsContent = editor.txt.html();
+      return detail;
+    }
+
+    var editor = new window.wangEditor('#editor');
+    // 自定义菜单配置
+    editor.customConfig.menus = [
+      'head', // 标题
+      'bold', // 粗体
+      'fontSize', // 字号
+      'fontName', // 字体
+      'italic', // 斜体
+      'underline', // 下划线
+      'strikeThrough', // 删除线
+      'foreColor', // 文字颜色
+      'backColor', // 背景颜色
+      'link', // 插入链接
+      'list', // 列表
+      'justify', // 对齐方式
+      'quote', // 引用 
+      //'emoticon',  // 表情
+      'image', // 插入图片
+      'table', // 表格
+      //'video',  // 插入视频
+      //'code',  // 插入代码
+      'undo', // 撤销
+      'redo' // 重复
+    ]
+
+    function showUEditor() {
+
+      // 上传图片到服务器
+      //editor.customConfig.uploadImgServer = ApiService.UpLoadApi.APIService + '/Api/Common/UploadFile';
+      // 隐藏“网络图片”tab
+      editor.customConfig.showLinkImg = false;
+      // 将图片大小限制为 3M
+      editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
+      // 限制一次最多上传 5 张图片
+      editor.customConfig.uploadImgMaxLength = 5;
+      editor.customConfig.uploadImgParams = {
+        // 如果版本 <=v3.1.0 ，属性值会自动进行 encode ，此处无需 encode
+        // 如果版本 >=v3.1.1 ，属性值不会自动 encode ，如有需要自己手动 encode
+        token: localStorage.Token
+      };
+
+      editor.customConfig.customUploadImg = function (files, insert) {
+        // files 是 input 中选中的文件列表
+        // insert 是获取图片 url 后，插入到编辑器的方法
+        var uploadData = new FormData();
+        for (var i = 0; i < files.length; i++) {
+          uploadData.append(files[i].name, files[i]);
+        }
+
+        $.ajax({
+          type: "POST",
+          url: ApiService.UpLoadApi.APIService + '/Api/Common/WangEditorUpload',
+          //beforeSend: function (xhr) {
+          //    xhr.setRequestHeader("XSRF-TOKEN",
+          //        $('input:hidden[name="__RequestVerificationToken"]').val());
+          //},
+          data: uploadData,
+          processData: false,
+          contentType: false,
+          async: false,
+          success: function (response) {
+            for (var i = 0; i < response.length; i++) {
+              // 上传代码返回结果之后，将图片插入到编辑器中
+              insert(ApiService.UpLoadApi.APIService + response[i]);
             }
-
-            form.render('select');
-
-            form.on('select(sel_tabMenu)', function (data) {
-                getTabMenu("sel_tabMenuChildren", data.value, "");
-                form.render('select');
-            });
-
-
+          },
+          failure: function (response) {
+            alert(response);
+          }
         });
+      }
 
-        //获取详情
-        function getDetail(info) {
-            //表单赋值 标签 name='NickName'
-            form.val('example', {
-                "Id": info.Id
-                , "ParentGid": info.ParentGid
-                , "ChildrenGid": info.ChildrenGid
-                , "Title": info.Title
-                , "Subtitle": info.Subtitle
-                , "InformationSource": info.InformationSource
-                , "NewsContent": info.NewsContent
-                , "CoverUrl": info.CoverUrl
-            });
-            getTabMenu("sel_tabMenu", "", info.ParentGid);
-            getTabMenu("sel_tabMenuChildren", info.ParentGid, info.ChildrenGid);
-            $('#up_img').attr('src', ApiService.SystemApi.APIService + info.CoverUrl);
-            editor.txt.html(info.NewsContent)
-            //UE.getEditor('editor').setContent(info.NewsContent);
-        }
+      editor.create();
 
-        //获取页面的值
-        function getNowDetailJson() {
-            var detail = form.val('example');
-            detail.NewsContent = editor.txt.html();
-            return detail;
-        }
-
-        var editor = new window.wangEditor('#editor');
-        // 自定义菜单配置
-        editor.customConfig.menus = [
-            'head',  // 标题
-            'bold',  // 粗体
-            'fontSize',  // 字号
-            'fontName',  // 字体
-            'italic',  // 斜体
-            'underline',  // 下划线
-            'strikeThrough',  // 删除线
-            'foreColor',  // 文字颜色
-            'backColor',  // 背景颜色
-            'link',  // 插入链接
-            'list',  // 列表
-            'justify',  // 对齐方式
-            'quote',  // 引用 
-            //'emoticon',  // 表情
-            'image',  // 插入图片
-            'table',  // 表格
-            //'video',  // 插入视频
-            //'code',  // 插入代码
-            'undo',  // 撤销
-            'redo'  // 重复
-        ]
-        function showUEditor() {
-
-            // 上传图片到服务器
-            //editor.customConfig.uploadImgServer = ApiService.SystemApi.APIService + '/Api/Common/UploadFile';
-            // 隐藏“网络图片”tab
-            editor.customConfig.showLinkImg = false;
-            // 将图片大小限制为 3M
-            editor.customConfig.uploadImgMaxSize = 3 * 1024 * 1024;
-            // 限制一次最多上传 5 张图片
-            editor.customConfig.uploadImgMaxLength = 5;
-            editor.customConfig.uploadImgParams = {
-                // 如果版本 <=v3.1.0 ，属性值会自动进行 encode ，此处无需 encode
-                // 如果版本 >=v3.1.1 ，属性值不会自动 encode ，如有需要自己手动 encode
-                token: localStorage.Token
-            };
-
-            editor.customConfig.customUploadImg = function (files, insert) {
-                // files 是 input 中选中的文件列表
-                // insert 是获取图片 url 后，插入到编辑器的方法
-                var uploadData = new FormData();
-                for (var i = 0; i < files.length; i++) {
-                    uploadData.append(files[i].name, files[i]);
-                }
-
-                $.ajax({
-                    type: "POST",
-                    url: ApiService.SystemApi.APIService + '/Api/Common/WangEditorUpload',
-                    //beforeSend: function (xhr) {
-                    //    xhr.setRequestHeader("XSRF-TOKEN",
-                    //        $('input:hidden[name="__RequestVerificationToken"]').val());
-                    //},
-                    data: uploadData,
-                    processData: false,
-                    contentType: false,
-                    async: false,
-                    success: function (response) {
-                        for (var i = 0; i < response.length; i++) {
-                            // 上传代码返回结果之后，将图片插入到编辑器中
-                            insert(ApiService.SystemApi.APIService + response[i]);
-                        }
-                    },
-                    failure: function (response) {
-                        alert(response);
-                    }
-                });
-            }
-
-            editor.create();
-
-        }
-
-
-    </script>
+    }
+  </script>
 
 </body>
 

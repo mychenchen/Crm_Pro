@@ -79,7 +79,8 @@ namespace Crm.WebApp.API
                     LoginUser = user.LoginName,
                     Name = user.NickName,
                     Token = Guid.NewGuid().ToString("N"),
-                    LoginTime = DateTime.Now
+                    LoginTime = DateTime.Now,
+                    HeadImg = user.HeadImg
                 };
 
                 _redis.SetStringKey("userLogin_" + info.Token, info, TimeSpan.FromDays(7));
@@ -127,7 +128,8 @@ namespace Crm.WebApp.API
                     Name = user.NickName,
                     Token = Guid.NewGuid().ToString("N"),
                     LoginTime = DateTime.Now,
-                    RoleId = user.RoleId
+                    RoleId = user.RoleId,
+                    HeadImg = user.HeadImg
                 };
 
                 _redis.SetStringKey("userLogin_" + info.Token, info, TimeSpan.FromDays(7));

@@ -52,6 +52,21 @@ namespace Crm.Repository.TbEntity
         /// 修改时间
         /// </summary>
         public DateTime? UpdateTime { get; set; }
-                
+
+        /// <summary>
+        /// 自我介绍
+        /// </summary>
+        public string MyIntroduce { get; set; }
+
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public int Sex { get; set; }
+
+        /// <summary>
+        /// 头像
+        /// </summary>
+        [StringLength(200)]
+        public string HeadImg { get; set; }
     }
 }

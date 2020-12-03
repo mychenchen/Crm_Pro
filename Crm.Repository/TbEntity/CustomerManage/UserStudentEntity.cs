@@ -57,8 +57,20 @@ namespace Crm.Repository.TbEntity
         public int IsVIP { get; set; }
 
         /// <summary>
-        /// 当前登陆IP
+        /// 自我介绍
         /// </summary>
-        public string RecentlyIp { get; set; }
+        public string MyIntroduce { get; set; }
+
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public int Sex { get; set; }
+
+        /// <summary>
+        /// 头像
+        /// </summary>
+        [StringLength(200)]
+        public string HeadImg { get; set; }
+
     }
 }

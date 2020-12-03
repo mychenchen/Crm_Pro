@@ -18,7 +18,7 @@
     <div class="layui-header">
       <div class="layui-logo systemLogoName" id="div_LogTitle">云健康</div>
       <!-- 头部区域（可配合layui已有的水平导航） -->
-      <ul class="layui-nav layui-layout-left">
+      <!-- <ul class="layui-nav layui-layout-left">
         <li class="layui-nav-item"><a href="">控制台</a></li>
         <li class="layui-nav-item"><a href="">商品管理</a></li>
         <li class="layui-nav-item"><a href="">用户</a></li>
@@ -30,11 +30,11 @@
             <dd><a href="">授权管理</a></dd>
           </dl>
         </li>
-      </ul>
+      </ul> -->
       <ul class="layui-nav layui-layout-right">
         <li class="layui-nav-item">
           <a href="javascript:;">
-            <img src="/images/name.png" class="layui-nav-img">
+            <img id="img_head" src="/images/name.png" class="layui-nav-img">
             <label id="lbl_SystemAdminName">大头不怕下雨</label>
           </a>
           <dl class="layui-nav-child">
@@ -89,6 +89,7 @@
       $("#div_botTitle").html(ApiService.HtmlInfo.bottomTitle);
       var logUserInfo = JSON.parse(localStorage.LoginUser);
       $("#lbl_SystemAdminName").html(logUserInfo.Name);
+      $("#img_head").attr("src", ApiService.UpLoadApi.APIService + logUserInfo.HeadImg);
 
 
       if (!IsNullOrEmpty(localStorage.Token)) {

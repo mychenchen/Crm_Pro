@@ -47,5 +47,20 @@ namespace Crm.Repository.MapperEntity
         /// </summary>
         public string Salt { get; set; }
 
+        /// <summary>
+        /// 自我介绍
+        /// </summary>
+        public string MyIntroduce { get; set; }
+
+        /// <summary>
+        /// 性别
+        /// </summary>
+        public int Sex { get; set; }
+
+        /// <summary>
+        /// 头像
+        /// </summary>
+        public string HeadImg { get; set; }
+
     }
 }

@@ -40,15 +40,35 @@ layui.use(['form', 'table', 'layer'], function () {
     page: true,
     height: 'full-60',
     toolbar: '#toolbarDemo', //开启头部工具栏，并为其绑定左侧模板
+    defaultToolbar: ['filter'],
     where: {
       name: '',
       isVip: -1
     },
     cols: [
       [{
-          title: '身份标签',
+          title: '标签',
           templet: '#imgShow'
-        }, {
+        },
+        {
+          title: '头像',
+          templet: function (val) {
+            var imgUrl = "/images/name.png";
+            if (!IsNullOrEmpty(val.HeadImg))
+              imgUrl = ApiService.UpLoadApi.APIService + val.HeadImg;
+            var str = '<img style="width:50px" src="' + imgUrl + '">';
+            return str;
+          }
+        },
+        {
+          field: 'SexStr',
+          title: '性别'
+        },
+        {
+          field: 'LoginName',
+          title: '用户账号'
+        },
+        {
           field: 'NickName',
           title: '用户昵称'
         },
@@ -59,10 +79,6 @@ layui.use(['form', 'table', 'layer'], function () {
         {
           field: 'CreateTime',
           title: '注册时间'
-        },
-        {
-          field: 'RecentlyIp',
-          title: '最近登陆IP'
         },
         {
           field: '',
@@ -122,7 +138,7 @@ function OpenDetail() {
     type: 2,
     title: "用户详情",
     scrollbar: false,
-    area: ['500px', '650px'],
+    area: ['850px', '650px'],
     content: 'StudentDetail.html',
     btn: ['保存', '取消'],
     btnAlign: 'c',
