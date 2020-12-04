@@ -146,7 +146,7 @@ namespace Crm.Service.SystemService
         /// <param name="sortNum"></param>
         public bool VerifySortNum(Guid id, Guid pid, int sortNum)
         {
-            var num = _mydb.SystemMenu.Count(a => a.IsDelete == 0 && a.ParentGid == pid && a.Id != pid && a.SortNum == sortNum);
+            var num = _mydb.SystemMenu.Count(a => a.IsDelete == 0 && a.ParentGid == pid && a.Id != id && a.SortNum == sortNum);
 
             if (num > 0)
                 return true;

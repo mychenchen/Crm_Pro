@@ -8,6 +8,11 @@ namespace Crm.Repository.MapperEntity
     public class ProductMapper : BaseEntityMapper
     {
         /// <summary>
+        /// 产品分类
+        /// </summary>
+        public Guid ProductTypeId { get; set; }
+
+        /// <summary>
         /// 标题
         /// </summary>
         public string Title { get; set; }

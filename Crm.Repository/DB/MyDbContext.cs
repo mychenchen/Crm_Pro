@@ -83,6 +83,11 @@ namespace Crm.Repository.DB
         #region 产品
 
         /// <summary>
+        /// 产品分类信息
+        /// </summary>
+        public DbSet<ProductTypeEntity> ProductType { get; set; }
+
+        /// <summary>
         /// 产品信息
         /// </summary>
         public DbSet<ProductEntity> Product { get; set; }

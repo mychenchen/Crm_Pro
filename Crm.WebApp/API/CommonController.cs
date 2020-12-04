@@ -120,7 +120,7 @@ namespace Crm.WebApp.API
             }
         }
         /// <summary>
-        /// 角色权限
+        /// 系统菜单树
         /// </summary>
         /// <returns></returns>
         public ResultObject GetSystemMenuTree()

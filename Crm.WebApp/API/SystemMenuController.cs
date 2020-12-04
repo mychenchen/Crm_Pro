@@ -113,12 +113,6 @@ namespace Crm.WebApp.API
             string errStr = "成功";
             try
             {
-                var userInfo = GetLoginUserDetail();
-                if (userInfo.LoginUser != "admin")
-                {
-                    return Error("非最高管理员,无法修改");
-                }
-
                 //判断排序是否重复
                 if (_menu.VerifySortNum(model.Id, model.ParentGid, model.SortNum))
                 {

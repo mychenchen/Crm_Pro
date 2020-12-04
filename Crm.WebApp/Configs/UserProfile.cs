@@ -24,6 +24,7 @@ namespace Crm.WebApp.Models.Configs
             CreateMap<HotSpotEntity, HotSpotMapper>();
             CreateMap<NoticeEntity, NoticeMapper>();
 
+            CreateMap<ProductTypeEntity, ProductTypeMapper>();
             CreateMap<ProductEntity, ProductMapper>();
             CreateMap<ProductVideoEntity, ProductVideoMapper>();
 
