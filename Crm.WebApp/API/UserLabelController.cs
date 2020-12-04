@@ -20,7 +20,7 @@ namespace Crm.WebApp.API
         protected readonly IUserLabelService _label;
         public UserLabelController(
             IOptions<CmsAppSettingModel> configStr,
-            IMapper mapper,
+            IMapper mapper, 
             IUserLabelService label
             ) : base(configStr, mapper)
         {
