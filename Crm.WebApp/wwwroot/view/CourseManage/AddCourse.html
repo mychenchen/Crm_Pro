@@ -175,7 +175,7 @@
           $('#up_img').attr('src', ApiService.UpLoadApi.APIService + res.data);
           $("input[name='CoverPath']").val(res.data);
         },
-        error: function () {}
+        error: function () { }
       });
 
       var info = localStorage.detail;
@@ -247,11 +247,13 @@
       return list;
     }
 
+    //获取指定类型名称
     function getTreeNameById(list, id) {
       var name = "";
       $.each(list, function (i, val) {
         if (val.id == id) {
           name = val.title;
+          return false;
         } else {
           name = getTreeNameById(val.children, id);
         }

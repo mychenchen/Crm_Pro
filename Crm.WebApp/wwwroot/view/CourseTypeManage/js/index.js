@@ -43,39 +43,39 @@ layui.use(['table', 'layer', 'element'], function () {
     page: true,
     height: 'full-60',
     toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-      ,
+    ,
     defaultToolbar: ['filter'],
     where: searchModel,
     cols: [
       [{
-          field: 'btn',
-          width: 50,
-          align: 'center',
-          templet: function (d) {
-            return '<a class="a_btn" style="cursor: pointer;" lay-event="addRowTable">+</a>'
-          }
-        },
-        {
-          field: 'TypeName',
-          title: '名称',
-          align: 'center'
-        },
-        {
-          field: 'TypeCode',
-          title: '编码',
-          align: 'center'
-        },
-        {
-          field: 'CreateTimeStr',
-          title: '更新时间',
-          align: 'center',
-        },
-        {
-          field: '',
-          title: '操作',
-          align: 'center',
-          toolbar: '#barDemo',
+        field: 'btn',
+        width: 50,
+        align: 'center',
+        templet: function (d) {
+          return '<a class="a_btn" style="cursor: pointer;" lay-event="addRowTable">+</a>'
         }
+      },
+      {
+        field: 'TypeName',
+        title: '名称',
+        align: 'center'
+      },
+      {
+        field: 'TypeCode',
+        title: '编码',
+        align: 'center'
+      },
+      {
+        field: 'CreateTimeStr',
+        title: '更新时间',
+        align: 'center',
+      },
+      {
+        field: '',
+        title: '操作',
+        align: 'center',
+        toolbar: '#barDemo',
+      }
       ]
     ],
     response: {
@@ -166,8 +166,8 @@ function addRowChild(trIndex, tr, table, pid) {
     elem: '#' + childTableName,
     url: ApiService.SystemApi.APIService + '/Api/ProductType/GetDataByPid',
     page: false //关闭分页
-      // cellMinWidth: 80,//最小列宽
-      ,
+    // cellMinWidth: 80,//最小列宽
+    ,
     method: "get",
     headers: {
       "ToKenStr": localStorage.Token
@@ -177,26 +177,26 @@ function addRowChild(trIndex, tr, table, pid) {
     },
     cols: [
       [{
-          field: 'TypeName',
-          title: '名称',
-          align: 'center'
-        },
-        {
-          field: 'TypeCode',
-          title: '编码',
-          align: 'center'
-        },
-        {
-          field: 'CreateTimeStr',
-          title: '创建时间',
-          align: 'center',
-        },
-        {
-          field: '',
-          title: '操作',
-          align: 'center',
-          toolbar: '#barDemoChild'
-        }
+        field: 'TypeName',
+        title: '名称',
+        align: 'center'
+      },
+      {
+        field: 'TypeCode',
+        title: '编码',
+        align: 'center'
+      },
+      {
+        field: 'CreateTimeStr',
+        title: '创建时间',
+        align: 'center',
+      },
+      {
+        field: '',
+        title: '操作',
+        align: 'center',
+        toolbar: '#barDemoChild'
+      }
       ]
     ],
     response: {
