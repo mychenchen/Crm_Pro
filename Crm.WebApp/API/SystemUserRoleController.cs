@@ -271,13 +271,14 @@ namespace Crm.WebApp.API
             var errStr = "成功";
             try
             {
-                var user = _user.GetModel(userId);
+                var user = _user.GetEntity(a => a.Id == userId);
                 if (user == null)
                 {
                     return Error("用户不存在,请刷新页面");
                 }
                 user.RoleId = roleId;
-                _user.AddUpdateModel(user);
+                user.UpdateTime = DateTime.Now;
+                _user.Update(user);
 
                 return Success();
             }

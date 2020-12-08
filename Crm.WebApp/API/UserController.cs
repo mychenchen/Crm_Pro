@@ -66,7 +66,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _user.GetModel(gid);
+                var data = _user.GetEntity(a => a.Id == gid);
                 var info = _mapper.Map<UserMapper>(data);
 
                 return Success(info);
@@ -95,41 +95,32 @@ namespace Crm.WebApp.API
                 {
                     return Error("最高权限账号,不可修改");
                 }
-                var entity = new User();
-                if (model.Id == Guid.Empty)
-                {
-                    entity.Salt = RandomCode.CreateAuthStr(6, false);
-                    entity.CreateTime = DateTime.Now;
-                    entity.UpdateTime = DateTime.Now;
-                    entity.IsDelete = 0;
-                }
-                else
-                {
-                    entity = _user.GetModel(model.Id);
-                    if (entity == null)
-                    {
-                        return Error("信息不存在,修改失败");
-                    }
-                    entity.UpdateTime = DateTime.Now;
-                    optEvent = "修改";
-                }
-                entity.LabelId = model.LabelId;
-                entity.LoginName = model.LoginName;
-                entity.NickName = model.NickName;
-                entity.Sex = model.Sex;
-                entity.HeadImg = model.HeadImg;
-                entity.MyIntroduce = model.MyIntroduce;
-                //密码修改
-                if (model.LoginPwd != entity.LoginPwd)
-                {
-                    entity.LoginPwd = (model.LoginPwd + entity.Salt).ToMD5();
-                }
-                if (_user.VerifyLoginName(entity.Id, entity.LoginName))
+                var entity = _mapper.Map<User>(model);
+                if (_user.IsExist(a => a.Id != entity.Id && a.LoginName == entity.LoginName))
                 {
                     return Error("登陆账号已存在,无法重复添加");
                 }
-
-                _user.AddUpdateModel(entity);
+                entity.UpdateTime = DateTime.Now;
+                if (entity.Id == Guid.Empty)
+                {
+                    entity.Salt = RandomCode.CreateAuthStr(6, false);
+                    _user.Insert(entity);
+                }
+                else
+                {
+                    optEvent = "修改";
+                    var info = _user.GetEntity(a => a.Id == model.Id);
+                    if (info == null)
+                    {
+                        return Error("信息不存在,修改失败");
+                    }
+                    //密码修改
+                    if (info.LoginPwd != entity.LoginPwd)
+                    {
+                        entity.LoginPwd = (entity.LoginPwd + entity.Salt).ToMD5();
+                    }
+                    _user.Update(entity);
+                }
                 return Success();
             }
             catch (Exception ex)
@@ -150,12 +141,12 @@ namespace Crm.WebApp.API
         /// <param name="gid"></param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject DeleteModel(string gid)
+        public ResultObject DeleteModel(Guid gid)
         {
             string errStr = "成功";
             try
             {
-                _user.Delete(Guid.Parse(gid));
+                _user.Delete(a => a.Id == gid);
                 return Success();
             }
             catch (Exception ex)
@@ -170,38 +161,5 @@ namespace Crm.WebApp.API
             }
         }
 
-        ///// <summary>
-        ///// 发送Mq消息
-        ///// </summary>
-        ///// <param name="quName"></param>
-        ///// <param name="messageStr"></param>
-        ///// <returns></returns>
-        //[HttpGet]
-        //public ResultObject SendMq(string quName, string messageStr)
-        //{
-        //    try
-        //    {
-        //        HotNews ht = new HotNews
-        //        {
-        //            Id = Guid.NewGuid(),
-        //            ShowTime = DateTime.Now,
-        //            CoverUrl = "#",
-        //            CreateTime = DateTime.Now,
-        //            IsDelete = 0,
-        //            NewsContent = messageStr,
-        //            Title = "测试内容"
-        //        };
-
-
-        //        _mq.SendByName(quName, ht.ToJson());
-
-        //        return Success("发送成功");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        LogHelper.Error(ex.ToString());
-        //        return Error(ex.Message);
-        //    }
-        //}
     }
 }

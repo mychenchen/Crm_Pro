@@ -2,18 +2,14 @@
 using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
-using Crm.WebApp.Infrastructure;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.LogManange;
-using Currency.Quartz;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Crm.WebApp.API
 {
@@ -110,7 +106,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var user = _user.UserLoginModel(login.account);
+                var user = _user.GetEntity(a => a.LoginName == login.account);
                 if (user == null)
                 {
                     return Error("账号不存在");

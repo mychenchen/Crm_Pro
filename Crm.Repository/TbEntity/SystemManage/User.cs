@@ -51,7 +51,7 @@ namespace Crm.Repository.TbEntity
         /// <summary>
         /// 修改时间
         /// </summary>
-        public DateTime? UpdateTime { get; set; }
+        public DateTime UpdateTime { get; set; }
 
         /// <summary>
         /// 自我介绍

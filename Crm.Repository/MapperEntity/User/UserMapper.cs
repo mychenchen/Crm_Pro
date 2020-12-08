@@ -60,9 +60,40 @@ namespace Crm.Repository.MapperEntity
         public int Sex { get; set; }
 
         /// <summary>
+        /// 性别
+        /// </summary>
+        public string SexStr
+        {
+            get
+            {
+                string str = "未设置";
+                if (Sex == 1)
+                    str = "男";
+                else
+                    str = "女";
+                return str;
+            }
+        }
+        /// <summary>
         /// 头像
         /// </summary>
         public string HeadImg { get; set; }
 
+        /// <summary>
+        /// 更新时间
+        /// </summary>
+        public DateTime UpdateTime { get; set; }
+
+        /// <summary>
+        /// 更新时间格式化
+        /// </summary>        
+        public string UpdateTimeStr
+        {
+            get
+            {
+                return UpdateTime == null ? "" : UpdateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+            }
+        }
     }
 }

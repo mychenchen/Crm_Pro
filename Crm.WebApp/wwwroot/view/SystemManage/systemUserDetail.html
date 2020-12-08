@@ -18,64 +18,67 @@
 
 <body>
 
-  <form class="layui-form" action="" lay-filter="example">
-    <input type="hidden" name="Id" value="" />
-    <div class="layui-form-item">
-      <label class="layui-form-label">标签<label style="color: red;">*</label></label>
-      <div class="layui-input-block">
-        <div class="layui-input-inline">
-          <select id="sel_UserLabel" name='LabelId' lay-search="" lay-filter="sel_UserLabel">
-            <option value="">请选择</option>
-          </select>
+    <form class="layui-form" action="" lay-filter="example">
+        <input type="hidden" name="Id" value="" />
+        <input type="hidden" name="CreateTime" value="" />
+        <input type="hidden" name="IsDelete" value="0" />
+        <input type="hidden" name="Salt" value="" />
+        <div class="layui-form-item">
+            <label class="layui-form-label">标签<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <div class="layui-input-inline">
+                    <select id="sel_UserLabel" name='LabelId' lay-search="" lay-filter="sel_UserLabel">
+                        <option value="">请选择</option>
+                    </select>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">用户昵称<label style="color: red;">*</label></label>
-      <div class="layui-input-block">
-        <input type="text" name="NickName" autocomplete="off" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">用户账号<label style="color: red;">*</label></label>
-      <div class="layui-input-block">
-        <input type="text" name="LoginName" autocomplete="off" placeholder="请输入账号" class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">用户密码<label style="color: red;">*</label></label>
-      <div class="layui-input-block">
-        <input type="password" name="LoginPwd" placeholder="请输入密码" autocomplete="off" value="123123"
-          class="layui-input">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">头像</label>
-      <div class="layui-input-block">
-        <img src='../../../images/name.png' class="layui-upload-img" id="up_img" style="width: 114px;height: 140px;">
-        <input type="hidden" name="HeadImg" value="" />
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">性别</label>
-      <div class="layui-input-block">
-        <input type="radio" name="Sex" value="1" title="男" checked="">
-        <input type="radio" name="Sex" value="0" title="女">
-      </div>
-    </div>
-    <div class="layui-form-item">
-      <label class="layui-form-label">个人介绍</label>
-      <div class="layui-input-block">
-        <div id="editor"></div>
-      </div>
-    </div>
-    <div class="layui-form-item" style="display:none" id="div_nows">
-      <div class="layui-input-block">
-        <a class="layui-btn">保存修改</a>
-      </div>
-    </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户昵称<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <input type="text" name="NickName" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户账号<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <input type="text" name="LoginName" autocomplete="off" placeholder="请输入账号" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户密码<label style="color: red;">*</label></label>
+            <div class="layui-input-block">
+                <input type="password" name="LoginPwd" placeholder="请输入密码" autocomplete="off" value="123123"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">头像</label>
+            <div class="layui-input-block">
+                <img src='../../../images/name.png' class="layui-upload-img" id="up_img" style="width: 114px;height: 140px;">
+                <input type="hidden" name="HeadImg" value="" />
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">性别</label>
+            <div class="layui-input-block">
+                <input type="radio" name="Sex" value="1" title="男" checked="">
+                <input type="radio" name="Sex" value="0" title="女">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">个人介绍</label>
+            <div class="layui-input-block">
+                <div id="editor"></div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="display:none" id="div_nows">
+            <div class="layui-input-block">
+                <a class="layui-btn">保存修改</a>
+            </div>
+        </div>
 
-  </form>
+    </form>
 
   <script src="../../layui/layui.js"></script>
   <script src="../../js/jquery.min.js"></script>
@@ -155,6 +158,8 @@
       //表单赋值 标签 name='NickName'
       form.val('example', {
         "Id": info.Id,
+        "CreateTime": info.CreateTime,
+        "Salt": info.Salt,
         "NickName": info.NickName,
         "LoginName": info.LoginName,
         "LoginPwd": info.LoginPwd,
