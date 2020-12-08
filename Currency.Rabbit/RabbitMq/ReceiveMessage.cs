@@ -1,5 +1,5 @@
 ﻿using Crm.Service.RabbitService;
-using Currency.Common;
+using Currency.Common.SystemRegister;
 using Currency.Mq.Model;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;

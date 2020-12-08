@@ -1,8 +1,11 @@
-﻿namespace Crm.Repository.MapperEntity
+﻿using Crm.Repository.TbEntity;
+
+namespace Crm.Repository.MapperEntity
 {
     /// <summary>
     /// 热点轮播
     /// </summary>
+    [AutoMappers(typeof(HotSpotEntity))]
     public class HotSpotMapper : BaseEntityMapper
     {
         /// <summary>

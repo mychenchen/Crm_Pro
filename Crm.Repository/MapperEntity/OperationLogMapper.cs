@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Crm.Repository.TbEntity;
+using System;
 
 namespace Crm.Repository.MapperEntity
 {
     /// <summary>
     /// 操作日志表
     /// </summary>
+    [AutoMappers(typeof(OperationLogEntity))]
     public class OperationLogMapper : BaseEntityMapper
     {
         /// <summary>

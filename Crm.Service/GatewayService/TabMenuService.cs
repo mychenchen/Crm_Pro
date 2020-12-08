@@ -1,19 +1,15 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Currency.Common.NetCoreDIModuleRegister;
 
 namespace Crm.Service.GatewayService
 {
     /// <summary>
     /// tab菜单
-    /// UseDI特性用于注入必须加
     /// </summary>
-    [UseDI(ServiceLifetime.Scoped, typeof(ITabMenuService))]
     public class TabMenuService : ITabMenuService
     {
         /// <summary>

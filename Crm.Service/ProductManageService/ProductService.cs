@@ -2,19 +2,15 @@
 using Crm.Repository.TbEntity;
 using Currency.Common.LogManange;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Currency.Common.NetCoreDIModuleRegister;
 
 namespace Crm.Service.ProductManageService
 {
     /// <summary>
     /// 产品(课程)
-    /// UseDI特性用于注入必须加
     /// </summary>
-    [UseDI(ServiceLifetime.Scoped, typeof(IProductService))]
     public class ProductService : IProductService
     {
         /// <summary>

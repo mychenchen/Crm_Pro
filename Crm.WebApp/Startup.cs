@@ -5,11 +5,9 @@ using Crm.Repository.DB;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Infrastructure;
 using Crm.WebApp.Models;
-using Currency.Common;
-using Currency.Common.Caching;
 using Currency.Common.LogManange;
+using Currency.Common.SystemRegister;
 using Currency.Mq.Model;
-using Currency.Quartz;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -86,7 +84,7 @@ namespace Crm.WebApp
 
             services.AddAutoMapper();
 
-            services.AutoRegisterServicesFromAssembly("Crm.Service");
+            services.AddAssembly("Crm.Service");
             //µ¥¸ö×¢Èë 
 
             //services.AddSingleton<IMqSend, SendMessage>();

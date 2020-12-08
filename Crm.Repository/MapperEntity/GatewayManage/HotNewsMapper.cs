@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Crm.Repository.TbEntity;
+using System;
 
 namespace Crm.Repository.MapperEntity
 {
     /// <summary>
     /// 新闻管理
     /// </summary>
+    [AutoMappers(typeof(HotNewsEntity))]
     public class HotNewsMapper : BaseEntityMapper
     {
         /// <summary>

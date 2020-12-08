@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using System;
 
-namespace Currency.Common
+namespace Currency.Common.SystemRegister
 {
     public class DI
     {

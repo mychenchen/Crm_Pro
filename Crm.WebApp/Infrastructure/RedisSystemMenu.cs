@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using Crm.Repository.MapperEntity;
-using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
-using Currency.Common;
 using Currency.Common.Redis;
+using Currency.Common.SystemRegister;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Crm.WebApp.Infrastructure
 {

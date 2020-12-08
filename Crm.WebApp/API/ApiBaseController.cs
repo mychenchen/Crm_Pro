@@ -4,6 +4,7 @@ using Crm.Service.SystemService;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.Redis;
+using Currency.Common.SystemRegister;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

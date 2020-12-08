@@ -3,11 +3,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace Currency.Common
+namespace Currency.Common.SystemRegister
 {
+    /*
+     使用方法 : 在接口属性处写入
+    [UseDI(ServiceLifetime.Scoped, typeof(ISystemMenuService))]
+    public class SystemMenuService : ISystemMenuService 
+    {
+    .....
+    }
 
+     */
+    /// <summary>
+    /// 自动批量注入[已放弃]
+    /// </summary>
     public static class NetCoreDIModuleRegister
     {
         /// <summary>

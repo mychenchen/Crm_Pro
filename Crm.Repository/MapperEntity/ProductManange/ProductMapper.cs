@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Crm.Repository.TbEntity;
+using System;
 
 namespace Crm.Repository.MapperEntity
 {
     /// <summary>
     /// 产品信息
     /// </summary>
+    [AutoMappers(typeof(ProductEntity))]
     public class ProductMapper : BaseEntityMapper
     {
         /// <summary>

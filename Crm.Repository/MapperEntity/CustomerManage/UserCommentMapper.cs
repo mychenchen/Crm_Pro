@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Crm.Repository.TbEntity;
+using System;
 
 namespace Crm.Repository.MapperEntity
 {
     /// <summary>
     /// 用户评论
     /// </summary>
+    [AutoMappers(typeof(UserCommentEntity))]
     public class UserCommentMapper : BaseEntityMapper
     {
         /// <summary>

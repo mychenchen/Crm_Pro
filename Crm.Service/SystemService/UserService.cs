@@ -1,19 +1,15 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Currency.Common.NetCoreDIModuleRegister;
 
 namespace Crm.Service.SystemService
 {
     /// <summary>
     /// 用户管理
-    /// UseDI特性用于注入必须加
     /// </summary>
-    [UseDI(ServiceLifetime.Scoped, typeof(IUserService))]
     public class UserService : IUserService
     {
         /// <summary>

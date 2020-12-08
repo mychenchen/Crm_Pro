@@ -1,18 +1,15 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using static Currency.Common.NetCoreDIModuleRegister;
 
 namespace Crm.Service.ProductManageService
 {
     /// <summary>
     /// 产品分类(课程分类)
     /// </summary>
-    [UseDI(ServiceLifetime.Scoped, typeof(IProductTypeService))]
     public class ProductTypeService : IProductTypeService
     {
         /// <summary>

@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Crm.Repository.TbEntity
 {
+    /// <summary>
+    /// 产品视频
+    /// </summary>
     [Table("tb_ProductVideo")]
     public class ProductVideoEntity : BaseEntity
     {

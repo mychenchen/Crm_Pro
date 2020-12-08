@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Crm.Repository.TbEntity;
+using System;
 
 namespace Crm.Repository.MapperEntity
 {
     /// <summary>
     /// tab菜单管理
     /// </summary>
+    [AutoMappers(typeof(TabMenuEntity))]
     public class TabMenuMapper : BaseEntityMapper
     {
         /// <summary>

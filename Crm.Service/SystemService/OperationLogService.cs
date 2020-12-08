@@ -1,20 +1,14 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static Currency.Common.NetCoreDIModuleRegister;
 
 namespace Crm.Service.SystemService
 {
     /// <summary>
     /// 用户操作日志
-    /// UseDI特性用于注入必须加
     /// </summary>
-    [UseDI(ServiceLifetime.Scoped, typeof(IOperationLogService))]
     public class OperationLogService : IOperationLogService
     {
         /// <summary>

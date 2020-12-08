@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Crm.Repository.MapperEntity;
-using Crm.Repository.TbEntity;
+using Crm.Repository;
+using Currency.Common.SystemRegister;
+using System.Reflection;
 
 namespace Crm.WebApp.Models.Configs
 {
@@ -12,31 +13,46 @@ namespace Crm.WebApp.Models.Configs
 
         public UserProfile()
         {
-            // 添加尽可能多的这些行的，因为你需要映射你的对象
+            // 添加尽可能多的这些行的，因为你需要映射你的对象
 
-            CreateMap<User, UserMapper>();
-            CreateMap<UserLoginLog, UserLoginLogMapper>();
+            var assembly = RuntimeHelper.GetAssemblyByName("Crm.Repository");
 
-            CreateMap<TabMenuEntity, TabMenuMapper>();
-            CreateMap<OperationLogEntity, OperationLogMapper>();
+            var types = assembly.GetExportedTypes();
+            foreach (var type in types)
+            {
+                if (!type.IsDefined(typeof(AutoMappersAttribute))) continue;
+                var autoMapper = type.GetCustomAttribute<AutoMappersAttribute>();
 
-            CreateMap<HotNewsEntity, HotNewsMapper>();
-            CreateMap<HotSpotEntity, HotSpotMapper>();
-            CreateMap<NoticeEntity, NoticeMapper>();
+                foreach (var source in autoMapper.ToSource)
+                {
+                    CreateMap(type, source).ReverseMap();
+                }
+            }
 
-            CreateMap<ProductTypeEntity, ProductTypeMapper>();
-            CreateMap<ProductEntity, ProductMapper>();
-            CreateMap<ProductVideoEntity, ProductVideoMapper>();
+            //CreateMap<User, UserMapper>();
+            //CreateMap<UserLoginLog, UserLoginLogMapper>();
+
+            //CreateMap<TabMenuEntity, TabMenuMapper>();
+            //CreateMap<OperationLogEntity, OperationLogMapper>();
+
+            //CreateMap<HotNewsEntity, HotNewsMapper>();
+            //CreateMap<HotSpotEntity, HotSpotMapper>();
+            //CreateMap<NoticeEntity, NoticeMapper>();
+
+            //CreateMap<ProductTypeEntity, ProductTypeMapper>();
+            //CreateMap<ProductEntity, ProductMapper>();
+            //CreateMap<ProductVideoEntity, ProductVideoMapper>();
 
 
-            CreateMap<SystemMenuEntity, SystemMenuMapper>();
-            CreateMap<UserRoleEntity, UserRoleMapper>();
-            CreateMap<RoleMenuEntity, RoleMenuMapper>();
+            //CreateMap<SystemMenuEntity, SystemMenuMapper>();
+            //CreateMap<UserRoleEntity, UserRoleMapper>();
+            //CreateMap<RoleMenuEntity, RoleMenuMapper>();
 
-            CreateMap<UserStudentEntity, UserStudentMapper>();
-            CreateMap<UserCommentEntity, UserCommentMapper>();
-            CreateMap<UserOrderEntity, UserOrderMapper>();
+            //CreateMap<UserStudentEntity, UserStudentMapper>();
+            //CreateMap<UserCommentEntity, UserCommentMapper>();
+            //CreateMap<UserOrderEntity, UserOrderMapper>();
 
         }
+
     }
 }
