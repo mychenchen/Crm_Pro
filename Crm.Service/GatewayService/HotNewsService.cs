@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,11 @@ namespace Crm.Service.GatewayService
     /// <summary>
     /// 新闻
     /// </summary>
-    public class HotNewsService : IHotNewsService
+    public class HotNewsService : BaseServiceRepository<HotNewsEntity>, IHotNewsService
     {
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        protected readonly MyDbContext _mydb;
 
-        public HotNewsService(MyDbContext mydb)
+        public HotNewsService(MyDbContext mydb) : base(mydb)
         {
-            _mydb = mydb;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public List<HotNewsEntity> GetList()
-        {
-            return _mydb.HotNews.ToList();
         }
 
         /// <summary>
@@ -41,7 +28,7 @@ namespace Crm.Service.GatewayService
         /// <returns></returns>
         public List<HotNewsEntity> GetPageList(string title, int page, int rows, ref int count)
         {
-            var list = _mydb.HotNews.Where(a => a.IsDelete == 0);
+            var list = myDbContext.HotNews.Where(a => a.IsDelete == 0);
             if (!string.IsNullOrEmpty(title))
             {
                 list = list.Where(a => a.Title.Contains(title) || a.Subtitle.Contains(title));
@@ -50,58 +37,6 @@ namespace Crm.Service.GatewayService
                 .Skip((page - 1) * rows).Take(rows).ToList();
             count = list.Count();
             return data;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public HotNewsEntity GetModel(Guid gid)
-        {
-            return _mydb.HotNews.AsNoTracking().FirstOrDefault(a => a.Id == gid);
-        }
-
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="model"></param>
-        public void AddUpdateModel(HotNewsEntity model)
-        {
-            if (model.Id == Guid.Empty)
-            {
-                model.Id = Guid.NewGuid();
-                model.CreateTime = DateTime.Now;
-                _mydb.HotNews.Add(model);
-            }
-            else
-            {
-                _mydb.Update(model);
-            }
-            _mydb.SaveChanges();
-        }
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="isDelete">true 真删除 false 假删除</param>
-        public bool Delete(Guid gid, bool isDelete = false)
-        {
-            var model = GetModel(gid);
-            if (model == null)
-                return false;
-
-            if (isDelete)
-            {
-                _mydb.HotNews.Remove(model);
-            }
-            else
-            {
-                model.IsDelete = 1;
-                _mydb.HotNews.Update(model);
-            }
-            _mydb.SaveChanges();
-            return true;
         }
 
     }

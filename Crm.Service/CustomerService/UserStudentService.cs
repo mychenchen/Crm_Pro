@@ -1,36 +1,24 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 
 namespace Crm.Service.SystemService
 {
     /// <summary>
     /// 学员管理
     /// </summary>
-    public class UserStudentService : IUserStudentService
+    public class UserStudentService : BaseServiceRepository<UserStudentEntity>, IUserStudentService
     {
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        protected readonly MyDbContext _mydb;
-
-        public UserStudentService(MyDbContext mydb)
+        public UserStudentService(MyDbContext mydb) : base(mydb)
         {
-            _mydb = mydb;
         }
 
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public List<UserStudentEntity> GetList()
-        {
-            return _mydb.UserStudent.ToList();
-        }
 
         /// <summary>
         /// 分页查询
@@ -43,8 +31,8 @@ namespace Crm.Service.SystemService
         /// <returns></returns>
         public List<UserStudentMapper> GetMapperPageList(string name, int isVip, int page, int rows, ref int count)
         {
-            var list = from a in _mydb.UserStudent
-                       join b in _mydb.UserLabel on a.LabelId equals b.Id into temp
+            var list = from a in myDbContext.UserStudent
+                       join b in myDbContext.UserLabel on a.LabelId equals b.Id into temp
                        from bb in temp.DefaultIfEmpty()
                        where a.IsDelete == 0
                        select new UserStudentMapper
@@ -78,62 +66,6 @@ namespace Crm.Service.SystemService
                 .Skip((page - 1) * rows).Take(rows).ToList();
             count = list.Count();
             return data;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public UserStudentEntity GetModel(Guid gid)
-        {
-            return _mydb.UserStudent.AsNoTracking().FirstOrDefault(a => a.Id == gid);
-        }
-
-        /// <summary>
-        /// 根据登陆名称查询
-        /// </summary>
-        /// <param name="name"></param>
-        public UserStudentEntity UserLoginModel(string name)
-        {
-            return _mydb.UserStudent.AsNoTracking().FirstOrDefault(a => a.LoginName == name);
-        }
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="model"></param>
-        public void AddUpdateModel(UserStudentEntity model)
-        {
-            if (model.Id == Guid.Empty)
-            {
-                model.Id = Guid.NewGuid();
-                _mydb.UserStudent.Add(model);
-            }
-            else
-            {
-                _mydb.Update(model);
-            }
-            _mydb.SaveChanges();
-        }
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="isDelete">true 真删除 false 假删除</param>
-        public bool Delete(Guid gid, bool isDelete = false)
-        {
-            var model = GetModel(gid);
-            if (model == null)
-                return false;
-            if (isDelete)
-                _mydb.UserStudent.Remove(model);
-            else
-            {
-                model.IsDelete = 1;
-                _mydb.UserStudent.Update(model);
-            }
-            _mydb.SaveChanges();
-            return true;
         }
 
     }

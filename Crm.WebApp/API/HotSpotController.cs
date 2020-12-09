@@ -67,7 +67,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _hotSpot.GetModel(gid);
+                var data = _hotSpot.GetEntity(a => a.Id == gid);
                 var info = _mapper.Map<HotSpotMapper>(data);
 
                 return Success(info);
@@ -92,7 +92,7 @@ namespace Crm.WebApp.API
             try
             {
                 var saveEntity = _mapper.Map<HotSpotEntity>(model);
-                var entity = _hotSpot.GetModel(saveEntity.Id);
+                var entity = _hotSpot.GetEntity(a => a.Id == saveEntity.Id);
                 if (entity != null)
                 {
                     saveEntity.CreateTime = entity.CreateTime;
@@ -102,9 +102,16 @@ namespace Crm.WebApp.API
                         saveEntity.ImgPath = entity.ImgPath;
                     }
                     optEvent = "修改";
+                    _hotSpot.Update(saveEntity);
+                }
+                else
+                {
+                    saveEntity.CreateTime = DateTime.Now;
+                    saveEntity.IsDelete = 0;
+                    saveEntity.Id = Guid.NewGuid();
+                    _hotSpot.Insert(saveEntity);
                 }
 
-                _hotSpot.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
@@ -125,12 +132,14 @@ namespace Crm.WebApp.API
         /// <param name="gid"></param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject DeleteModel(string gid)
+        public ResultObject DeleteModel(Guid gid)
         {
             var errStr = "成功";
             try
             {
-                _hotSpot.Delete(Guid.Parse(gid));
+                var info = _hotSpot.GetEntity(a => a.Id == gid);
+                info.IsDelete = 1;
+                _hotSpot.Update(info);
                 return Success();
             }
             catch (Exception ex)

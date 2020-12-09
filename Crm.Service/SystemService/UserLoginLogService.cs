@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,27 +9,12 @@ namespace Crm.Service.SystemService
     /// <summary>
     /// 用户管理
     /// </summary>
-    public class UserLoginLogService : IUserLoginLogService
+    public class UserLoginLogService : BaseServiceRepository<UserLoginLog>, IUserLoginLogService
     {
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        protected readonly MyDbContext _mydb;
 
-        public UserLoginLogService(MyDbContext mydb)
+        public UserLoginLogService(MyDbContext mydb) : base(mydb)
         {
-            _mydb = mydb;
         }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public List<UserLoginLog> GetList()
-        {
-            return _mydb.UserLoginLog.ToList();
-        }
-
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -39,7 +25,7 @@ namespace Crm.Service.SystemService
         /// <returns></returns>
         public List<UserLoginLog> GetPageList(string name, int page, int rows, ref int count)
         {
-            var list = _mydb.UserLoginLog.Where(a => a.IsDelete == 0);
+            var list = myDbContext.UserLoginLog.Where(a => a.IsDelete == 0);
             if (!string.IsNullOrEmpty(name))
             {
                 list = list.Where(a => a.UserName.Contains(name));
@@ -50,14 +36,5 @@ namespace Crm.Service.SystemService
             return data;
         }
 
-        /// <summary>
-        /// 保存日志
-        /// </summary>
-        /// <param name="model"></param>
-        public void SaveLog(UserLoginLog model)
-        {
-            _mydb.UserLoginLog.Add(model);
-            _mydb.SaveChanges();
-        }
     }
 }

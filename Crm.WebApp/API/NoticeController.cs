@@ -66,7 +66,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _notice.GetModel(gid);
+                var data = _notice.GetEntity(a => a.Id == gid);
                 var info = _mapper.Map<NoticeMapper>(data);
 
                 return Success(info);
@@ -90,17 +90,22 @@ namespace Crm.WebApp.API
             var errStr = "成功";
             try
             {
-                model.CreateTime = DateTime.Now;
                 var saveEntity = _mapper.Map<NoticeEntity>(model);
-                var entity = _notice.GetModel(saveEntity.Id);
+                var entity = _notice.GetEntity(a => a.Id == saveEntity.Id);
                 if (entity != null)
                 {
                     saveEntity.CreateTime = entity.CreateTime;
                     saveEntity.IsDelete = entity.IsDelete;
                     optEvent = "修改";
+                    _notice.Update(saveEntity);
+                }
+                else
+                {
+                    saveEntity.CreateTime = DateTime.Now;
+                    saveEntity.Id = Guid.NewGuid();
+                    _notice.Insert(saveEntity);
                 }
 
-                _notice.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
@@ -121,12 +126,14 @@ namespace Crm.WebApp.API
         /// <param name="gid"></param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject DeleteModel(string gid)
+        public ResultObject DeleteModel(Guid gid)
         {
             var errStr = "成功";
             try
             {
-                _notice.Delete(Guid.Parse(gid));
+                var info = _notice.GetEntity(a => a.Id == gid);
+                info.IsDelete = 1;
+                _notice.Delete(info);
                 return Success();
             }
             catch (Exception ex)

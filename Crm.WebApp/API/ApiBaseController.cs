@@ -79,7 +79,7 @@ namespace Crm.WebApp.API
                     OperationUser = $"昵称:{userLogin.Name},账号:{userLogin.LoginUser}",
                     OpentionContext = txt
                 };
-                await _opt.SaveLogAsync(optModel);
+                await _opt.InsertAsync(optModel);
             }
         }
 

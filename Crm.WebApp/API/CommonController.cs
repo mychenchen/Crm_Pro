@@ -63,7 +63,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _tabMenu.GetListByPid(pid);
+                var data = _tabMenu.SelectWhere(a => a.IsDelete == 0 && a.ParentGid == pid).OrderBy(a => a.SortNum).ToList();
                 var list = _mapper.Map<List<TabMenuMapper>>(data);
 
                 return Success(list);
@@ -83,7 +83,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _userLabel.GetList().Select(a => new
+                var data = _userLabel.SelectWhere(a => a.IsDelete == 0).Select(a => new
                 {
                     id = a.Id,
                     name = a.LabelName
@@ -127,7 +127,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _sysMenu.GetList();
+                var data = _sysMenu.SelectWhere(a => a.IsDelete == 0);
                 var list = RecursionTree.LayuiTreeList(data, Guid.Empty);
 
                 return Success(list);

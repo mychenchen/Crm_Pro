@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using Currency.Common.LogManange;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,28 +12,13 @@ namespace Crm.Service.ProductManageService
     /// <summary>
     /// 产品(课程)
     /// </summary>
-    public class ProductService : IProductService
+    public class ProductService : BaseServiceRepository<ProductEntity>, IProductService
     {
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        protected readonly MyDbContext _mydb;
-
-        public ProductService(MyDbContext mydb)
+        public ProductService(MyDbContext mydb) : base(mydb)
         {
-            _mydb = mydb;
         }
 
         #region 产品信息
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public List<ProductEntity> GetList()
-        {
-            return _mydb.Product.ToList();
-        }
 
         /// <summary>
         /// 分页查询
@@ -44,7 +30,7 @@ namespace Crm.Service.ProductManageService
         /// <returns></returns>
         public List<ProductEntity> GetPageList(string title, int page, int rows, ref int count)
         {
-            var list = _mydb.Product.Where(a => a.IsDelete == 0);
+            var list = myDbContext.Product.Where(a => a.IsDelete == 0);
             if (!string.IsNullOrEmpty(title))
             {
                 list = list.Where(a => a.Title.Contains(title) || a.Subtitle.Contains(title));
@@ -53,81 +39,6 @@ namespace Crm.Service.ProductManageService
                 .Skip((page - 1) * rows).Take(rows).ToList();
             count = list.Count();
             return data;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public ProductEntity GetModel(Guid gid)
-        {
-            return _mydb.Product.AsNoTracking().FirstOrDefault(a => a.Id == gid);
-        }
-
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="model"></param>
-        public void AddUpdateModel(ProductEntity model)
-        {
-            if (model.Id == Guid.Empty)
-            {
-                model.Id = Guid.NewGuid();
-                model.CreateTime = DateTime.Now;
-                _mydb.Product.Add(model);
-            }
-            else
-            {
-                _mydb.Update(model);
-            }
-            _mydb.SaveChanges();
-        }
-
-        /// <summary>
-        /// 产品上架/下架
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="onShelfStatus"></param>
-        public bool UpdateOnShelf(Guid gid, int onShelfStatus)
-        {
-            try
-            {
-                var info = _mydb.Product.AsNoTracking().FirstOrDefault(a => a.Id == gid);
-                info.IssueDateTime = DateTime.Now;
-                info.OnShelfStatus = onShelfStatus;
-                _mydb.Update(info);
-                _mydb.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                LogHelper.Error(ex.ToString());
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="isDelete">true 真删除 false 假删除</param>
-        public bool Delete(Guid gid, bool isDelete = false)
-        {
-            var model = GetModel(gid);
-            if (model == null)
-                return false;
-
-            if (isDelete)
-            {
-                _mydb.Product.Remove(model);
-            }
-            else
-            {
-                model.IsDelete = 1;
-                _mydb.Product.Update(model);
-            }
-            _mydb.SaveChanges();
-            return true;
         }
 
         #endregion
@@ -144,7 +55,7 @@ namespace Crm.Service.ProductManageService
         /// <returns></returns>
         public List<ProductVideoEntity> GetVideoList(Guid proId, int page, int rows, ref int count)
         {
-            var list = _mydb.ProductVideo.Where(a => a.ProId == proId);
+            var list = myDbContext.ProductVideo.Where(a => a.ProId == proId);
             var data = list.OrderBy(a => a.VideoName)
                 .Skip((page - 1) * rows).Take(rows).ToList();
             count = list.Count();
@@ -157,7 +68,7 @@ namespace Crm.Service.ProductManageService
         /// <param name="model"></param>
         public ProductVideoEntity GetVideoModel(Guid gid)
         {
-            return _mydb.ProductVideo.AsNoTracking().FirstOrDefault(a => a.Id == gid);
+            return myDbContext.ProductVideo.AsNoTracking().FirstOrDefault(a => a.Id == gid);
         }
 
         /// <summary>
@@ -170,13 +81,13 @@ namespace Crm.Service.ProductManageService
             {
                 model.Id = Guid.NewGuid();
                 model.CreateTime = DateTime.Now;
-                _mydb.ProductVideo.Add(model);
+                myDbContext.ProductVideo.Add(model);
             }
             else
             {
-                _mydb.Update(model);
+                myDbContext.Update(model);
             }
-            _mydb.SaveChanges();
+            myDbContext.SaveChanges();
         }
 
         /// <summary>
@@ -192,14 +103,14 @@ namespace Crm.Service.ProductManageService
 
             if (isDelete)
             {
-                _mydb.ProductVideo.Remove(model);
+                myDbContext.ProductVideo.Remove(model);
             }
             else
             {
                 model.IsDelete = 1;
-                _mydb.ProductVideo.Update(model);
+                myDbContext.ProductVideo.Update(model);
             }
-            _mydb.SaveChanges();
+            myDbContext.SaveChanges();
             return true;
         }
         #endregion

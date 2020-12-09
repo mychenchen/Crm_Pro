@@ -67,7 +67,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _hotNews.GetModel(gid);
+                var data = _hotNews.GetEntity(a => a.Id == gid);
                 var info = _mapper.Map<HotNewsMapper>(data);
 
                 return Success(info);
@@ -92,15 +92,21 @@ namespace Crm.WebApp.API
             try
             {
                 var saveEntity = _mapper.Map<HotNewsEntity>(model);
-                var entity = _hotNews.GetModel(saveEntity.Id);
+                var entity = _hotNews.GetEntity(a => a.Id == saveEntity.Id);
                 if (entity != null)
                 {
                     saveEntity.CreateTime = entity.CreateTime;
                     saveEntity.IsDelete = entity.IsDelete;
                     optEvent = "修改";
+                    _hotNews.Update(saveEntity);
+                }
+                else
+                {
+                    saveEntity.CreateTime = DateTime.Now;
+                    saveEntity.IsDelete = 0;
+                    _hotNews.Insert(saveEntity);
                 }
 
-                _hotNews.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
@@ -121,12 +127,14 @@ namespace Crm.WebApp.API
         /// <param name="gid"></param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject DeleteModel(string gid)
+        public ResultObject DeleteModel(Guid gid)
         {
             var errStr = "成功";
             try
             {
-                _hotNews.Delete(Guid.Parse(gid));
+                var info = _hotNews.GetEntity(a => a.Id == gid);
+                info.IsDelete = 1;
+                _hotNews.Update(info);
                 return Success();
             }
             catch (Exception ex)
@@ -154,7 +162,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _hotNews.GetList();
+                var data = _hotNews.Select();
                 var list = _mapper.Map<List<HotNewsMapper>>(data);
 
                 return Success(list);

@@ -1,4 +1,5 @@
 ﻿using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using System;
 using System.Collections.Generic;
 
@@ -7,14 +8,8 @@ namespace Crm.Service.GatewayService
     /// <summary>
     /// 热点轮播
     /// </summary>
-    public interface IHotSpotService
+    public interface IHotSpotService : IBaseServiceRepository<HotSpotEntity>
     {
-        /// <summary>
-        /// 查询列表
-        /// </summary>
-        /// <returns></returns>
-        List<HotSpotEntity> GetList();
-
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -24,25 +19,6 @@ namespace Crm.Service.GatewayService
         /// <param name="count"></param>
         /// <returns></returns>
         List<HotSpotEntity> GetPageList(string title, int page, int rows, ref int count);
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        HotSpotEntity GetModel(Guid gid);
-
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="model"></param>
-        void AddUpdateModel(HotSpotEntity model);
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="isDelete">true 真删除 false 假删除</param>
-        bool Delete(Guid gid, bool isDelete = false);
 
     }
 }

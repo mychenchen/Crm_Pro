@@ -1,33 +1,19 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Crm.Service.SystemService
 {
     /// <summary>
     /// 用户操作日志
     /// </summary>
-    public class OperationLogService : IOperationLogService
+    public class OperationLogService : BaseServiceRepository<OperationLogEntity>, IOperationLogService
     {
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        protected readonly MyDbContext _mydb;
 
-        public OperationLogService(MyDbContext mydb)
+        public OperationLogService(MyDbContext mydb) : base(mydb)
         {
-            _mydb = mydb;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public List<OperationLogEntity> GetList()
-        {
-            return _mydb.OperationLog.ToList();
         }
 
         /// <summary>
@@ -41,7 +27,7 @@ namespace Crm.Service.SystemService
         /// <returns></returns>
         public List<OperationLogEntity> GetPageList(string optEvent, string controllerStr, int page, int rows, ref int count)
         {
-            var list = _mydb.OperationLog.Where(a => a.IsDelete == 0);
+            var list = myDbContext.OperationLog.Where(a => a.IsDelete == 0);
             if (!string.IsNullOrEmpty(optEvent))
             {
                 list = list.Where(a => a.OperationEvent == optEvent);
@@ -56,24 +42,5 @@ namespace Crm.Service.SystemService
             return data;
         }
 
-        /// <summary>
-        /// 保存日志
-        /// </summary>
-        /// <param name="model"></param>
-        public void SaveLog(OperationLogEntity model)
-        {
-            _mydb.OperationLog.Add(model);
-            _mydb.SaveChanges();
-        }
-
-        /// <summary>
-        /// 保存日志
-        /// </summary>
-        /// <param name="model"></param>
-        public async Task SaveLogAsync(OperationLogEntity model)
-        {
-            await _mydb.OperationLog.AddAsync(model);
-            await _mydb.SaveChangesAsync();
-        }
     }
 }

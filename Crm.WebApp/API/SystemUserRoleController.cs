@@ -117,7 +117,7 @@ namespace Crm.WebApp.API
                     //获取角色权限对应的菜单ID
                     List<Guid> list = info.MenuIds.Split(',').Select(a => Guid.Parse(a)).ToList();
                     //筛选指定菜单ID的数据
-                    var menuList = _sysMenu.GetList().Where(a => list.Contains(a.Id)).ToList();
+                    var menuList = _sysMenu.SelectWhere(a => list.Contains(a.Id)).ToList();
                     //返回树组件实体模型
                     var reslist = RecursionTree.LayuiTreeList(menuList, Guid.Empty);
                     return Success(reslist);

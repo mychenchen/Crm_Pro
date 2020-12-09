@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,10 @@ namespace Crm.Service.GatewayService
     /// <summary>
     /// 热点轮播
     /// </summary>
-    public class HotSpotService : IHotSpotService
+    public class HotSpotService : BaseServiceRepository<HotSpotEntity>, IHotSpotService
     {
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        protected readonly MyDbContext _mydb;
-
-        public HotSpotService(MyDbContext mydb)
+        public HotSpotService(MyDbContext mydb) : base(mydb)
         {
-            _mydb = mydb;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public List<HotSpotEntity> GetList()
-        {
-            return _mydb.HotSpot.ToList();
         }
 
         /// <summary>
@@ -41,7 +27,7 @@ namespace Crm.Service.GatewayService
         /// <returns></returns>
         public List<HotSpotEntity> GetPageList(string title, int page, int rows, ref int count)
         {
-            var list = _mydb.HotSpot.Where(a => a.IsDelete == 0);
+            var list = myDbContext.HotSpot.Where(a => a.IsDelete == 0);
             if (!string.IsNullOrEmpty(title))
             {
                 list = list.Where(a => a.ImgTitle.Contains(title));
@@ -50,58 +36,6 @@ namespace Crm.Service.GatewayService
                 .Skip((page - 1) * rows).Take(rows).ToList();
             count = list.Count();
             return data;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public HotSpotEntity GetModel(Guid gid)
-        {
-            return _mydb.HotSpot.AsNoTracking().FirstOrDefault(a => a.Id == gid);
-        }
-
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="model"></param>
-        public void AddUpdateModel(HotSpotEntity model)
-        {
-            if (model.Id == Guid.Empty)
-            {
-                model.Id = Guid.NewGuid();
-                model.CreateTime = DateTime.Now;
-                _mydb.HotSpot.Add(model);
-            }
-            else
-            {
-                _mydb.Update(model);
-            }
-            _mydb.SaveChanges();
-        }
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="isDelete">true 真删除 false 假删除</param>
-        public bool Delete(Guid gid, bool isDelete = false)
-        {
-            var model = GetModel(gid);
-            if (model == null)
-                return false;
-
-            if (isDelete)
-            {
-                _mydb.HotSpot.Remove(model);
-            }
-            else
-            {
-                model.IsDelete = 1;
-                _mydb.HotSpot.Update(model);
-            }
-            _mydb.SaveChanges();
-            return true;
         }
 
     }

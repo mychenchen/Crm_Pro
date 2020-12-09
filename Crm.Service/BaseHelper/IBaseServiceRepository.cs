@@ -110,13 +110,13 @@ namespace Crm.Service.BaseHelper
         /// 
         /// </summary>
         /// <typeparam name="S"></typeparam>
-        /// <param name="pageSize">条数</param>
         /// <param name="pageIndex">页码</param>
+        /// <param name="pageSize">条数</param>
         /// <param name="whereLambda">条件</param>
         /// <param name="orderByLambda">排序</param>
         /// <param name="isAsc">是否正序</param>
         /// <returns></returns>
-        ServicePageResult<T> SelectPage<S>(int pageSize, int pageIndex, Expression<Func<T, bool>> whereLambda, Expression<Func<T, S>> orderByLambda, bool isAsc);
+        ServicePageResult<T> SelectPage<S>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda, Expression<Func<T, S>> orderByLambda, bool isAsc);
 
         #region 异步方法
 

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Crm.WebApp.API
 {
@@ -67,7 +68,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _menu.GetListByPid(pid);
+                var data = _menu.SelectWhere(a => a.IsDelete == 0 && a.ParentGid == pid).OrderBy(a => a.SortNum).ToList(); ;
                 var list = _mapper.Map<List<SystemMenuMapper>>(data);
 
                 return Success(list);
@@ -89,7 +90,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _menu.GetModel(gid);
+                var data = _menu.GetEntity(a => a.Id == gid);
                 var info = _mapper.Map<SystemMenuMapper>(data);
 
                 return Success(info);
@@ -114,26 +115,27 @@ namespace Crm.WebApp.API
             try
             {
                 //判断排序是否重复
-                if (_menu.VerifySortNum(model.Id, model.ParentGid, model.SortNum))
+                if (_menu.IsExist(a => a.Id != model.Id && a.ParentGid == model.ParentGid && a.SortNum == model.SortNum))
                 {
                     return Error("排序已存在,请更换");
                 }
 
                 var saveEntity = _mapper.Map<SystemMenuEntity>(model);
-                var entity = _menu.GetModel(saveEntity.Id);
+                var entity = _menu.GetEntity(a => a.Id == saveEntity.Id);
                 if (entity != null)
                 {
                     saveEntity.CreateTime = entity.CreateTime;
                     saveEntity.IsDelete = entity.IsDelete;
                     optEvent = "修改";
+                    _menu.Update(saveEntity);
                 }
                 else
                 {
-                    saveEntity.CreateTime = DateTime.Now; ;
+                    saveEntity.CreateTime = DateTime.Now;
+                    saveEntity.Id = Guid.NewGuid();
+                    saveEntity.IsDelete = 0;
+                    _menu.Insert(saveEntity);
                 }
-
-                _menu.AddUpdateModel(saveEntity);
-
                 return Success();
             }
             catch (Exception ex)
@@ -155,12 +157,14 @@ namespace Crm.WebApp.API
         /// <param name="gid"></param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject DeleteModel(string gid)
+        public ResultObject DeleteModel(Guid gid)
         {
             string errStr = "成功";
             try
             {
-                _menu.Delete(Guid.Parse(gid));
+                var info = _menu.GetEntity(a => a.Id == gid);
+                info.IsDelete = 1;
+                _menu.Delete(info);
                 return Success();
             }
             catch (Exception ex)
@@ -189,11 +193,20 @@ namespace Crm.WebApp.API
             string errStr = "成功";
             try
             {
-                var flag = _menu.UpdateSortNum(id, pid, sortNum);
-                if (flag)
+                var model_1 = _menu.GetEntity(a => a.Id == id);
+                var model_2 = _menu.GetEntity(a => a.IsDelete == 0 && a.ParentGid == pid && a.SortNum == sortNum);
+
+                //交换sortNum
+                if (model_2 != null)
+                {
+                    model_2.SortNum = model_1.SortNum;
+                    model_1.SortNum = sortNum;
+
+                    _menu.Update(model_1);
+                    _menu.Update(model_2);
+                }
+
                     return Success();
-                else
-                    return Error("修改失败");
             }
             catch (Exception ex)
             {

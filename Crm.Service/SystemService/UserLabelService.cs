@@ -1,7 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
-using Microsoft.EntityFrameworkCore;
-using System;
+using Crm.Service.BaseHelper;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,25 +9,10 @@ namespace Crm.Service.SystemService
     /// <summary>
     /// 用户标签
     /// </summary>
-    public class UserLabelService : IUserLabelService
+    public class UserLabelService : BaseServiceRepository<UserLabel>, IUserLabelService
     {
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        protected readonly MyDbContext _mydb;
-
-        public UserLabelService(MyDbContext mydb)
+        public UserLabelService(MyDbContext mydb) : base(mydb)
         {
-            _mydb = mydb;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public List<UserLabel> GetList()
-        {
-            return _mydb.UserLabel.ToList();
         }
 
         /// <summary>
@@ -41,7 +25,7 @@ namespace Crm.Service.SystemService
         /// <returns></returns>
         public List<UserLabel> GetPageList(string name, int page, int rows, ref int count)
         {
-            var list = _mydb.UserLabel.Where(a => a.IsDelete == 0);
+            var list = myDbContext.UserLabel.Where(a => a.IsDelete == 0);
 
             if (!string.IsNullOrEmpty(name))
             {
@@ -51,54 +35,6 @@ namespace Crm.Service.SystemService
                 .Skip((page - 1) * rows).Take(rows).ToList();
             count = list.Count();
             return data;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public UserLabel GetModel(Guid gid)
-        {
-            return _mydb.UserLabel.AsNoTracking().FirstOrDefault(a => a.Id == gid);
-        }
-
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="model"></param>
-        public void AddUpdateModel(UserLabel model)
-        {
-            if (model.Id == Guid.Empty)
-            {
-                model.Id = Guid.NewGuid();
-                _mydb.UserLabel.Add(model);
-            }
-            else
-            {
-                _mydb.UserLabel.Update(model);
-            }
-            _mydb.SaveChanges();
-        }
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="isDelete">true 真删除 false 假删除</param>
-        public bool Delete(Guid gid, bool isDelete = false)
-        {
-            var model = GetModel(gid);
-            if (model == null)
-                return false;
-            if (isDelete)
-                _mydb.UserLabel.Remove(model);
-            else
-            {
-                model.IsDelete = 1;
-                _mydb.UserLabel.Update(model);
-            }
-            _mydb.SaveChanges();
-            return true;
         }
 
     }

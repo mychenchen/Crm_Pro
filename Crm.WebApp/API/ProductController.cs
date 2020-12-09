@@ -67,7 +67,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _product.GetModel(gid);
+                var data = _product.GetEntity(a => a.Id == gid);
                 var info = _mapper.Map<ProductMapper>(data);
 
                 return Success(info);
@@ -92,23 +92,30 @@ namespace Crm.WebApp.API
             try
             {
                 var saveEntity = _mapper.Map<ProductEntity>(model);
-                var entity = _product.GetModel(saveEntity.Id);
+                var entity = _product.GetEntity(a => a.Id == saveEntity.Id);
                 if (entity != null)
                 {
                     saveEntity.CreateTime = entity.CreateTime;
                     saveEntity.IsDelete = entity.IsDelete;
+                    saveEntity.FloorPrice = entity.Price;
+                    saveEntity.HotNum = entity.HotNum;
+                    saveEntity.OnShelfStatus = entity.OnShelfStatus;
+                    saveEntity.IssueDateTime = entity.IssueDateTime;
+
                     optEvent = "修改";
+                    _product.Update(saveEntity);
                 }
                 else
                 {
+                    model.Id = Guid.NewGuid();
                     model.CreateTime = DateTime.Now;
                     model.FloorPrice = model.Price;
                     model.HotNum = 0;
                     model.OnShelfStatus = 0;
                     model.IssueDateTime = DateTime.Now;
+                    _product.Insert(saveEntity);
                 }
 
-                _product.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
@@ -129,12 +136,14 @@ namespace Crm.WebApp.API
         /// <param name="gid"></param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject DeleteModel(string gid)
+        public ResultObject DeleteModel(Guid gid)
         {
             var errStr = "成功";
             try
             {
-                _product.Delete(Guid.Parse(gid));
+                var info = _product.GetEntity(a => a.Id == gid);
+                info.IsDelete = 1;
+                _product.Update(info);
                 return Success();
             }
             catch (Exception ex)
@@ -156,12 +165,15 @@ namespace Crm.WebApp.API
         /// <param name="onShelf"> 1上架 2下架</param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject ProductIssue(string gid, int onShelf)
+        public ResultObject ProductIssue(Guid gid, int onShelf)
         {
             var errStr = "成功";
             try
             {
-                _product.UpdateOnShelf(Guid.Parse(gid), onShelf);
+                var info = _product.GetEntity(a => a.Id == gid);
+                info.OnShelfStatus = onShelf;
+                info.IssueDateTime = DateTime.Now;
+                _product.Update(info);
                 return Success();
             }
             catch (Exception ex)

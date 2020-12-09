@@ -21,14 +21,17 @@ namespace Crm.WebApp.API
     [Route("api/[controller]/[action]")]
     public class ProductTypeController : ApiBaseController
     {
-        protected readonly IProductTypeService _product;
+        protected readonly IProductTypeService _productType;
+        protected readonly IProductService _product;
         public ProductTypeController(
             IOptions<CmsAppSettingModel> configStr,
             IMapper mapper,
-            IProductTypeService notice
+            IProductService product,
+            IProductTypeService productType
             ) : base(configStr, mapper)
         {
-            _product = notice;
+            _product = product;
+            _productType = productType;
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _product.GetList();
+                var data = _productType.Select();
                 var list = RecursionTree.LayuiTreeList(data, Guid.Empty);
 
                 return Success(list);
@@ -64,7 +67,7 @@ namespace Crm.WebApp.API
             try
             {
                 var count = 0;
-                var data = _product.GetPageList(title, page, limit, ref count);
+                var data = _productType.GetPageList(title, page, limit, ref count);
                 var list = _mapper.Map<List<ProductTypeMapper>>(data);
 
                 return SuccessPage(page, limit, count, list);
@@ -86,7 +89,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _product.GetListByPid(pid);
+                var data = _productType.SelectWhere(a => a.PID == pid);
                 var list = _mapper.Map<List<ProductTypeMapper>>(data);
 
                 return Success(list);
@@ -108,7 +111,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _product.GetModel(gid);
+                var data = _productType.GetEntity(a => a.Id == gid);
                 var info = _mapper.Map<ProductTypeMapper>(data);
 
                 return Success(info);
@@ -136,9 +139,16 @@ namespace Crm.WebApp.API
                 if (saveEntity.Id != Guid.Empty)
                 {
                     optEvent = "修改";
+                    _productType.Update(saveEntity);
+                }
+                else
+                {
+                    saveEntity.Id = Guid.NewGuid();
+                    saveEntity.IsDelete = 0;
+                    saveEntity.CreateTime = DateTime.Now;
+                    _productType.Insert(saveEntity);
                 }
 
-                _product.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
@@ -164,8 +174,17 @@ namespace Crm.WebApp.API
             var errStr = "成功";
             try
             {
-                _product.Delete(gid, true);
-                return Success();
+                var pro = _product.GetEntity(a => a.ProductTypeId == gid && a.IsDelete == 0);
+                if (pro != null)
+                {
+                    return Error("标签已使用,请先删除");
+                }
+                else
+                {
+                    var info = _productType.GetEntity(a => a.Id == gid);
+                    _productType.Delete(info);
+                    return Success();
+                }
             }
             catch (Exception ex)
             {

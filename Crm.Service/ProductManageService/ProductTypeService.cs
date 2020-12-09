@@ -1,5 +1,6 @@
 ﻿using Crm.Repository.DB;
 using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,25 +11,10 @@ namespace Crm.Service.ProductManageService
     /// <summary>
     /// 产品分类(课程分类)
     /// </summary>
-    public class ProductTypeService : IProductTypeService
+    public class ProductTypeService : BaseServiceRepository<ProductTypeEntity>, IProductTypeService
     {
-        /// <summary>
-        /// 数据库
-        /// </summary>
-        protected readonly MyDbContext _mydb;
-
-        public ProductTypeService(MyDbContext mydb)
+        public ProductTypeService(MyDbContext mydb) : base(mydb)
         {
-            _mydb = mydb;
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public List<ProductTypeEntity> GetList()
-        {
-            return _mydb.ProductType.ToList();
         }
 
         /// <summary>
@@ -41,7 +27,7 @@ namespace Crm.Service.ProductManageService
         /// <returns></returns>
         public List<ProductTypeEntity> GetPageList(string title, int page, int rows, ref int count)
         {
-            var list = _mydb.ProductType.Where(a =>a.PID == Guid.Empty && a.IsDelete == 0);
+            var list = myDbContext.ProductType.Where(a => a.PID == Guid.Empty && a.IsDelete == 0);
             if (!string.IsNullOrEmpty(title))
             {
                 title = title.ToUpper();
@@ -53,66 +39,5 @@ namespace Crm.Service.ProductManageService
             return data;
         }
 
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public ProductTypeEntity GetModel(Guid gid)
-        {
-            return _mydb.ProductType.AsNoTracking().FirstOrDefault(a => a.Id == gid);
-        }
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        public List<ProductTypeEntity> GetListByPid(Guid pid)
-        {
-            return _mydb.ProductType.Where(a => a.PID == pid).ToList();
-        }
-
-        /// <summary>
-        /// 添加修改
-        /// </summary>
-        /// <param name="model"></param>
-        public void AddUpdateModel(ProductTypeEntity model)
-        {
-            model.CreateTime = DateTime.Now;
-            model.IsDelete = 0;
-            if (model.Id == Guid.Empty)
-            {
-                model.Id = Guid.NewGuid();
-                _mydb.ProductType.Add(model);
-            }
-            else
-            {
-                _mydb.Update(model);
-            }
-            _mydb.SaveChanges();
-        }
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="isDelete">true 真删除 false 假删除</param>
-        public bool Delete(Guid gid, bool isDelete = false)
-        {
-            var model = GetModel(gid);
-            if (model == null)
-                return false;
-
-            if (isDelete)
-            {
-                _mydb.ProductType.Remove(model);
-            }
-            else
-            {
-                model.IsDelete = 1;
-                _mydb.ProductType.Update(model);
-            }
-            _mydb.SaveChanges();
-            return true;
-        }
     }
 }

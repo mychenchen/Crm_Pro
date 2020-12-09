@@ -76,10 +76,10 @@ namespace Crm.Service.BaseHelper
         /// 删除
         /// </summary>
         /// <param name="t"></param>
+        /// <param name="isDelete">true 真删除 false 假删除</param>
         /// <returns></returns>
         public bool Delete(T entity)
         {
-            LogHelper.Error("删除异常 \n " + "测试一下");
             try
             {
                 myDbContext.Set<T>().Remove(entity);
@@ -97,11 +97,13 @@ namespace Crm.Service.BaseHelper
         /// 删除
         /// </summary>
         /// <param name="t"></param>
+        /// <param name="isDelete">true 真删除 false 假删除</param>
         /// <returns></returns>
         public bool Delete(Expression<Func<T, bool>> whereLambda)
         {
             try
             {
+                LogHelper.Error("删除异常 \n " + "测试一下");
                 var list = myDbContext.Set<T>().Where(whereLambda);
                 if (list.Any())
                 {
@@ -188,13 +190,13 @@ namespace Crm.Service.BaseHelper
         /// 分页查询
         /// </summary>
         /// <typeparam name="S"></typeparam>
-        /// <param name="pageSize">条数</param>
         /// <param name="pageIndex">页码</param>
+        /// <param name="pageSize">条数</param>
         /// <param name="whereLambda">条件</param>
         /// <param name="orderByLambda">排序</param>
         /// <param name="isAsc">是否正序 true-正序 false-反序</param>
         /// <returns></returns>
-        public ServicePageResult<T> SelectPage<S>(int pageSize, int pageIndex, Expression<Func<T, bool>> whereLambda, Expression<Func<T, S>> orderByLambda, bool isAsc)
+        public ServicePageResult<T> SelectPage<S>(int pageIndex, int pageSize, Expression<Func<T, bool>> whereLambda, Expression<Func<T, S>> orderByLambda, bool isAsc)
         {
             ServicePageResult<T> res = new ServicePageResult<T>
             {

@@ -58,7 +58,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var user = _student.UserLoginModel(login.account);
+                var user = _student.GetEntity(a => a.LoginName == login.account);
                 if (user == null)
                 {
                     return Error("账号不存在");
@@ -200,7 +200,7 @@ namespace Crm.WebApp.API
                 UserName = userName
             };
 
-            _log.SaveLog(model);
+            _log.Insert(model);
         }
 
     }

@@ -1,20 +1,14 @@
 ﻿using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Crm.Service.SystemService
 {
     /// <summary>
     /// 用户操作日志
     /// </summary>
-    public interface IOperationLogService
+    public interface IOperationLogService : IBaseServiceRepository<OperationLogEntity>
     {
-        /// <summary>
-        /// 查询列表
-        /// </summary>
-        /// <returns></returns>
-        List<OperationLogEntity> GetList();
-
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -26,16 +20,5 @@ namespace Crm.Service.SystemService
         /// <returns></returns>
         List<OperationLogEntity> GetPageList(string optEvent, string controllerStr, int page, int rows, ref int count);
 
-        /// <summary>
-        /// 保存日志
-        /// </summary>
-        /// <param name="model"></param>
-        void SaveLog(OperationLogEntity model);
-
-        /// <summary>
-        /// 保存日志
-        /// </summary>
-        /// <param name="model"></param>
-        Task SaveLogAsync(OperationLogEntity model);
     }
 }

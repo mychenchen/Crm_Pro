@@ -18,13 +18,16 @@ namespace Crm.WebApp.API
     public class UserLabelController : ApiBaseController
     {
         protected readonly IUserLabelService _label;
+        protected readonly IUserService _user;
         public UserLabelController(
             IOptions<CmsAppSettingModel> configStr,
-            IMapper mapper, 
-            IUserLabelService label
+            IMapper mapper,
+            IUserLabelService label,
+            IUserService user
             ) : base(configStr, mapper)
         {
             _label = label;
+            _user = user;
         }
 
         #region 后台服务接口
@@ -63,7 +66,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _label.GetModel(gid);
+                var data = _label.GetEntity(a => a.Id == gid);
 
                 return Success(data);
             }
@@ -86,15 +89,21 @@ namespace Crm.WebApp.API
             var errStr = "成功";
             try
             {
-                var entity = _label.GetModel(model.Id);
+                var entity = _label.GetEntity(a => a.Id == model.Id);
                 if (entity != null)
                 {
                     model.CreateTime = entity.CreateTime;
                     model.IsDelete = 0;
                     optEvent = "修改";
+                    _label.Update(model);
+                }
+                else
+                {
+                    model.Id = Guid.NewGuid();
+                    model.CreateTime = DateTime.Now;
+                    _label.Insert(model);
                 }
 
-                _label.AddUpdateModel(model);
                 return Success();
             }
             catch (Exception ex)
@@ -120,7 +129,13 @@ namespace Crm.WebApp.API
             var errStr = "成功";
             try
             {
-                _label.Delete(gid, true);
+                var user = _user.GetEntity(a => a.LabelId == gid);
+                if (user != null)
+                {
+                    return Error("标签已使用,请先删除使用");
+                }
+                var info = _label.GetEntity(a => a.Id == gid);
+                _label.Delete(info);
                 return Success();
             }
             catch (Exception ex)

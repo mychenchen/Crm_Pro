@@ -55,8 +55,8 @@ namespace Crm.WebApp.Infrastructure
             {
                 string key = "all_system_menu";
                 RedisHelperNetCore.Default.KeyDelete(key);
-                var data = _sysMenu.GetList();
-                var list = _mapper.Map<List<SystemMenuMapper>>(data);               
+                var data = _sysMenu.SelectWhere(a => a.IsDelete == 0);
+                var list = _mapper.Map<List<SystemMenuMapper>>(data);
                 RedisHelperNetCore.Default.SetStringKey(key, list, TimeSpan.FromDays(7));
                 return list;
             }

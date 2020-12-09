@@ -178,10 +178,7 @@ namespace Crm.WebApp
 
             #endregion
 
-            app.UseMvc();
-
-
-            //开启后,可直接访问静态页面,静态文件
+            #region 开启后,可直接访问静态页面,静态文件
             app.UseStaticFiles();
             string upl = Directory.GetCurrentDirectory() + @"/uploads";
             if (!Directory.Exists(upl))
@@ -198,6 +195,9 @@ namespace Crm.WebApp
             });
 
             app.UseMvcWithDefaultRoute();
+            #endregion
+
+            #region Swagger设置
 
             app.UseSwagger();
             app.UseSwaggerUI(c =>
@@ -205,7 +205,7 @@ namespace Crm.WebApp
                 c.RoutePrefix = "swagger";
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "ApiHelp V1");
             });
-
+            #endregion
 
             app.UseCors("allow_all").UseSignalR(routes =>
             {
@@ -226,6 +226,7 @@ namespace Crm.WebApp
             var myContext = DI.GetService<MyDbContext>();
             DefaultDataSeed.SeedAsync(myContext).Wait();
 
+            app.UseMvc();
 
         }
     }

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Crm.WebApp.API
 {
@@ -67,7 +68,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _tabMenu.GetListByPid(pid);
+                var data = _tabMenu.SelectWhere(a => a.IsDelete == 0 && a.ParentGid == pid).OrderBy(a => a.SortNum).ToList();
                 var list = _mapper.Map<List<TabMenuMapper>>(data);
 
                 return Success(list);
@@ -89,7 +90,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _tabMenu.GetModel(gid);
+                var data = _tabMenu.GetEntity(a => a.Id == gid);
                 var info = _mapper.Map<TabMenuMapper>(data);
 
                 return Success(info);
@@ -114,15 +115,22 @@ namespace Crm.WebApp.API
             try
             {
                 var saveEntity = _mapper.Map<TabMenuEntity>(model);
-                var entity = _tabMenu.GetModel(saveEntity.Id);
+                var entity = _tabMenu.GetEntity(a => a.Id == saveEntity.Id);
                 if (entity != null)
                 {
                     saveEntity.CreateTime = entity.CreateTime;
                     saveEntity.IsDelete = entity.IsDelete;
                     optEvent = "修改";
+                    _tabMenu.Update(saveEntity);
+                }
+                else
+                {
+                    saveEntity.Id = Guid.NewGuid();
+                    saveEntity.IsDelete = 0;
+                    saveEntity.CreateTime = DateTime.Now;
+                    _tabMenu.Insert(saveEntity);
                 }
 
-                _tabMenu.AddUpdateModel(saveEntity);
                 return Success();
             }
             catch (Exception ex)
@@ -143,12 +151,14 @@ namespace Crm.WebApp.API
         /// <param name="gid"></param>
         /// <returns></returns>
         [HttpGet]
-        public ResultObject DeleteModel(string gid)
+        public ResultObject DeleteModel(Guid gid)
         {
             var errStr = "成功";
             try
             {
-                _tabMenu.Delete(Guid.Parse(gid));
+                var info = _tabMenu.GetEntity(a => a.Id == gid);
+                info.IsDelete = 1;
+                _tabMenu.Delete(info);
                 return Success();
             }
             catch (Exception ex)
@@ -176,7 +186,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _tabMenu.GetList();
+                var data = _tabMenu.Select();
                 var list = _mapper.Map<List<TabMenuMapper>>(data);
 
                 return Success(list);

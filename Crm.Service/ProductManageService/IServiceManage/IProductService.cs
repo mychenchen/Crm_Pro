@@ -1,4 +1,5 @@
 ﻿using Crm.Repository.TbEntity;
+using Crm.Service.BaseHelper;
 using System;
 using System.Collections.Generic;
 
@@ -7,14 +8,8 @@ namespace Crm.Service.ProductManageService
     /// <summary>
     /// 产品(课程)
     /// </summary>
-    public interface IProductService
+    public interface IProductService : IBaseServiceRepository<ProductEntity>
     {
-        /// <summary>
-        /// 查询列表
-        /// </summary>
-        /// <returns></returns>
-        List<ProductEntity> GetList();
-
         /// <summary>
         /// 分页查询
         /// </summary>
@@ -24,32 +19,6 @@ namespace Crm.Service.ProductManageService
         /// <param name="count"></param>
         /// <returns></returns>
         List<ProductEntity> GetPageList(string title, int page, int rows, ref int count);
-
-        /// <summary>
-        /// 查询
-        /// </summary>
-        /// <param name="model"></param>
-        ProductEntity GetModel(Guid gid);
-
-        /// <summary>
-        /// 添加
-        /// </summary>
-        /// <param name="model"></param>
-        void AddUpdateModel(ProductEntity model);
-
-        /// <summary>
-        /// 删除
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="isDelete">true 真删除 false 假删除</param>
-        bool Delete(Guid gid, bool isDelete = false);
-
-        /// <summary>
-        /// 产品上架/下架
-        /// </summary>
-        /// <param name="gid"></param>
-        /// <param name="onShelfStatus"></param>
-        bool UpdateOnShelf(Guid gid, int onShelfStatus);
 
         #region 产品视频详情
 

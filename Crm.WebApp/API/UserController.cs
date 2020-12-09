@@ -146,7 +146,9 @@ namespace Crm.WebApp.API
             string errStr = "成功";
             try
             {
-                _user.Delete(a => a.Id == gid);
+                var info = _user.GetEntity(a => a.Id == gid);
+                info.IsDelete = 1;
+                _user.Update(info);
                 return Success();
             }
             catch (Exception ex)

@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace Crm.WebApp.API
 {
     /// <summary>
-    /// 系统用户管理
+    /// 学生用户管理
     /// </summary>
     [EnableCors("allow_all")]
     [Route("api/[controller]/[action]")]
@@ -67,7 +67,7 @@ namespace Crm.WebApp.API
         {
             try
             {
-                var data = _student.GetModel(gid);
+                var data = _student.GetEntity(a => a.Id == gid);
                 var info = _mapper.Map<UserStudentMapper>(data);
 
                 return Success(info);
@@ -92,20 +92,21 @@ namespace Crm.WebApp.API
             var userInfo = GetLoginUserDetail();
             try
             {
-                var entity = _mapper.Map<UserStudentEntity>(model);
-                if (model.Id != Guid.Empty)
+                var dbInfo = _student.GetEntity(a => a.Id == model.Id);
+                if (dbInfo == null)
                 {
-                    var dbInfo = _student.GetModel(model.Id);
-                    entity.Salt = dbInfo.Salt;
-                    entity.CreateTime = dbInfo.CreateTime;
-                    entity.IsDelete = 0;
-                    if (entity.LoginPwd != dbInfo.LoginPwd)
-                    {
-                        entity.LoginPwd = (entity.LoginPwd + entity.Salt).ToMD5();
-                    }
+                    return Error("信息不存在");
                 }
+                var entity = _mapper.Map<UserStudentEntity>(model);
+                entity.Salt = dbInfo.Salt;
+                entity.CreateTime = dbInfo.CreateTime;
+                entity.IsDelete = 0;
+                if (entity.LoginPwd != dbInfo.LoginPwd)
+                {
+                    entity.LoginPwd = (entity.LoginPwd + entity.Salt).ToMD5();
+                }
+                _student.Update(entity);
 
-                _student.AddUpdateModel(entity);
                 return Success();
             }
             catch (Exception ex)
@@ -131,7 +132,9 @@ namespace Crm.WebApp.API
             string errStr = "成功";
             try
             {
-                _student.Delete(gid);
+                var info = _student.GetEntity(a => a.Id == gid);
+                info.IsDelete = 1;
+                _student.Update(info);
                 return Success();
             }
             catch (Exception ex)
