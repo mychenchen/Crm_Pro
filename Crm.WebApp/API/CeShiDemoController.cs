@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
 using Currency.Quartz;
@@ -17,17 +18,21 @@ namespace Crm.WebApp.API
     [EnableCors("allow_all")]
     public class CeShiDemoController : ApiBaseController
     {
+        protected readonly IUserService _user;
+
         /// <summary>
         /// 用户登陆接口
         /// </summary>
         /// <param name="configStr"></param>
         /// <param name="mapper"></param>
+        /// <param name="user"></param>
         public CeShiDemoController(
             IOptions<CmsAppSettingModel> configStr,
-            IMapper mapper
+            IMapper mapper,
+            IUserService user
             ) : base(configStr, mapper)
         {
-
+            _user = user;
         }
 
         /// <summary>
@@ -39,6 +44,7 @@ namespace Crm.WebApp.API
         {
             try
             {
+                _user.CommQuery("update [user] set NickName = NickName +'_1' where LoginName = 'cc'");
                 return Success("ok");
             }
             catch (Exception ex)

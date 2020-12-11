@@ -11,6 +11,12 @@ namespace Crm.Service.BaseHelper
     /// <typeparam name="T"></typeparam>
     public interface IBaseServiceRepository<T> where T : class, new()
     {
+        /// <summary>
+        /// 扩展方法，自带方法不能满足的时候可以添加新方法
+        /// </summary>
+        /// <returns></returns>
+        int CommQuery(string json);
+
         #region 增
 
         /// <summary>

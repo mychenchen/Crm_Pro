@@ -20,6 +20,16 @@ namespace Crm.Service.BaseHelper
         {
             this.myDbContext = m;
         }
+
+        /// <summary>
+        /// 扩展方法，自带方法不能满足的时候可以添加新方法
+        /// </summary>
+        /// <returns></returns>
+        public int CommQuery(string json)
+        {
+            return myDbContext.Database.ExecuteSqlCommand(json);
+        }
+
         #region 增
 
         /// <summary>
@@ -146,7 +156,6 @@ namespace Crm.Service.BaseHelper
         #endregion
 
         #region 查
-
         /// <summary>
         /// 判断是否存在符合条件的结果
         /// </summary>
@@ -204,7 +213,7 @@ namespace Crm.Service.BaseHelper
                 PageSize = pageSize
             };
             res.TotalSize = myDbContext.Set<T>().Where(whereLambda).Count();
-
+            
             if (isAsc)
             {
                 var entities = myDbContext.Set<T>().Where(whereLambda)
