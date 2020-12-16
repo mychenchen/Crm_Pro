@@ -39,11 +39,18 @@
   <script src="../../../layui/layui.js"></script>
   <script src="../../../js/jquery.min.js"></script>
   <script src="../../../js/main.js"></script>
+  <script src="../../js/pinying/pinyin_dict_notone.js"></script>
+  <script src="../../js/pinying/pinyinUtil.js"></script>
 
   <script type="text/javascript">
     var form = null;
     layui.use(['form', 'layedit'], function () {
       form = layui.form;
+      $("input[name=TypeName]").bind('input', function (e) {
+        var py = pinyinUtil.getFirstLetter(e.delegateTarget.value);
+        $("input[name=TypeCode]").val(py);
+      });
+
 
       var info = localStorage.detail;
       if (!IsNullOrEmpty(info)) {
@@ -66,6 +73,37 @@
     //获取页面的值
     function getNowDetailJson() {
       return form.val('example');
+    }
+
+    function getPinyin() {
+      var value = document.getElementById('test').value;
+      var type = document.querySelector('[name="pinyin_type"]:checked').value;
+      var polyphone = document.querySelector('[name="polyphone"]').checked;
+      var result = '';
+      if (value) {
+        switch (type) {
+          case '0':
+            result = pinyinUtil.getPinyin(value, ' ', true, polyphone);
+            break;
+          case '1':
+            result = pinyinUtil.getPinyin(value, ' ', false, polyphone);
+            break;
+          case '2':
+            result = pinyinUtil.getFirstLetter(value, polyphone);
+            break;
+          default:
+            break;
+        }
+      }
+      var html = result;
+      if (result instanceof Array) {
+        html = '<ol>';
+        result.forEach(function (val) {
+          html += '<li>' + val + '</li>';
+        });
+        html += '</ol>';
+      }
+      document.getElementById('result').innerHTML = html;
     }
   </script>
 

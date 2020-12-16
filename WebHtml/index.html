@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>首页</title>
+  <!-- 引入element样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+
+  <style>
+    .time {
+      font-size: 13px;
+      color: #999;
+    }
+
+    .bottom {
+      margin-top: 13px;
+      line-height: 12px;
+    }
+
+    .button {
+      padding: 0;
+      float: right;
+    }
+
+    .image {
+      width: 100%;
+      display: block;
+    }
+
+    .clearfix:before,
+    .clearfix:after {
+      display: table;
+      content: "";
+    }
+
+    .clearfix:after {
+      clear: both
+    }
+  </style>
+</head>
+
+<body>
+
+  <el-container id="app">
+    <el-header height="90px">
+      <el-row :gutter="20">
+        <el-col :span="5">
+          <el-image style="height: 100px" :src="logoImg"></el-image>
+        </el-col>
+        <el-col :span="10">
+          <div style="margin-top: 30px;">
+            <el-input placeholder="请输入内容" v-model="searchName" class="input-with-select">
+              <el-button slot="append" icon="el-icon-search" @click="searchContest()"></el-button>
+            </el-input>
+          </div>
+        </el-col>
+        <el-col :span="6" align="middle">
+          <el-link :underline="false" style="margin-top: 20px;" v-if="isLogin">
+            <el-avatar :size="50" :src="circleUrl"></el-avatar>
+          </el-link>
+          <el-link type="primary" style="margin-top: 35px;font-size: 18px;" v-else>
+            登陆
+          </el-link>
+        </el-col>
+      </el-row>
+    </el-header>
+    <el-main>
+      <template>
+        <el-carousel align="middle" arrow="always">
+          <el-carousel-item class="lunbo-box-item" v-for="(item,index) in img_list" :key="index">
+            <img :src="item.img" class="lunbotu" style="height: inherit">
+          </el-carousel-item>
+        </el-carousel>
+      </template>
+
+      <template>
+        <el-divider>初级课程</el-divider>
+        <el-row>
+          <el-col :span="4" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
+            <el-card :body-style="{ padding: '0px' }">
+              <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png"
+                class="image">
+              <div style="padding: 14px;">
+                <span>好吃的汉堡</span>
+                <div class="bottom clearfix">
+                  <time class="time">{{ currentDate }}</time>
+                  <el-button type="text" class="button">操作按钮</el-button>
+                </div>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+      </template>
+
+      <el-divider></el-divider>
+    </el-main>
+
+    <el-footer height="30%">
+      底部
+    </el-footer>
+  </el-container>
+  <!-- 引入VUE组件库 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- 引入element组件库 -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script>
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        a: "你好呀",
+        isLogin: true,
+        circleUrl: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
+        searchName: "",
+        logoImg: "../src/images/logo_2.png",
+        activeName: 'indexTop',
+        currentDate: new Date(),
+        // 图片地址数组
+        img_list: [{
+            img: "../src/images/lunbo/1.jpg"
+          },
+          {
+            img: "../src/images/lunbo/2.jpg"
+          },
+          {
+            img: "../src/images/lunbo/3.jpg"
+          },
+          {
+            img: "../src/images/lunbo/4.jpg"
+          },
+          {
+            img: "../src/images/lunbo/5.jpg"
+          }
+        ],
+      },
+      methods: {
+        handleClick(tab, event) {
+          console.log(tab, event);
+        },
+        searchContest() {
+          console.log(this.searchName);
+        }
+      },
+      //初始化界面首先进来的
+      mounted() {
+
+      },
+      updated() {
+
+      }
+    })
+  </script>
+
+</body>
+
+</html>
