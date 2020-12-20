@@ -70,7 +70,7 @@
       <template>
         <el-carousel align="middle" arrow="always">
           <el-carousel-item class="lunbo-box-item" v-for="(item,index) in img_list" :key="index">
-            <img :src="item.img" class="lunbotu" style="height: inherit">
+            <img :src="urlImg+item.ImgPath" class="lunbotu" style="height: inherit">
           </el-carousel-item>
         </el-carousel>
       </template>
@@ -105,10 +105,15 @@
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <!-- 引入element组件库 -->
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+  </script>
   <script>
+
     var vm = new Vue({
       el: '#app',
       data: {
+        urlApi: "http://134.175.30.213:8011",
+        urlImg: "http://134.175.30.213:8011",
         a: "你好呀",
         isLogin: true,
         circleUrl: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png",
@@ -117,22 +122,23 @@
         activeName: 'indexTop',
         currentDate: new Date(),
         // 图片地址数组
-        img_list: [{
-            img: "../src/images/lunbo/1.jpg"
-          },
-          {
-            img: "../src/images/lunbo/2.jpg"
-          },
-          {
-            img: "../src/images/lunbo/3.jpg"
-          },
-          {
-            img: "../src/images/lunbo/4.jpg"
-          },
-          {
-            img: "../src/images/lunbo/5.jpg"
-          }
-        ],
+        img_list: [],
+        // img_list: [{
+        //   img: "../src/images/lunbo/1.jpg"
+        // },
+        // {
+        //   img: "../src/images/lunbo/2.jpg"
+        // },
+        // {
+        //   img: "../src/images/lunbo/3.jpg"
+        // },
+        // {
+        //   img: "../src/images/lunbo/4.jpg"
+        // },
+        // {
+        //   img: "../src/images/lunbo/5.jpg"
+        // }
+        // ],
       },
       methods: {
         handleClick(tab, event) {
@@ -140,16 +146,44 @@
         },
         searchContest() {
           console.log(this.searchName);
+        },
+        getImg: function () {
+          let that = this;
+          that.img_list = [];
+
+          $.ajax({
+            type: 'get',
+            url: that.urlApi + '/Api/HotSpot/GetData',
+            data: {
+              page: 1,
+              limit: 10,
+              title: ''
+            },
+            headers: { ToKenStr: '3ab9faa59f164f39a8471737069a9d44' },
+            success: function (res) {
+              res.code = 0
+              location.href = "";
+              console.log("res", res)
+              that.img_list = res.data.list;
+
+              console.log("img_list", that.img_list);
+            },
+            error: function () {
+
+            }
+          });
+
         }
       },
       //初始化界面首先进来的
       mounted() {
-
+        this.getImg();
       },
       updated() {
 
       }
-    })
+    });
+
   </script>
 
 </body>
