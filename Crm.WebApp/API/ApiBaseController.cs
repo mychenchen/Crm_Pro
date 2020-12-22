@@ -88,7 +88,7 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="key">键</param>
         /// <param name="value">值</param>
-        public void SetSession(string key, string value)
+        protected void SetSession(string key, string value)
         {
             HttpContext.Session.SetString(key, value);
         }
@@ -98,7 +98,7 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="key">键</param>
         /// <returns>返回对应的值</returns>
-        public string GetSession(string key)
+        protected string GetSession(string key)
         {
             var value = HttpContext.Session.GetString(key);
             if (string.IsNullOrEmpty(value))
@@ -265,7 +265,7 @@ namespace Crm.WebApp.API
         /// <param name="msg"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected ResultObject Error(ErrorCode code, string msg, object obj)
+        protected ResultObject Error(ErrorCode code, string msg, object obj = null)
         {
             ResultObject res = new ResultObject()
             {

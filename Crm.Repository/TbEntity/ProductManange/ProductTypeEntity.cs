@@ -11,7 +11,7 @@ namespace Crm.Repository.TbEntity
     public class ProductTypeEntity : BaseEntity
     {
         /// <summary>
-        /// 标题
+        /// 父ID
         /// </summary>
         [Required]
         public Guid PID { get; set; }
