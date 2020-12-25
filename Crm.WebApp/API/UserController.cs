@@ -101,6 +101,7 @@ namespace Crm.WebApp.API
                     return Error("登陆账号已存在,无法重复添加");
                 }
                 entity.UpdateTime = DateTime.Now;
+                entity.IsDelete = 0;
                 if (entity.Id == Guid.Empty)
                 {
                     entity.Salt = RandomCode.CreateAuthStr(6, false);
@@ -114,10 +115,12 @@ namespace Crm.WebApp.API
                     {
                         return Error("信息不存在,修改失败");
                     }
+                    entity.RoleId = info.RoleId;
+                    entity.Salt = info.Salt;
                     //密码修改
                     if (info.LoginPwd != entity.LoginPwd)
                     {
-                        entity.LoginPwd = (entity.LoginPwd + entity.Salt).ToMD5();
+                        entity.LoginPwd = (entity.LoginPwd + info.Salt).ToMD5();
                     }
                     _user.Update(entity);
                 }

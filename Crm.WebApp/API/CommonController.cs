@@ -6,6 +6,7 @@ using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Infrastructure;
 using Crm.WebApp.Models;
+using Currency.Common;
 using Currency.Common.LogManange;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
@@ -50,6 +51,39 @@ namespace Crm.WebApp.API
             _sysUser = sysUser;
             _sysMenu = sysMenu;
         }
+
+        #region 短信,微信
+
+        /// <summary>
+        /// 发送手机短信
+        /// </summary>
+        /// <param name="telephone"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public ResultObject SendTelephoneMsg(string telephone)
+        {
+            try
+            {
+                var codeNum = _redis.GetKey<int>($"code_{telephone}_Num");
+                if (codeNum == 0)
+                {
+                    var code = RandomCode.CreateAuthStr(4, true); ;
+                    _redis.SetStringKey($"code_{telephone}_Num", 1, TimeSpan.FromMinutes(4));
+                    _redis.SetStringKey($"code_{telephone}", code, TimeSpan.FromMinutes(5));
+                    return Success($"【在线教育】验证码:{code},该验证码仅用于身份验证,请勿泄露给他人使用");
+                }
+                else
+                {
+                    return Error("已发送验证码,请勿频繁获取验证码");
+                }
+            }
+            catch (Exception ex)
+            {
+                return Error(ex.Message);
+            }
+        }
+
+        #endregion
 
         #region 下拉框
 

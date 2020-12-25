@@ -116,6 +116,10 @@ namespace Crm.Repository.DB
         /// </summary>
         public DbSet<UserOrderEntity> UserOrder { get; set; }
 
+        /// <summary>
+        /// 学习任务
+        /// </summary>
+        public DbSet<UserStudyTaskEntity> UserStudyTask { get; set; }
         #endregion
 
     }

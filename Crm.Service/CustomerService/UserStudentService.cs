@@ -2,13 +2,10 @@
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
 using Crm.Service.BaseHelper;
-using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 
-namespace Crm.Service.SystemService
+namespace Crm.Service.CustomerService
 {
     /// <summary>
     /// 学员管理

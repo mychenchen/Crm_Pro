@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Crm.Service.ProductManageService
 {
@@ -41,9 +42,58 @@ namespace Crm.Service.ProductManageService
             return data;
         }
 
+        /// <summary>
+        /// 前台搜索查询
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="typeId"></param>
+        /// <param name="isMoney"></param>
+        /// <param name="page"></param>
+        /// <param name="rows"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public List<ProductEntity> WebAppGetPageList(string title, Guid typeId, int isMoney, int page, int rows, ref int count)
+        {
+            var list = myDbContext.Product.Where(a => a.IsDelete == 0 && a.OnShelfStatus == 1);
+            if (!string.IsNullOrEmpty(title))
+            {
+                list = list.Where(a => a.Title.Contains(title) || a.Subtitle.Contains(title));
+            }
+            if (typeId != Guid.Empty)
+            {
+                list = list.Where(a => a.ProductTypeId == typeId);
+            }
+            if (isMoney == 0)
+            {
+                list = list.Where(a => a.Price == 0);
+            }
+            else if (isMoney == 1)
+            {
+                list = list.Where(a => a.Price > 0);
+            }
+            var data = list.OrderByDescending(a => a.CreateTime)
+                .Skip((page - 1) * rows).Take(rows).ToList();
+            count = list.Count();
+            return data;
+        }
+
         #endregion
 
         #region 产品视频详情
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="proId">产品ID</param>
+        /// <returns></returns>
+        public async Task<List<ProductVideoEntity>> GetAllVideo(Guid proId)
+        {
+            var list = await myDbContext.ProductVideo
+                .Where(a => a.IsDelete == 0 && a.ProId == proId)
+                .OrderBy(a => a.VideoName)
+                .ToListAsync();
+            return list;
+        }
 
         /// <summary>
         /// 分页查询

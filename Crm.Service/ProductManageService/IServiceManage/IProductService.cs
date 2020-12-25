@@ -2,6 +2,7 @@
 using Crm.Service.BaseHelper;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Crm.Service.ProductManageService
 {
@@ -20,7 +21,29 @@ namespace Crm.Service.ProductManageService
         /// <returns></returns>
         List<ProductEntity> GetPageList(string title, int page, int rows, ref int count);
 
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="title"></param>
+        /// <param name="typeId"></param>
+        /// <param name="isMoney"></param>
+        /// <param name="page"></param>
+        /// <param name="rows"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        List<ProductEntity> WebAppGetPageList(string title, Guid typeId, int isMoney, int page, int rows, ref int count);
+
         #region 产品视频详情
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <param name="proId">产品ID</param>
+        /// <param name="page"></param>
+        /// <param name="rows"></param>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        Task<List<ProductVideoEntity>> GetAllVideo(Guid proId);
 
         /// <summary>
         /// 分页查询

@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
-using Crm.Service.SystemService;
+using Crm.Service.CustomerService;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.LogManange;

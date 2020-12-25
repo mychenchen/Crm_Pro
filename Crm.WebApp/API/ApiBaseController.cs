@@ -246,7 +246,7 @@ namespace Crm.WebApp.API
         /// <param name="msg"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected ResultObject Error(string msg, object obj = null)
+        protected ResultObject Error(string msg = null, object obj = null)
         {
             ResultObject res = new ResultObject()
             {
@@ -265,8 +265,12 @@ namespace Crm.WebApp.API
         /// <param name="msg"></param>
         /// <param name="obj"></param>
         /// <returns></returns>
-        protected ResultObject Error(ErrorCode code, string msg, object obj = null)
+        protected ResultObject Error(ErrorCode code, string msg = null, object obj = null)
         {
+            if (string.IsNullOrEmpty(msg))
+            {
+                msg = code.GetDescription();
+            }
             ResultObject res = new ResultObject()
             {
                 code = code.ToInt(),

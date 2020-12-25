@@ -4,14 +4,16 @@ using Crm.Repository.DB;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Crm.Repository.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    partial class MyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201224070119_studyTask")]
+    partial class studyTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -519,32 +521,6 @@ namespace Crm.Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("tb_UserStudent");
-                });
-
-            modelBuilder.Entity("Crm.Repository.TbEntity.UserStudyTaskEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<Guid>("CourseId");
-
-                    b.Property<DateTime>("CreateTime");
-
-                    b.Property<int>("IsDelete");
-
-                    b.Property<int>("IsStudy");
-
-                    b.Property<Guid>("StudentId");
-
-                    b.Property<int>("TimeLong");
-
-                    b.Property<Guid>("VideoId");
-
-                    b.Property<string>("VideoName");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("tb_StudyTask");
                 });
 #pragma warning restore 612, 618
         }

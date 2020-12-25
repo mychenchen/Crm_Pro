@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Crm.WebApp.Models
 {
@@ -20,7 +17,7 @@ namespace Crm.WebApp.Models
         /// <summary>
         /// 唯一ID
         /// </summary>
-        public string Gid { get; set; }
+        public Guid Gid { get; set; }
 
         /// <summary>
         /// 唯一ID

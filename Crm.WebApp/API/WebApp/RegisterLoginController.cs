@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Crm.Repository.MapperEntity;
 using Crm.Repository.TbEntity;
+using Crm.Service.CustomerService;
 using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
@@ -57,6 +58,13 @@ namespace Crm.WebApp.API.WebApp
         {
             try
             {
+                var code = _redis.GetStringKey($"code_{model.Telephone}");
+                if (code != model.Salt)
+                {
+                    return Error(ErrorCode.ValicodeError);
+                }
+                _redis.KeyDelete($"code_{model.Telephone}_Num");
+                _redis.KeyDelete($"code_{model.Telephone}");
                 var sqlModel = await _student.GetEntityAsync(a => a.LoginName == model.LoginName);
                 if (sqlModel != null)
                 {
@@ -93,7 +101,7 @@ namespace Crm.WebApp.API.WebApp
         {
             try
             {
-                var user = await _student.GetEntityAsync(a => a.LoginName == login.account);
+                var user = await _student.GetEntityAsync(a => a.LoginName == login.account || a.Telephone == login.account);
                 if (user == null)
                 {
                     return Error("账号不存在");
@@ -106,7 +114,7 @@ namespace Crm.WebApp.API.WebApp
 
                 LoginUserInfo info = new LoginUserInfo()
                 {
-                    Gid = user.Id.ToString(),
+                    Gid = user.Id,
                     LoginUser = user.LoginName,
                     Name = user.NickName,
                     Token = Guid.NewGuid().ToString("N"),
@@ -159,7 +167,7 @@ namespace Crm.WebApp.API.WebApp
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="userName"></param>
-        protected async Task SaveUserLoginLog(string userId, string userName)
+        protected async Task SaveUserLoginLog(Guid userId, string userName)
         {
             UserLoginLog model = new UserLoginLog()
             {
@@ -167,7 +175,7 @@ namespace Crm.WebApp.API.WebApp
                 Ip = HttpContext.Connection.RemoteIpAddress.ToString(),
                 IsDelete = 0,
                 CreateTime = DateTime.Now,
-                UserId = Guid.Parse(userId),
+                UserId = userId,
                 UserName = userName
             };
 

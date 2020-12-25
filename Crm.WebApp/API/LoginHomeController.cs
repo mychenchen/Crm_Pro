@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Crm.Repository.TbEntity;
+using Crm.Service.CustomerService;
 using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Models;
@@ -71,7 +72,7 @@ namespace Crm.WebApp.API
 
                 LoginUserInfo info = new LoginUserInfo()
                 {
-                    Gid = user.Id.ToString(),
+                    Gid = user.Id,
                     LoginUser = user.LoginName,
                     Name = user.NickName,
                     Token = Guid.NewGuid().ToString("N"),
@@ -119,7 +120,7 @@ namespace Crm.WebApp.API
 
                 LoginUserInfo info = new LoginUserInfo()
                 {
-                    Gid = user.Id.ToString(),
+                    Gid = user.Id,
                     LoginUser = user.LoginName,
                     Name = user.NickName,
                     Token = Guid.NewGuid().ToString("N"),
@@ -187,7 +188,7 @@ namespace Crm.WebApp.API
         /// </summary>
         /// <param name="userId"></param>
         /// <param name="userName"></param>
-        protected void SaveUserLoginLog(string userId, string userName)
+        protected void SaveUserLoginLog(Guid userId, string userName)
         {
 
             UserLoginLog model = new UserLoginLog()
@@ -196,7 +197,7 @@ namespace Crm.WebApp.API
                 Ip = HttpContext.Connection.RemoteIpAddress.ToString(),
                 IsDelete = 0,
                 CreateTime = DateTime.Now,
-                UserId = Guid.Parse(userId),
+                UserId = userId,
                 UserName = userName
             };
 

@@ -43,12 +43,12 @@ namespace Crm.WebApp.Models
         Success = 1,
 
         /// <summary>
-        /// 未授权
+        /// 未授权的请求,请联系管理员
         /// </summary>
         [Description("未授权的请求,请联系管理员")]
         NoAuthorize = 401,
         /// <summary>
-        /// 不存在
+        /// 数据不存在
         /// </summary>
         [Description("数据不存在")]
         NoExist = 404,
@@ -58,7 +58,7 @@ namespace Crm.WebApp.Models
         [Description("用户已存在")]
         UserExist = 402,
         /// <summary>
-        /// 用户存在
+        /// 用户不存在或未注册
         /// </summary>
         [Description("用户不存在或未注册")]
         UserNotExist = 403,
@@ -115,7 +115,7 @@ namespace Crm.WebApp.Models
         /// <summary>
         /// 验证码错误
         /// </summary>
-        [Description("验证码错误")]
+        [Description("验证码错误或已失效")]
         ValicodeError = 12,
     }
 }
