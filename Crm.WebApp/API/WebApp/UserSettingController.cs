@@ -98,7 +98,7 @@ namespace Crm.WebApp.API.WebApp
                 }
                 detail.LoginPwd = (newPwd + detail.Salt).ToMD5();
 
-                _student.CommQuery($"UPDATE tb_UserStudent SET LoginPwd = '{detail.LoginPwd}' WHERE ID = '{proId}';");
+                _student.CommQuery($"UPDATE tb_UserStudent SET LoginPwd = '{detail.LoginPwd}' WHERE ID = '{uId}';");
                 return Success("修改成功");
             }
             catch (Exception ex)

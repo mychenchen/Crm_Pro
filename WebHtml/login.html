@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+
+  <title>登录系统</title>
+  <link rel="stylesheet" href="src/css/layui.css">
+  <link rel="stylesheet" href="src/css/loginStyle.css">
+  <style>
+    body {
+      background-image: url('./src/images/Background_img_2.png');
+    }
+
+    .layui-form>div {
+      margin-top: 20px;
+    }
+
+    header {
+      font-family: '微软雅黑';
+      font-weight: bold;
+      color: blue;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="login-main" style="left:835px !important;top: 50px !important;">
+    <header class="layui-elip">
+      登&nbsp;&nbsp;
+      陆
+    </header>
+    <form class="layui-form" action="#">
+      <div class="layui-input-inline">
+        <input type="text" id="account" placeholder="用户名" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-input-inline">
+        <input type="password" id="password" placeholder="密码" autocomplete="off" class="layui-input">
+      </div>
+      <div class="layui-input-inline login-btn" style="text-align: center;">
+        <label style="color: #aaa;">如果账号遇到问题,请联系管理员</label>
+        <button style="margin-top:10px;" class="layui-btn layui-btn-normal layui-btn-radius"
+          onclick="userLogin()">登录</button>
+      </div>
+
+    </form>
+  </div>
+
+
+  <script src="src/js/jquery.min.js"></script>
+  <script src="src/js/main.js"></script>
+  <script type="text/javascript">
+    $(function () {
+
+      if (!IsNullOrEmpty(localStorage.Token)) {
+        console.log("自动登陆,请等待...");
+        ajaxGet({
+          url: _mainObject.apiServiceUrl + '/Api/LoginHome/AutomaticLogin',
+          data: {
+            token: localStorage.Token
+          },
+          success: function (res) {
+            if (res.code != 1) {
+              alert(res.message);
+              localStorage.Token = "";
+              localStorage.LoginUser = "";
+              return false;
+            }
+            localStorage.LoginUser = JSON.stringify(res.data);
+            localStorage.Token = res.data.Token;
+            location.href = "index.html";
+          }
+        });
+      }
+    });
+
+    function userLogin() {
+      var acc = $("#account").val();
+      var pwd = $("#password").val();
+      if (IsNullOrEmpty(acc) || IsNullOrEmpty(pwd)) {
+        alert("请完整的输入账号或密码");
+        return false;
+      }
+      ajaxPost({
+        url: _mainObject.apiServiceUrl + '/api/WebApp/RegisterLogin/UserLogin',
+        data: {
+          account: acc,
+          password: pwd
+        },
+        success: function (res) {
+          if (res.code != 1) {
+            layer.msg(res.message);
+            return false;
+          }
+          localStorage.LoginUser = JSON.stringify(res.data);
+          localStorage.Token = res.data.Token;
+          setTimeout(() => {
+            location.href = "index.html";
+          }, 1500);
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>
