@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Crm.Service.SystemService;
 using Crm.WebApp.AuthorizeHelper;
+using Crm.WebApp.Infrastructure;
 using Crm.WebApp.Models;
 using Currency.Quartz;
 using Microsoft.AspNetCore.Cors;
@@ -44,7 +45,8 @@ namespace Crm.WebApp.API
         {
             try
             {
-                _user.CommQuery("update [user] set NickName = NickName +'_1' where LoginName = 'cc'");
+                var user = GetLoginUserDetail();
+                //_user.CommQuery("update [user] set NickName = NickName +'_1' where LoginName = 'cc'");
                 return Success("ok");
             }
             catch (Exception ex)
@@ -63,7 +65,7 @@ namespace Crm.WebApp.API
             try
             {
                 var key = Guid.NewGuid().ToString("N");
-                _redis.SetStringKey<int>("online_" + key, 1,TimeSpan.FromMinutes(5));
+                _redis.SetStringKey<int>("online_" + key, 1, TimeSpan.FromMinutes(5));
                 QuartzService.StartJob<UsrOnLineJob>(key, 10,
                     new Dictionary<string, string>
                     {

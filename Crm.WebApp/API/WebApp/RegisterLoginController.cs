@@ -97,10 +97,15 @@ namespace Crm.WebApp.API.WebApp
         /// <param name="login"></param>
         /// <returns></returns>
         [HttpPost, NoSign]
+        // [Filter] aop扩展,有时间了解下
         public async Task<ResultObject> UserLogin(LoginUserPwd login)
         {
             try
             {
+                /*
+                 
+                 */
+
                 var user = await _student.GetEntityAsync(a => a.LoginName == login.account || a.Telephone == login.account);
                 if (user == null)
                 {

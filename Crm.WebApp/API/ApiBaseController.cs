@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Crm.Repository.TbEntity;
 using Crm.Service.SystemService;
+using Crm.WebApp.Infrastructure;
 using Crm.WebApp.Models;
 using Currency.Common;
 using Currency.Common.Redis;
@@ -53,6 +54,7 @@ namespace Crm.WebApp.API
         /// 获取当前登录用户信息
         /// </summary>
         /// <returns></returns>
+        //[TimeAspect] AOP切面
         protected LoginUserInfo GetLoginUserDetail()
         {
             return _redis.GetKey<LoginUserInfo>("userLogin_" + Request.Headers["ToKenStr"]);
