@@ -104,14 +104,15 @@
           datType: "json",
           type: 'post',
           success: function (res) {
-            layer.close(indexMsg);
             if (res.code != 1) {
+              layer.close(indexMsg);
               layer.msg(res.message);
               return false;
             }
             localStorage.LoginUser = JSON.stringify(res.data);
             localStorage.Token = res.data.Token;
             setTimeout(() => {
+              layer.close(indexMsg);
               location.href = "index.html";
             }, 1500);
           },
