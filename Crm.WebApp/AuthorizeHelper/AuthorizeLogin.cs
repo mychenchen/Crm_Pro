@@ -10,7 +10,7 @@ namespace Crm.WebApp.AuthorizeHelper
     /// <summary>
     /// 所有API请求拦截器
     /// </summary>
-    public class AuthorizeLogin : ActionFilterAttribute
+    public class AuthorizeAction : ActionFilterAttribute
     {
         /// <summary>
         /// 在执行请求开始之前进行调用

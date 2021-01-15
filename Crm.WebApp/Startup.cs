@@ -116,7 +116,7 @@ namespace Crm.WebApp
             //È«¾ÖÀ¹½Ø
             services.AddMvc(options =>
             {
-                options.Filters.Add(typeof(AuthorizeLogin));
+                options.Filters.Add(typeof(AuthorizeAction));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddMvc();
