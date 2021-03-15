@@ -242,6 +242,7 @@ namespace Currency.Common.Redis
                 return null;
             }
         }
+
         #endregion
 
         #region --删除设置过期--
@@ -314,5 +315,59 @@ namespace Currency.Common.Redis
         }
         #endregion
 
+
+        /// <summary>
+        /// 设置自增长计数
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public long SetIncrementNum(string key)
+        {
+            return CacheRedis.StringIncrement(key, 1);
+        }
+
+        #region 发布订阅
+
+        /// <summary>
+        /// 发布
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public void SetPublish(string pubStr, string msgStr)
+        {
+            using (ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(_conn))
+            {
+                ISubscriber sub = redis.GetSubscriber();
+                sub.Publish(pubStr, msgStr);
+            }
+
+        }
+
+        /// <summary>
+        /// 发布
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public string GetSubscribe(string pubStr)
+        {
+            string msg = "";
+            //创建连接
+            using (ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(_conn))
+            {
+                ISubscriber sub = redis.GetSubscriber();
+
+                //订阅名为 messages 的通道
+
+                sub.Subscribe(pubStr, (channel, message) =>
+                {
+                    //输出收到的消息
+                    msg = message;
+                });
+
+            }
+            return msg;
+        }
+
+        #endregion
     }
 }
