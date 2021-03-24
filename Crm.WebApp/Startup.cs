@@ -154,6 +154,7 @@ namespace Crm.WebApp
             //启动mq消息接收程序
             //DI.GetService<IMqReceive>().ReceiveAll();
 
+            Currency.Common.Redis.RedisHelperNetCore.Default.GetSubscribe("txt_demo");
 
             return new AutofacServiceProvider(DI.Current);
         }

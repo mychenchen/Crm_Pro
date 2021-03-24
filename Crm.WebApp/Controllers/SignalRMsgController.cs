@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Crm.WebApp.AuthorizeHelper;
 using Crm.WebApp.Infrastructure;
 using Currency.Common;
+using Currency.Common.Redis;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -13,20 +14,28 @@ namespace Crm.WebApp.Controllers
 
     public class SignalRMsgController : Controller
     {
-        //private readonly IHubContext<ChatHub> _chatHub;
+        protected readonly RedisCommon _redis;
 
-        //public SignalRMsgController(IHubContext<ChatHub> chatHub)
-        //{
-        //    _chatHub = chatHub;
-        //}
+        public SignalRMsgController()
+        {
+            _redis = RedisHelperNetCore.Default;
+        }
 
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet, NoSign]
         public IActionResult Index()
         {
+            _redis.SetPublish("txt_demo", "你好");
+
+
+            //_redis.GetSubscribe("txt_demo", (res, rest) =>
+            //{
+            //    Console.WriteLine(res);
+            //});
+
             return View();
         }
 
@@ -34,7 +43,7 @@ namespace Crm.WebApp.Controllers
         /// 
         /// </summary>
         /// <returns></returns>
-        [HttpGet,NoSign]
+        [HttpGet, NoSign]
         public string GetDemo()
         {
             List<string> list = new List<string>();

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Currency.Common.LogManange;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -344,28 +345,32 @@ namespace Currency.Common.Redis
         }
 
         /// <summary>
-        /// 发布
+        /// 订阅
         /// </summary>
-        /// <param name="key"></param>
+        /// <param name="subChannel"></param>
         /// <returns></returns>
-        public string GetSubscribe(string pubStr)
+        /// []
+        public void GetSubscribe(string subChannel, Action<RedisChannel, RedisValue> handler = null)
         {
-            string msg = "";
             //创建连接
-            using (ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(_conn))
-            {
-                ISubscriber sub = redis.GetSubscriber();
+            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect(_conn);
+            ISubscriber sub = redis.GetSubscriber();
 
-                //订阅名为 messages 的通道
+            //订阅名为 messages 的通道
 
-                sub.Subscribe(pubStr, (channel, message) =>
-                {
-                    //输出收到的消息
-                    msg = message;
-                });
+            sub.Subscribe(subChannel,
+             (channel, message) =>
+             {
+                 if (handler == null)
+                 {
+                     LogHelper.Error(subChannel + @" 订阅收到消息：" + message);
+                 }
+                 else
+                 {
+                     handler(channel, message);
+                 }
+             });
 
-            }
-            return msg;
         }
 
         #endregion
