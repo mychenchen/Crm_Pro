@@ -3,16 +3,14 @@ using Autofac.Extensions.DependencyInjection;
 using AutoMapper;
 using Crm.Repository.DB;
 using Crm.WebApp.AuthorizeHelper;
+using Crm.WebApp.BasicsRegisterService;
 using Crm.WebApp.Infrastructure;
-using Crm.WebApp.Models;
 using Currency.Common.LogManange;
 using Currency.Common.SystemRegister;
-using Currency.Mq.Model;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -48,103 +46,13 @@ namespace Crm.WebApp
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            AllServiceRegister.DataBaseServiceRegister(services, Configuration);
 
-            //services.Configure<DataSettingsModel>(Configuration.GetSection("DataSettings")).AddMvc();
-            services.Configure<CmsAppSettingModel>(Configuration.GetSection("CmsAppSetting")).AddMvc();
-            services.Configure<RabbitBaseInfo>(Configuration.GetSection("RabbitSetting")).AddMvc();
+            AllServiceRegister.BaseServiceRegister(services);
 
-            var connection = Configuration.GetConnectionString("SqlServer");
+            AllServiceRegister.SwaggerServiceRegister(services);
 
-            services.AddDbContext<MyDbContext>(options =>
-                options.UseSqlServer(connection, b => b.MigrationsAssembly("Crm.Repository")));
-
-            services.AddScoped<DefaultDataSeed>();
-
-            #region Session
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                options.CheckConsentNeeded = context => false;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
-
-            //启用内存缓存(该步骤需在AddSession()调用前使用)
-            services.AddDistributedMemoryCache();//启用session之前必须先添加内存
-                                                 //services.AddSession();
-            services.AddSession();
-
-            #endregion
-
-            //设置json数据返回
-            services.AddMvc().AddJsonOptions(options =>
-            {
-                options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
-                //json字符串大小写原样输出
-                options.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
-            });
-
-            services.AddAutoMapper();
-
-            services.AddAssembly("Crm.Service");
-            //单个注入 
-
-            //services.AddSingleton<IMqSend, SendMessage>();
-            //services.AddSingleton<IMqReceive, ReceiveMessage>();
-
-            //接收mq的消息
-            //services.AddSingleton<BatchHandle>();
-
-            ////注入 MongoDB
-            //services.AddSingleton<MongoDBService>();
-
-
-            services.AddCors(options =>
-            {
-                options.AddPolicy("allow_all", q =>
-                {
-                    //buildler.WithOrigins("http://localhost:49554")
-                    q
-                    .SetIsOriginAllowed(origin => true)
-                    //.AllowAnyOrigin() //允许任何来源的主机访问  SignalR 2.2不允许使用 
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials();//指定处理cookie
-                });
-            });
-
-            services.AddSignalR();
-
-            //全局拦截
-            services.AddMvc(options =>
-            {
-                options.Filters.Add(typeof(AuthorizeAction));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            services.AddMvc();
-
-            #region Swagger
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info { Title = "Hello", Version = "v1" });
-                //var basePath = PlatformServices.Default.Application.ApplicationBasePath;
-                //var xmlPath = Path.Combine(basePath, "CMS.Project.xml");
-                //c.IncludeXmlComments(xmlPath);
-
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.XML";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath);
-            });
-
-
-            services.AddMvcCore().AddApiExplorer();
-
-            #endregion
-
-            #region Senparc.Weixin
-
-            services.AddSenparcGlobalServices(Configuration)//Senparc.CO2NET 全局注册
-                   .AddSenparcWeixinServices(Configuration);//Senparc.Weixin 注册
-            #endregion
+            AllServiceRegister.SenparcWeixinServiceRegister(services, Configuration);
 
 
             var builder = new ContainerBuilder();
@@ -171,13 +79,6 @@ namespace Crm.WebApp
                 app.UseExceptionHandler("/Error");
                 app.UseHsts();
             }
-
-            #region Session
-
-            app.UseSession();//UseSession配置在UseMvc之前    开启session         
-            app.UseAuthentication();//开启权限
-
-            #endregion
 
             #region 开启后,可直接访问静态页面,静态文件
             app.UseStaticFiles();
